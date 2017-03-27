@@ -21,3 +21,4 @@ D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\Entit
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.xml
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.pdb
+D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.csprojResolveAssemblyReference.cache

@@ -39,6 +39,10 @@ app.directive('header', function () {
 
 
 app.controller('sampleController', function ($scope, $http, httpService, $interval) {
+
+    
+
+
     $interval(function () {
         $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
     }, 1000);
@@ -97,16 +101,9 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                         }
                     }
                 },
-                last_name: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your last name'
-                        }
-                    }
-                }, role_id: {
+
+
+                role_id: {
                     validators: {
                         stringLength: {
                             min: 3,
@@ -143,6 +140,10 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                         },
                         notEmpty: {
                             message: 'Please supply your confirm pasword(same as password above)'
+                        },
+                        identical: {
+                            field: 'password',
+                            message: 'The password and its confirm are not the same'
                         }
                     }
                 },
@@ -181,11 +182,6 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
 
             // Get the BootstrapValidator instance
             var bv = $form.data('bootstrapValidator');
-
-            // Use Ajax to submit form data
-            //$.post($form.attr('action'), $form.serialize(), function (result) {
-            //    console.log(result);
-            //}, 'json');
         });
         //End of Sign Up form
 
@@ -218,7 +214,23 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
         });
     });
 
-   
+
+
+    //Ajax method 
+    $http({
+        method: "GET",
+        url: "/SignUp.aspx/GetUserDetails",
+        cache: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+    }).then(function mySucces(response) {
+
+        console.log(response);
+
+    }, function myError(response) {
+        console.log(response);
+    });
 
     $scope.createAccount = function () {
         if ($scope.password == $scope.confPassword) {
