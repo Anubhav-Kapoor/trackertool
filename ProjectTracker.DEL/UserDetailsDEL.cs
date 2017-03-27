@@ -25,34 +25,34 @@ namespace ProjectTracker.DEL
             int result = 0;
            try
             {
-                using (TLTEntities2 en = new TLTEntities2())
-                {
+                //using (TLTEntities2 en = new TLTEntities2())
+                //{
 
-                    tbl_user_details user = new tbl_user_details();
+                //    tbl_user_details user = new tbl_user_details();
 
-                    user.Ntid = Ntid;
-                    user.FirstName = FirstName;
-                    user.LastName = LastName;
-                    user.RoleId = RoleId;
-                    user.PhoneNo = PhoneNo;
-                    user.EmailId = EmailId;
-                    user.Password = Password;
+                //    user.Ntid = Ntid;
+                //    user.FirstName = FirstName;
+                //    user.LastName = LastName;
+                //    user.RoleId = RoleId;
+                //    user.PhoneNo = PhoneNo;
+                //    user.EmailId = EmailId;
+                //    user.Password = Password;
 
-                    en.tbl_user_details.Add(user);
-                    result = en.SaveChanges();
-                }
-                //con.Open();
-                //SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details",con);
-                //cmd.CommandType = CommandType.StoredProcedure;
-                //cmd.Parameters.AddWithValue("@Action", "Insert");
-                //cmd.Parameters.AddWithValue("@Ntid",Ntid);
-                //cmd.Parameters.AddWithValue("@FirstName", FirstName);
-                //cmd.Parameters.AddWithValue("@LastName", LastName);
-                //cmd.Parameters.AddWithValue("@RoleId", RoleId);
-                //cmd.Parameters.AddWithValue("@PhoneNo", PhoneNo);
-                //cmd.Parameters.AddWithValue("@EmailId", EmailId);
-                //cmd.Parameters.AddWithValue("@Password", Password);
-                //result = cmd.ExecuteNonQuery();
+                //    en.tbl_user_details.Add(user);
+                //    result = en.SaveChanges();
+                //}
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Insert");
+                cmd.Parameters.AddWithValue("@Ntid", Ntid);
+                cmd.Parameters.AddWithValue("@FirstName", FirstName);
+                cmd.Parameters.AddWithValue("@LastName", LastName);
+                cmd.Parameters.AddWithValue("@RoleId", RoleId);
+                cmd.Parameters.AddWithValue("@PhoneNo", PhoneNo);
+                cmd.Parameters.AddWithValue("@EmailId", EmailId);
+                cmd.Parameters.AddWithValue("@Password", Password);
+                result = cmd.ExecuteNonQuery();
 
 
 

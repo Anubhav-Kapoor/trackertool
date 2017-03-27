@@ -7,12 +7,12 @@
       <Diagram DiagramId="8ce718bd2d4e4233b934896385e4f4ed" Name="Diagram1">
         <EntityTypeShape EntityType="TLTModel.tbl_leave_details" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TLTModel.tbl_task_details" Width="1.5" PointX="5.25" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TLTModel.tbl_user_details" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TLTModel.tbl_user_roles" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
-        <AssociationConnector Association="TLTModel.FK__tbl_leave__Appli__36B12243" ManuallyRouted="false" />
-        <AssociationConnector Association="TLTModel.FK__tbl_task___Assig__33D4B598" ManuallyRouted="false" />
-        <AssociationConnector Association="TLTModel.FK__tbl_task___Creat__32E0915F" ManuallyRouted="false" />
-        <AssociationConnector Association="TLTModel.FK__tbl_user___RoleI__286302EC" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TLTModel.tbl_user_details" Width="1.5" PointX="3" PointY="2.625" />
+        <AssociationConnector Association="TLTModel.FK__tbl_leave__Appli__5EBF139D" />
+        <AssociationConnector Association="TLTModel.FK__tbl_task___Assig__5DCAEF64" />
+        <AssociationConnector Association="TLTModel.FK__tbl_task___Creat__5CD6CB2B" />
+        <AssociationConnector Association="TLTModel.fk_roleid" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

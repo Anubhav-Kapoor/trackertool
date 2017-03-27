@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="TLTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="TLTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="tbl_leave_details">
     <Key>
       <PropertyRef Name="LeaveId" />
@@ -80,6 +80,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_roleid">
+    <End Role="tbl_user_roles" Type="Self.tbl_user_roles" Multiplicity="1" />
+    <End Role="tbl_user_details" Type="Self.tbl_user_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_roles">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="tbl_user_details">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="sp_all_tbl_leave_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="LeaveId" Type="int" Mode="In" />
     <Parameter Name="Leavedesc" Type="varchar" Mode="In" />
@@ -132,6 +144,10 @@
     <AssociationSet Name="FK__tbl_task___Creat__5CD6CB2B" Association="Self.FK__tbl_task___Creat__5CD6CB2B">
       <End Role="tbl_user_details" EntitySet="tbl_user_details" />
       <End Role="tbl_task_details" EntitySet="tbl_task_details" />
+    </AssociationSet>
+    <AssociationSet Name="fk_roleid" Association="Self.fk_roleid">
+      <End Role="tbl_user_roles" EntitySet="tbl_user_roles" />
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

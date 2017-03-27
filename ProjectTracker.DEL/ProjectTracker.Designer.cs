@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.DEL\ProjectTracker.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\ProjectTracker.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

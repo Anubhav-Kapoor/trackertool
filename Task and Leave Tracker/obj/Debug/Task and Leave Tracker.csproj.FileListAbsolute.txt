@@ -12,3 +12,17 @@ C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\Ta
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\Task and Leave Tracker\bin\ProjectTracker.DEL.pdb
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll.config
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.pdb
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.pdb
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.pdb
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
