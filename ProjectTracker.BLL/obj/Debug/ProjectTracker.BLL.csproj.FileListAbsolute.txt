@@ -1,0 +1,11 @@
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.csprojResolveAssemblyReference.cache
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\TLT.mdf
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\TLT_log.ldf
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.dll
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.pdb
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\ProjectTracker.DEL.dll
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\EntityFramework.dll
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\ProjectTracker.DEL.pdb
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\EntityFramework.xml
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.dll
+C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.pdb

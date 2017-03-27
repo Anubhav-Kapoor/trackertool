@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TLTModelStoreContainer" CdmEntityContainer="TLTEntities2">
+    <EntitySetMapping Name="tbl_leave_details">
+      <EntityTypeMapping TypeName="TLTModel.tbl_leave_details">
+        <MappingFragment StoreEntitySet="tbl_leave_details">
+          <ScalarProperty Name="LeaveId" ColumnName="LeaveId" />
+          <ScalarProperty Name="Leavedesc" ColumnName="Leavedesc" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="AppliedBy" ColumnName="AppliedBy" />
+          <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_task_details">
+      <EntityTypeMapping TypeName="TLTModel.tbl_task_details">
+        <MappingFragment StoreEntitySet="tbl_task_details">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+          <ScalarProperty Name="Taskdesc" ColumnName="Taskdesc" />
+          <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+          <ScalarProperty Name="Expiry_Date" ColumnName="Expiry_Date" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_user_details">
+      <EntityTypeMapping TypeName="TLTModel.tbl_user_details">
+        <MappingFragment StoreEntitySet="tbl_user_details">
+          <ScalarProperty Name="Ntid" ColumnName="Ntid" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_user_roles">
+      <EntityTypeMapping TypeName="TLTModel.tbl_user_roles">
+        <MappingFragment StoreEntitySet="tbl_user_roles">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+          <ScalarProperty Name="Rights" ColumnName="Rights" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_all_tbl_leave_details" FunctionName="TLTModel.Store.sp_all_tbl_leave_details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TLTModel.sp_all_tbl_leave_details_Result">
+          <ScalarProperty Name="LeaveId" ColumnName="LeaveId" />
+          <ScalarProperty Name="Leavedesc" ColumnName="Leavedesc" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="AppliedBy" ColumnName="AppliedBy" />
+          <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_all_tbl_task_details" FunctionName="TLTModel.Store.sp_all_tbl_task_details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TLTModel.sp_all_tbl_task_details_Result">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+          <ScalarProperty Name="Taskdesc" ColumnName="Taskdesc" />
+          <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+          <ScalarProperty Name="Expiry_Date" ColumnName="Expiry_Date" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_all_tbl_user_details" FunctionName="TLTModel.Store.sp_all_tbl_user_details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TLTModel.sp_all_tbl_user_details_Result">
+          <ScalarProperty Name="Ntid" ColumnName="Ntid" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_all_tbl_user_roles" FunctionName="TLTModel.Store.sp_all_tbl_user_roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TLTModel.sp_all_tbl_user_roles_Result">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+          <ScalarProperty Name="Rights" ColumnName="Rights" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

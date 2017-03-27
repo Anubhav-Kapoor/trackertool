@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TLTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tbl_leave_details">
+    <Key>
+      <PropertyRef Name="LeaveId" />
+    </Key>
+    <Property Name="LeaveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Leavedesc" Type="varchar" MaxLength="50" />
+    <Property Name="FromDate" Type="date" />
+    <Property Name="ToDate" Type="date" />
+    <Property Name="AppliedBy" Type="varchar" MaxLength="50" />
+    <Property Name="LeaveType" Type="text" />
+    <Property Name="Status" Type="text" />
+  </EntityType>
+  <EntityType Name="tbl_task_details">
+    <Key>
+      <PropertyRef Name="TaskId" />
+    </Key>
+    <Property Name="TaskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Taskdesc" Type="varchar" MaxLength="50" />
+    <Property Name="Created_Date" Type="date" />
+    <Property Name="Expiry_Date" Type="date" />
+    <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
+    <Property Name="AssignedTo" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="text" />
+  </EntityType>
+  <EntityType Name="tbl_user_details">
+    <Key>
+      <PropertyRef Name="Ntid" />
+    </Key>
+    <Property Name="Ntid" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="RoleId" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="PhoneNo" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tbl_user_roles">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="RoleDesc" Type="varchar" MaxLength="50" />
+    <Property Name="Rights" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK__tbl_leave__Appli__5EBF139D">
+    <End Role="tbl_user_details" Type="Self.tbl_user_details" Multiplicity="0..1" />
+    <End Role="tbl_leave_details" Type="Self.tbl_leave_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_leave_details">
+        <PropertyRef Name="AppliedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tbl_task___Assig__5DCAEF64">
+    <End Role="tbl_user_details" Type="Self.tbl_user_details" Multiplicity="0..1" />
+    <End Role="tbl_task_details" Type="Self.tbl_task_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_task_details">
+        <PropertyRef Name="AssignedTo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tbl_task___Creat__5CD6CB2B">
+    <End Role="tbl_user_details" Type="Self.tbl_user_details" Multiplicity="0..1" />
+    <End Role="tbl_task_details" Type="Self.tbl_task_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_task_details">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="sp_all_tbl_leave_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LeaveId" Type="int" Mode="In" />
+    <Parameter Name="Leavedesc" Type="varchar" Mode="In" />
+    <Parameter Name="FromDate" Type="date" Mode="In" />
+    <Parameter Name="ToDate" Type="date" Mode="In" />
+    <Parameter Name="AppliedBy" Type="varchar" Mode="In" />
+    <Parameter Name="LeaveType" Type="text" Mode="In" />
+    <Parameter Name="Status" Type="text" Mode="In" />
+    <Parameter Name="Action" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_all_tbl_task_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TaskId" Type="int" Mode="In" />
+    <Parameter Name="Taskdesc" Type="varchar" Mode="In" />
+    <Parameter Name="Created_Date" Type="date" Mode="In" />
+    <Parameter Name="Expiry_Date" Type="date" Mode="In" />
+    <Parameter Name="CreatedBy" Type="varchar" Mode="In" />
+    <Parameter Name="AssignedTo" Type="varchar" Mode="In" />
+    <Parameter Name="Status" Type="text" Mode="In" />
+    <Parameter Name="Action" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_all_tbl_user_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Ntid" Type="varchar" Mode="In" />
+    <Parameter Name="FirstName" Type="text" Mode="In" />
+    <Parameter Name="LastName" Type="text" Mode="In" />
+    <Parameter Name="RoleId" Type="varchar" Mode="In" />
+    <Parameter Name="PhoneNo" Type="varchar" Mode="In" />
+    <Parameter Name="EmailId" Type="varchar" Mode="In" />
+    <Parameter Name="Password" Type="varchar" Mode="In" />
+    <Parameter Name="Action" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_all_tbl_user_roles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="RoleId" Type="varchar" Mode="In" />
+    <Parameter Name="RoleDesc" Type="varchar" Mode="In" />
+    <Parameter Name="Rights" Type="varchar" Mode="In" />
+    <Parameter Name="Action" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="TLTModelStoreContainer">
+    <EntitySet Name="tbl_leave_details" EntityType="Self.tbl_leave_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_task_details" EntityType="Self.tbl_task_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_user_details" EntityType="Self.tbl_user_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_user_roles" EntityType="Self.tbl_user_roles" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__tbl_leave__Appli__5EBF139D" Association="Self.FK__tbl_leave__Appli__5EBF139D">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_leave_details" EntitySet="tbl_leave_details" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tbl_task___Assig__5DCAEF64" Association="Self.FK__tbl_task___Assig__5DCAEF64">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_task_details" EntitySet="tbl_task_details" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tbl_task___Creat__5CD6CB2B" Association="Self.FK__tbl_task___Creat__5CD6CB2B">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_task_details" EntitySet="tbl_task_details" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
