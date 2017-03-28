@@ -7,7 +7,7 @@
     <link rel="import" href="header.html" />
     <title>Sign Up Team Member Page</title>
 </head>
-<body ng-app="myApp" ng-controller="sampleController" style="background-image: url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
   <form class="well form-horizontal" id="contact_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
@@ -51,7 +51,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_lname" name="last_name" placeholder="Last Name (Optional)" class="form-control" type="text"    ng-model="lastName"/>
+                                    <input id="txt_lname" name="last_name" placeholder="Last Name" class="form-control" type="text"    ng-model="lastName"/>
                                 </div>
                             </div>
                         </div>
@@ -101,6 +101,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Confirm Password field-->
                         <div class="form-group">
@@ -162,7 +163,7 @@
             </div>
             <div class="modal-footer">
                  <button type="button" class="btn btn-default button" data-dismiss="modal">Get Started</button>
-                <button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default button" data-dismiss="modal" onclick="location.reload();">Close</button>
                 
         </div>
     </div>

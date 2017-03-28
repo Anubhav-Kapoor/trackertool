@@ -37,16 +37,18 @@ app.directive('header', function () {
 
 
 
+//*******************Login Controller - Used for Sign Up and Sign In form*******************//
 
-app.controller('sampleController', function ($scope, $http, httpService, $interval) {
+app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
 
     
 
-
+    //Code for Clock Ticking
     $interval(function () {
         $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
     }, 1000);
 
+    //Code for Sub-Title Typing
     $(function () {
 
         $("#typed").typed({
@@ -54,10 +56,8 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
             typeSpeed: 30,
             backDelay: 500,
             loop: true,
-            contentType: 'html', // or text
-            // defaults to false for infinite loop
+            contentType: 'html',
             loopCount: false,
-            //callback: function () { foo(); },
             resetCallback: function () { newTyped(); }
         });
 
@@ -80,8 +80,6 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     //Data Table Plugin
     $(document).ready(function () {
 
-        //Begin of Sign Up Form-001
-
 
         $('#contact_form').bootstrapValidator({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
@@ -98,6 +96,15 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                         },
                         notEmpty: {
                             message: 'Please supply your first name'
+                        }
+                    }
+                }, last_name: {
+                    validators: {
+                        stringLength: {
+                            min: 2,
+                        },
+                        notEmpty: {
+                            message: 'Please supply your last name'
                         }
                     }
                 },
@@ -216,7 +223,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
 
 
 
-    //Ajax method 
+    //Ajax method - To Get User Details
     $http({
         method: "GET",
         url: "/SignUp.aspx/GetUserDetails",
@@ -232,7 +239,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
         console.log(response);
     });
 
-
+    // Code to Create Account.
     $scope.createAccount = function () {
         if ($scope.password == $scope.confPassword) {
 
@@ -276,8 +283,6 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 $('#myModal').modal("show")
 
 
-            }, function myError(response) {
-                console.log(response);
             });
 
             
