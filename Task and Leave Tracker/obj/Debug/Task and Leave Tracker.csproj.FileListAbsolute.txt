@@ -40,5 +40,11 @@ C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.D
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
-C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\TLT.mdf
-C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\TLT_log.ldf
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.dll
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.dll
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.dll
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.dll
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.xml
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.xml
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.xml
+C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.xml

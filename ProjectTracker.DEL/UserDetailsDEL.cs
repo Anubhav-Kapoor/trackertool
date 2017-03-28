@@ -104,10 +104,11 @@ namespace ProjectTracker.DEL
 
 
             }
-            catch
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex.Message);
+               
 
             }
             finally
@@ -131,11 +132,11 @@ namespace ProjectTracker.DEL
 
 
             }
-            catch
+            catch (Exception ex)
             {
 
-                throw;
-
+                Console.WriteLine(ex.Message);
+               
             }
             finally
             {
@@ -164,11 +165,11 @@ namespace ProjectTracker.DEL
 
 
             }
-            catch
+            catch (Exception ex)
             {
 
-                throw;
-
+                Console.WriteLine(ex.Message);
+                        
             }
             finally
             {

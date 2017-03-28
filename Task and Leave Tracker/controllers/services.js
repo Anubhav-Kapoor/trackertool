@@ -265,7 +265,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
-            }).then(function mySucces(response) {
+            }).then(function mySuccess(response) {
 
 
                 //Successful creation of Account Message
@@ -281,6 +281,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
                 $scope.status = responseJSON.Response.Reason;
                 console.log(response);
                 $('#myModal').modal("show")
+                window.location.href = "SignIn.aspx";
 
 
             });
@@ -293,6 +294,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
     }
 
 
+    //SignIn
     $scope.login = function () {
        
 
@@ -304,19 +306,20 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
             //Ajax method 
             $http({
                 method: "POST",
-                url: "/SignIn.aspx/Login",
+                url: "/TaskManagerAPI.aspx/Login",
                 data: JSON.stringify(user),
                 cache: false,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
-            }).then(function mySucces(response) {
+            }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
                 $scope.status = responseJSON.Response.Reason;
                 console.log(response);
                 $('#myModal').modal("show")
+                 window.location.href = "index.html";
 
             }, function myError(response) {
                 console.log(response);

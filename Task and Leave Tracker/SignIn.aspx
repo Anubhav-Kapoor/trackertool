@@ -35,7 +35,7 @@
                                 <input type="submit" class="button"  ng-click="login()" value="Sign In">
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <a href="/signUp.html" class="btn btn-default button" style="padding-top:16px">Register</a>
+                                <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top:16px">Register</a>
                             </div>
                         </div>
                     </fieldset>
