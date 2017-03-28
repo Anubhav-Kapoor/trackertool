@@ -232,7 +232,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
         console.log(response);
     });
 
-
+    //SignUp
     $scope.createAccount = function () {
         if ($scope.password == $scope.confPassword) {
 
@@ -258,13 +258,14 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
-            }).then(function mySucces(response) {
+            }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
                 $scope.status = responseJSON.Response.Reason;
                 console.log(response);
                 $('#myModal').modal("show")
+                window.location.href = "SignIn.aspx";
 
             }, function myError(response) {
                 console.log(response);
@@ -278,6 +279,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     }
 
 
+    //SignIn
     $scope.login = function () {
        
 
@@ -289,19 +291,20 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
             //Ajax method 
             $http({
                 method: "POST",
-                url: "/SignIn.aspx/Login",
+                url: "/TaskManagerAPI.aspx/Login",
                 data: JSON.stringify(user),
                 cache: false,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
-            }).then(function mySucces(response) {
+            }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
                 $scope.status = responseJSON.Response.Reason;
                 console.log(response);
                 $('#myModal').modal("show")
+                 window.location.href = "index.html";
 
             }, function myError(response) {
                 console.log(response);
