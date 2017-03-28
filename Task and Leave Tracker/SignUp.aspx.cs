@@ -18,7 +18,7 @@ namespace Task_and_Leave_Tracker
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+           
         }
 
        [System.Web.Services.WebMethod]
@@ -71,6 +71,29 @@ namespace Task_and_Leave_Tracker
             }
             return oSerializer.Serialize(resultObject);
         }
+
+        //
+       [System.Web.Services.WebMethod]
+       public static String GetUserDetails() {
+
+           JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+           RootObjectResponse resultObject = new RootObjectResponse();
+           resultObject.Response = new Response();
+
+           try
+           {
+
+               string name = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
+              
+           }
+           catch (Exception ex)
+           {
+               resultObject.Response.Status = "Fail";
+               resultObject.Response.Reason = ex.Message;
+           }
+           return oSerializer.Serialize(resultObject);
+       }
 
 
 

@@ -20,31 +20,31 @@
                         <!-- Form Name -->
                         <legend style="padding-left: 15px;">Create your Account today!</legend>
 
-                        <!-- Text input-->
+                        <!-- Network ID-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >NTID</label>
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                                    <input id="txt_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="ntid" />
+                                    <input id="txt_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="ntid"/>
                                    
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!-- First Name-->
 
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >First Name</label>
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_fname" name="first_name" placeholder="First Name" class="form-control" type="text"    ng-model="firstName"/>
+                                    <input id="txt_fname" name="first_name" placeholder="First Name" class="form-control" type="text"    ng-model="firstName" />
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!-- Last Name-->
 
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Last Name</label>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!-- Role ID  Hidden parameter-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Role Id</label>
                             <div class="col-md-4 inputGroupContainer">
@@ -68,7 +68,7 @@
                         </div>
 
 
-                        <!-- Text input-->
+                        <!-- Phone no -->
 
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Phone #</label>
@@ -80,18 +80,18 @@
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!--Email field-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >E-Mail</label>
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input id="txt_email" name="email" placeholder="E-Mail Address" class="form-control" type="text"   ng-model="emailId"/>
+                                    <input id="txt_email" name="email" placeholder="E-Mail Address" class="form-control" type="text"  ng-model="emailId"/>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!-- Password-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Password</label>
                             <div class="col-md-4 inputGroupContainer">
@@ -102,28 +102,25 @@
                             </div>
                         </div>
 
-                        <!-- Text input-->
+                        <!-- Confirm Password field-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Confirm Password</label>
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password"   ng-model="confPassword" />
+                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password"  ng-change="confirmPswd()" ng-model="confPassword" />
                                 </div>
                             </div>
                         </div>
 
-
-
-
-                        <!-- Success message -->
-                        <!--<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>-->
-                        <!-- Button -->
+                        <!--Buttons-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  ></label>
                             <div class="col-md-4" style="display: flex">
+
+
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
-                                <button class="button" style="margin-left: 10px; width: 180px"   > Cancel <span class="glyphicon glyphicon-remove"></span></button>
+                                <a href="/signIn.html" class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
                                 <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="location.reload();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
 
 
