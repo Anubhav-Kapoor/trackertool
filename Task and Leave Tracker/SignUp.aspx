@@ -51,7 +51,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_lname" name="last_name" placeholder="Last Name" class="form-control" type="text"    ng-model="lastName"/>
+                                    <input id="txt_lname" name="last_name" placeholder="Last Name (Optional)" class="form-control" type="text"    ng-model="lastName"/>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
                                 <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
                                 <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="location.reload();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
-
+                                
 
                             </div>
                             <div>
@@ -134,12 +134,7 @@
                 </div>
 
                 <div class="col-8">
-                    <!--<div class="container">-->
-
-                
-
-                    <!--</div>-->
-                    <!-- /.container -->
+                    
 
 
 
@@ -153,6 +148,29 @@
 
 
         </div>
+
+
+      <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            
+            <h4 class="modal-title" id="myModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Account Successfully Created!!</h3>
+            </div>
+            <div class="modal-footer">
+                 <button type="button" class="btn btn-default button" data-dismiss="modal">Get Started</button>
+                <button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+                
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
     </form>
 
     <div id="myModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">

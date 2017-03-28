@@ -260,6 +260,15 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 async: false
             }).then(function mySuccess(response) {
 
+
+                //Successful creation of Account Message
+                var options = {
+                    "backdrop" : "static"
+                }
+                $('#basicModal').modal(options);
+
+            }, function myError(response) {
+
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
                 $scope.status = responseJSON.Response.Reason;
@@ -267,11 +276,12 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 $('#myModal').modal("show")
                 window.location.href = "SignIn.aspx";
 
+
             }, function myError(response) {
                 console.log(response);
             });
 
-            console.log(user.toString());
+            
         }
         else {
             console.log("Passwords do not match");
