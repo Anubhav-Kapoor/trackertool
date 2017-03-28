@@ -177,40 +177,45 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-        
-        //public Boolean ViewUserExistDetailsDEL(String Ntid)
-        //{
-        //    DataTable dt = new DataTable();
-        //    try
-        //    {
-        //        con.Open();
-        //        SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@Action", "View");
-        //        cmd.Parameters.AddWithValue("@Ntid", Ntid);
-        //        SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //        da.Fill(dt);
-        //        if (dt.Rows.Count > 0)
-        //        {
-        //            return true;
-        //        }
-        //        else
-        //            return false;
 
-        //    }
-        //    catch
-        //    {
 
-        //        throw;
 
-        //    }
-        //    finally
-        //    {
-        //        con.Close();
-        //    }
-           
-           
-        //}
+
+
+        public Boolean ViewUserExistDetailsDEL(String Ntid)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View");
+                cmd.Parameters.AddWithValue("@Ntid", Ntid);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    return true;
+                }
+                else
+                    return false;
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+
+            }
+            finally
+            {
+                con.Close();
+            }
+
+        }
+               
                
 
         

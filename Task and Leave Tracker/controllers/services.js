@@ -227,10 +227,11 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     }).then(function mySucces(response) {
 
         console.log(response);
-
+   
     }, function myError(response) {
         console.log(response);
     });
+
 
     $scope.createAccount = function () {
         if ($scope.password == $scope.confPassword) {
@@ -259,6 +260,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 async: false
             }).then(function mySucces(response) {
 
+
                 //Successful creation of Account Message
                 var options = {
                     "backdrop" : "static"
@@ -267,6 +269,15 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
 
             }, function myError(response) {
 
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Reason;
+                console.log(response);
+                $('#myModal').modal("show")
+
+
+            }, function myError(response) {
+                console.log(response);
             });
 
             
@@ -277,10 +288,39 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     }
 
 
+    $scope.login = function () {
+       
+
+            var user = {
+                ntid: $scope.ntid,
+                password: $scope.password,
+            }
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/SignIn.aspx/Login",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySucces(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Reason;
+                console.log(response);
+                $('#myModal').modal("show")
+
+            }, function myError(response) {
+                console.log(response);
+            });
+
+            console.log(user.toString());
 
 
-
-
+    }
 
 }
 

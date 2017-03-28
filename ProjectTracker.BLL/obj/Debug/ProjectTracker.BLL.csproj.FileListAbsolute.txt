@@ -20,3 +20,14 @@ D:\Projects\trackerToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\Entit
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.csprojResolveAssemblyReference.cache
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.dll
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.pdb
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\TLT.mdf
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\TLT_log.ldf
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.pdb
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.DEL.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\EntityFramework.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.DEL.pdb
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\EntityFramework.xml
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.csprojResolveAssemblyReference.cache
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.pdb

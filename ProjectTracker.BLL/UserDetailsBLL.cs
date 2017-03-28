@@ -34,17 +34,19 @@ namespace ProjectTracker.BLL
 
         public DataTable ViewUserDetailsBLL(String Ntid)
         {
+            DataTable dt = null;
             try
             {
-                DataTable dt = userDEL.ViewUserDetailsDEL(Ntid);
-                return dt;
+                 dt = userDEL.ViewUserDetailsDEL(Ntid);
+                
             }
-            catch
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex.Message);
 
-            }
+            } 
+            return dt;
 
         }
 
@@ -52,15 +54,18 @@ namespace ProjectTracker.BLL
         {
             try
             {
-                int result = userDEL.DeleteUserDetailsDEL(Ntid);
-                return result;
+                result = userDEL.DeleteUserDetailsDEL(Ntid);
+                
             }
-            catch
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex.Message);
 
             }
+
+
+            return result;
 
            
         }
@@ -70,39 +75,38 @@ namespace ProjectTracker.BLL
             try
             {
 
-                int result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
-                return result;
+                 result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
+                
             }
 
-            catch
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex.Message);
 
             }
+
+
+            return result;
 
           
         }
-        //public Boolean ViewUserExistDetailsBLL(String Ntid)
-        //{
-        //    try
-        //    {
-        //        Boolean dt = userDEL.ViewUserExistDetailsDEL(Ntid);
-        //        return true;
-        //    }
-        //    catch
-        //    {
+        public Boolean ViewUserExistDetailsBLL(String Ntid)
+        {
+            Boolean value = false;
+            try
+            {
+                value = userDEL.ViewUserExistDetailsDEL(Ntid);
 
-        //        throw;
+            }
+            catch (Exception ex)
+            {
 
-        //    }
+                Console.WriteLine(ex.Message);
 
-        //    finally
-        //    {
+            }
 
-        //        userDEL = null;
-
-        //    }
-        //}
+            return value;
+        }
     }
 }
