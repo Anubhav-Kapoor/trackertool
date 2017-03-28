@@ -21,3 +21,15 @@ D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\Entit
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.xml
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\trackerToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.pdb
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\TLT.mdf
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\TLT_log.ldf
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\ProjectTracker.DEL.dll.config
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\ProjectTracker.DEL.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\ProjectTracker.DEL.pdb
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.SqlServer.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.xml
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\bin\Debug\EntityFramework.SqlServer.xml
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.csprojResolveAssemblyReference.cache
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.dll
+C:\trackelToolRepository\trackertool\ProjectTracker.DEL\obj\Debug\ProjectTracker.DEL.pdb

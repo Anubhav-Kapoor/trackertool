@@ -218,6 +218,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
         });
     });
 
+
    
 
     $scope.createAccount = function () {
@@ -247,8 +248,14 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 async: false
             }).then(function mySucces(response) {
 
-            }, function myError(response) {
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Reason;
+                console.log(response);
+                $('#myModal').modal("show")
 
+            }, function myError(response) {
+                console.log(response);
             });
 
             console.log(user.toString());
@@ -259,10 +266,39 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     }
 
 
+    $scope.login = function () {
+       
 
+            var user = {
+                ntid: $scope.ntid,
+                password: $scope.password,
+            }
 
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/SignIn.aspx/Login",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySucces(response) {
 
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Reason;
+                console.log(response);
+                $('#myModal').modal("show")
 
+            }, function myError(response) {
+                console.log(response);
+            });
+
+            console.log(user.toString());
+        
+      
+    }
 
 }
 

@@ -28,32 +28,41 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
+            Boolean value = userBll.ViewUserExistDetailsBLL(ntid);
+           try{
+           if (!value)
+             {
 
-            try
-            {
-            //    Boolean value = userBll.ViewUserExistDetailsBLL(ntid);
+                 if (ntid != "" && firstName != "" && lastName != "" && roleId != "" && phone != "" && email != "" && password != "")
+                 {
+                     int result = userBll.InsertUserDetailsBLL(ntid, firstName, lastName, roleId, phone, email, password);
 
-                if (ntid != "" && firstName != "" && lastName != "" && roleId != "" && phone != "" && email != "" && password != "")
-                {
-                    int result = userBll.InsertUserDetailsBLL(ntid, firstName, lastName, roleId, phone, email, password);
+                     if (result > 0)
+                     {
+                         resultObject.Response.Status = "Success";
+                         resultObject.Response.Reason = "You are successfully registered.";
+                         
+                     }
+                     else
+                     {
+                         resultObject.Response.Status = "Fail";
+                         resultObject.Response.Reason = "Please try to register with different email id";
+                     }
+                 }
+                 else
+                 {
+                     resultObject.Response.Status = "Fail";
+                     resultObject.Response.Reason = "Input Data invalid.";
 
-                    if (result > 0)
-                    {
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "You are successfully registered.";
-                    }
-                    else
-                    {
-                        resultObject.Response.Status = "Fail";
-                        resultObject.Response.Reason = "Please try to register with different email id";
-                    }
-                }
-                else
-                {
-                    resultObject.Response.Status = "Fail";
-                    resultObject.Response.Reason = "Input Data invalid.";
+                 }
+           }
+             
+             else
+             {
+                 resultObject.Response.Status = "Fail";
+                 resultObject.Response.Reason = "User Already exists!!";
+             }
 
-                }
             }
             catch (Exception ex)
             {
