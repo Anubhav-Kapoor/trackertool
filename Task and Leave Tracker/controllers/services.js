@@ -259,11 +259,17 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 async: false
             }).then(function mySucces(response) {
 
+                //Successful creation of Account Message
+                var options = {
+                    "backdrop" : "static"
+                }
+                $('#basicModal').modal(options);
+
             }, function myError(response) {
 
             });
 
-            console.log(user.toString());
+            
         }
         else {
             console.log("Passwords do not match");
