@@ -7,7 +7,7 @@
     <link rel="import" href="header.html" />
     <title>Sign Up Team Member Page</title>
 </head>
-<body ng-app="myApp" ng-controller="sampleController" style="background-image: url(images/background_pattern.jpg);">
+<body ng-init="loadPage()" ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
   <form class="well form-horizontal" id="contact_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
@@ -51,7 +51,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_lname" name="last_name" placeholder="Last Name (Optional)" class="form-control" type="text"    ng-model="lastName"/>
+                                    <input id="txt_lname" name="last_name" placeholder="Last Name" class="form-control" type="text"    ng-model="lastName"/>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +102,7 @@
                             </div>
                         </div>
 
+
                         <!-- Confirm Password field-->
                         <div class="form-group">
                             <label class="col-md-4 control-label"  >Confirm Password</label>
@@ -120,7 +121,7 @@
 
 
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
-                                <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
+                                <a class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
                                 <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="location.reload();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
                                 
 
@@ -158,11 +159,11 @@
             <h4 class="modal-title" id="myModalLabel">Message</h4>
             </div>
             <div class="modal-body">
-                <h3>Account Successfully Created!!</h3>
+                <h3>{{message}}</h3>
             </div>
             <div class="modal-footer">
-                 <button type="button" class="btn btn-default button" data-dismiss="modal">Get Started</button>
-                <button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+                 <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-show="isSuccess" ng-click="GoToURL('SignIn.aspx')">Sign in</a>
+                <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-hide ="isSuccess">Close</a>
                 
         </div>
     </div>

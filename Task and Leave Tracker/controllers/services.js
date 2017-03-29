@@ -1,4 +1,4 @@
-﻿var app = angular.module('myApp', []);
+﻿var app = angular.module('myApp', ['ngCookies']);
 // HTTP Factory Service
 app.factory('httpService', function ($http) {
 
@@ -37,16 +37,30 @@ app.directive('header', function () {
 
 
 
+//*******************Login Controller - Used for Sign Up and Sign In form*******************//
 
-app.controller('sampleController', function ($scope, $http, httpService, $interval) {
+app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $cookies) {
 
+    //On Load of every page 
+    $scope.loadPage = function () {
+        if ($cookies.get('username') == null || $cookies.get('username') == undefined) {
+            $scope.GoToURL('SignIn.aspx');
+        }
+    }
     
+    //Navigate to Page
+    $scope.GoToURL = function (navigatePage) {
 
+        if (navigatePage != null && navigatePage != '')
+            window.location.href = navigatePage;
+    }
 
-    $interval(function () {
-        $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    }, 1000);
+    //Code for Clock Ticking
+    //$interval(function () {
+    //    $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
+    //}, 1000);
 
+    //Code for Sub-Title Typing
     $(function () {
 
         $("#typed").typed({
@@ -54,10 +68,8 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
             typeSpeed: 30,
             backDelay: 500,
             loop: true,
-            contentType: 'html', // or text
-            // defaults to false for infinite loop
+            contentType: 'html',
             loopCount: false,
-            //callback: function () { foo(); },
             resetCallback: function () { newTyped(); }
         });
 
@@ -80,8 +92,6 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     //Data Table Plugin
     $(document).ready(function () {
 
-        //Begin of Sign Up Form-001
-
 
         $('#contact_form').bootstrapValidator({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
@@ -98,6 +108,15 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                         },
                         notEmpty: {
                             message: 'Please supply your first name'
+                        }
+                    }
+                }, last_name: {
+                    validators: {
+                        stringLength: {
+                            min: 2,
+                },
+                        notEmpty: {
+                            message: 'Please supply your last name'
                         }
                     }
                 },
@@ -216,7 +235,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
 
 
 
-    //Ajax method 
+    //Ajax method - To Get User Details
     $http({
         method: "GET",
         url: "/TaskManagerAPI.aspx/GetUserDetails",
@@ -246,61 +265,79 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 phone: $scope.phoneNo,
                 email: $scope.emailId,
                 password: $scope.password,
-        }
-
+            }
+        
             //Ajax method 
-     $http({
-          method: "POST",
+            $http({
+                method: "POST",
               url: "/TaskManagerAPI.aspx/CreateAccount",
-          data: JSON.stringify(user),
-          cache: false,
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          async: false
-                }).then(function mySuccess(response) {
-                var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " +responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Status ;
-                console.log(response);
-                $('#myModal').modal("show");
-                 if($scope.status== "Success")
-                {
-                    window.location.href = "SignIn.aspx";
-                    }
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
 
-            }, function myError(response) {
-                console.log(response);
-                });
+                var resp = JSON.parse(response.data.d);
 
+                //Case of NTID already existing
+                if (resp.Response.Status == 'Fail') {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = false;
+                } else {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = true;
+                }
+                //Successful creation of Account Message
+                var options = {
+                    "backdrop" : "static"
+                }
+                $('#basicModal').modal(options);
 
+                //Redirect to Sign In page after a specific time interval 
+                setTimeout(function () {
+                window.location.href = "SignIn.aspx";
+                }, 5000);
+            });
+
+            
         }
         else {
             console.log("Passwords do not match");
         }
-      }
-            
+    }
+    //Code for Sending Forgot password
+    $scope.forgotPwdPopUp = function () {
+
+        var options = {
+            "backdrop": "static"
+        }
+        $('#forgotPwd').modal(options);
+    }
 
 
     //SignIn
     $scope.login = function () {
        
+            //Save it to a cookie
+                $cookies.put('username', $scope.ntid);            
 
             var user = {
-                    ntid: $scope.ntid,
-                    password: $scope.password,
-    }
+                ntid: $scope.ntid,
+                password: $scope.password,
+            }
 
 
-    //Ajax method 
-$http({
-        method: "POST",
-        url: "/TaskManagerAPI.aspx/Login",
-        data: JSON.stringify(user),
-        cache: false,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        async: false
-                }).then(function mySuccess(response) {
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/Login",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
@@ -310,16 +347,16 @@ $http({
 
                if($scope.status=="Success")
                 {
-                    window.location.href = "index.html";
+                 window.location.href = "index.html";
                     }
-                }, function myError(response) {
+            }, function myError(response) {
                 console.log(response);
             });
 
-                console.log(user.toString());
+            console.log(user.toString());
 
 
-            }
+}
 
 
 });
