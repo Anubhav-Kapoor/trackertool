@@ -219,7 +219,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     //Ajax method 
     $http({
         method: "GET",
-        url: "/SignUp.aspx/GetUserDetails",
+        url: "/TaskManagerAPI.aspx/GetUserDetails",
         cache: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -231,6 +231,7 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
     }, function myError(response) {
         console.log(response);
     });
+
 
     //SignUp
     $scope.createAccount = function () {
@@ -245,48 +246,39 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
                 phone: $scope.phoneNo,
                 email: $scope.emailId,
                 password: $scope.password,
+        }
 
-
-            }
-        
             //Ajax method 
-            $http({
-                method: "POST",
-                url: "/SignUp.aspx/CreateAccount",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
-
-
-                //Successful creation of Account Message
-                var options = {
-                    "backdrop" : "static"
-                }
-                $('#basicModal').modal(options);
-
-            }, function myError(response) {
-
+     $http({
+          method: "POST",
+              url: "/TaskManagerAPI.aspx/CreateAccount",
+          data: JSON.stringify(user),
+          cache: false,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          async: false
+                }).then(function mySuccess(response) {
                 var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Reason;
+                console.log("Reason: " +responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Status ;
                 console.log(response);
-                $('#myModal').modal("show")
-                window.location.href = "SignIn.aspx";
-
+                $('#myModal').modal("show");
+                 if($scope.status== "Success")
+                {
+                    window.location.href = "SignIn.aspx";
+                    }
 
             }, function myError(response) {
                 console.log(response);
-            });
+                });
 
-            
+
         }
         else {
             console.log("Passwords do not match");
         }
-    }
+      }
+            
 
 
     //SignIn
@@ -294,39 +286,40 @@ app.controller('sampleController', function ($scope, $http, httpService, $interv
        
 
             var user = {
-                ntid: $scope.ntid,
-                password: $scope.password,
-            }
+                    ntid: $scope.ntid,
+                    password: $scope.password,
+    }
 
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/Login",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
+
+    //Ajax method 
+$http({
+        method: "POST",
+        url: "/TaskManagerAPI.aspx/Login",
+        data: JSON.stringify(user),
+        cache: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+                }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
                 console.log("Reason: " + responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Reason;
+                $scope.status = responseJSON.Response.Status;
                 console.log(response);
-                $('#myModal').modal("show")
-                 window.location.href = "index.html";
+                $('#myModal').modal("show");
 
-            }, function myError(response) {
+               if($scope.status=="Success")
+                {
+                    window.location.href = "index.html";
+                    }
+                }, function myError(response) {
                 console.log(response);
             });
 
-            console.log(user.toString());
+                console.log(user.toString());
 
 
-    }
-
-}
+            }
 
 
-
-    );
+});

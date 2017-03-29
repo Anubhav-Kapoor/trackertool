@@ -17,12 +17,12 @@ namespace ProjectTracker.DEL
 
         public int InsertUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
+            Guid userGuid = System.Guid.NewGuid();
 
+            // Hash the password together with our unique userGuid
+            string hashedPassword = Security.HashSHA1(Password + userGuid.ToString());
 
-
-
-
-            int result = 0;
+          int result = 0;
            try
             {
                 //using (TLTEntities2 en = new TLTEntities2())
@@ -51,7 +51,8 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@RoleId", RoleId);
                 cmd.Parameters.AddWithValue("@PhoneNo", PhoneNo);
                 cmd.Parameters.AddWithValue("@EmailId", EmailId);
-                cmd.Parameters.AddWithValue("@Password", Password);
+                cmd.Parameters.AddWithValue("@Password", hashedPassword);
+                cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 result = cmd.ExecuteNonQuery();
 
 

@@ -63,6 +63,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ProjectTracker.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Security.cs" />
     <Compile Include="sp_all_tbl_leave_details_Result.cs">
       <DependentUpon>ProjectTracker.tt</DependentUpon>
     </Compile>

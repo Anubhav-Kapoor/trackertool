@@ -17,6 +17,86 @@ namespace Task_and_Leave_Tracker
         {
 
         }
+
+        #region Sign-up
+        [System.Web.Services.WebMethod]
+        public static String CreateAccount(String ntid, String firstName, String lastName, String roleId, String phone, String email, String password)
+        {
+
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            Boolean value = userBll.ViewUserExistDetailsBLL(ntid);
+            try
+            {
+                if (!value)
+                {
+
+                    if (ntid != "" && firstName != "" && lastName != "" && roleId != "" && phone != "" && email != "" && password != "")
+                    {
+                        int result = userBll.InsertUserDetailsBLL(ntid, firstName, lastName, roleId, phone, email, password);
+
+                        if (result > 0)
+                        {
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "You are successfully registered.";
+
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Fail";
+                            resultObject.Response.Reason = "Please try to register with different email id";
+                        }
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Reason = "Input Data invalid.";
+
+                    }
+                }
+
+                else
+                {
+                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Reason = "User Already exists!!";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Fail";
+                resultObject.Response.Reason = ex.Message;
+            }
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
+
+        [System.Web.Services.WebMethod]
+        public static String GetUserDetails()
+        {
+
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+
+            try
+            {
+
+                string name = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
+
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Fail";
+                resultObject.Response.Reason = ex.Message;
+            }
+            return oSerializer.Serialize(resultObject);
+        }
+
+    
+
         #region Sign-in
         [System.Web.Services.WebMethod]
         public static String Login(String ntid, String password)
@@ -25,30 +105,38 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-          try
+            try
             {
-            DataTable dt = userBll.ViewUserDetailsBLL(ntid);
-            String Ntid = dt.Rows[0]["Ntid"].ToString();
-            String Password = dt.Rows[0]["Password"].ToString();
+                if (ntid != "" && password != "")
+                {
+                    DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+                    String Ntid = dt.Rows[0]["Ntid"].ToString();
+                    String Password = dt.Rows[0]["Password"].ToString();
+                    String UserGuid = dt.Rows[0]["UserGuid"].ToString();
+                    string hashedPassword = Security.HashSHA1(password + UserGuid);
 
-            if (Ntid == ntid && Password == password)
-            {
 
-                resultObject.Response.Status = "Success";
-                resultObject.Response.Reason = "Welcome!!";
+                    if (Ntid == ntid && Password == hashedPassword)
+                    {
 
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Welcome!!";
+
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Reason = "Username Or Password is Incorrect";
+                    }
+
+                }
+                else
+                {
+                    resultObject.Response.Status = "Empty";
+                    resultObject.Response.Reason = "Enter your details !!";
+                }
             }
-            else if (Ntid != ntid || Password != password)
-            {
-                resultObject.Response.Status = "Fail";
-                resultObject.Response.Reason = "Username Or Password is Incorrect";
-            }
-            // else
-            //  {
-            //      Response.Redirect("SignUp.aspx");
-            //  }
-        }
-               catch (Exception ex)
+            catch (Exception ex)
             {
                 resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;

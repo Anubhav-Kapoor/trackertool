@@ -87,7 +87,6 @@
   <ItemGroup>
     <Content Include="bin\RestSharp.dll.refresh" />
     <Content Include="bin\Task and Leave Tracker.dll.config" />
-    <Content Include="JustForCheck.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -166,15 +165,9 @@
   <ItemGroup>
     <Compile Include="App_Data\RestHelper.cs" />
     <Compile Include="App_Data\Utilities.cs" />
-    <Compile Include="JustForCheck.aspx.cs">
-      <DependentUpon>JustForCheck.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="JustForCheck.aspx.designer.cs">
-      <DependentUpon>JustForCheck.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="SignIn.aspx.cs">
       <DependentUpon>SignIn.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
