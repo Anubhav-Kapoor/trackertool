@@ -1,4 +1,4 @@
-﻿var app = angular.module('myApp', []);
+﻿var app = angular.module('myApp', ['ngCookies']);
 // HTTP Factory Service
 app.factory('httpService', function ($http) {
 
@@ -39,7 +39,7 @@ app.directive('header', function () {
 
 //*******************Login Controller - Used for Sign Up and Sign In form*******************//
 
-app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
+app.controller('loginCtrl', function ($scope, $http, httpService, $interval,$cookies) {
 
     //Navigate to Page
     $scope.GoToURL = function (navigatePage) {
@@ -312,6 +312,11 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
     //SignIn
     $scope.login = function () {
        
+            //Save it to a cookie
+                $cookies.put('username', $scope.ntid);
+                $cookies.put('password', $scope.password);
+
+            
 
             var user = {
                 ntid: $scope.ntid,
