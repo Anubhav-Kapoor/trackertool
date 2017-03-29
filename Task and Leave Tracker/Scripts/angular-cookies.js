@@ -21,15 +21,7 @@
  */
 
 
-angular.module('ngCookies', ['ng']).
-  info({ angularVersion: '1.6.4-build.5342+sha.f1d0f03' }).
-  /**
-   * @ngdoc provider
-   * @name $cookiesProvider
-   * @description
-   * Use `$cookiesProvider` to change the default behavior of the {@link ngCookies.$cookies $cookies} service.
-   * */
-   provider('$cookies', [/** @this */function $CookiesProvider() {
+angular.module('ngCookies', ['ng']).provider('$cookies', [/** @this */function $CookiesProvider() {
     /**
      * @ngdoc property
      * @name $cookiesProvider#defaults

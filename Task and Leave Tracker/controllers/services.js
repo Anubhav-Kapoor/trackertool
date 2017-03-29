@@ -39,7 +39,14 @@ app.directive('header', function () {
 
 //*******************Login Controller - Used for Sign Up and Sign In form*******************//
 
-app.controller('loginCtrl', function ($scope, $http, httpService, $interval,$cookies) {
+app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $cookies) {
+
+    //On Load of every page 
+    $scope.loadPage = function () {
+        if ($cookies.get('username') == null || $cookies.get('username') == undefined) {
+            $scope.GoToURL('SignIn.aspx');
+        }
+    }
 
     //Navigate to Page
     $scope.GoToURL = function (navigatePage) {
@@ -49,9 +56,9 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval,$coo
     }
 
     //Code for Clock Ticking
-    $interval(function () {
-        $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    }, 1000);
+    //$interval(function () {
+    //    $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
+    //}, 1000);
 
     //Code for Sub-Title Typing
     $(function () {
@@ -313,10 +320,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval,$coo
     $scope.login = function () {
        
             //Save it to a cookie
-                $cookies.put('username', $scope.ntid);
-                $cookies.put('password', $scope.password);
-
-            
+                $cookies.put('username', $scope.ntid);            
 
             var user = {
                 ntid: $scope.ntid,
