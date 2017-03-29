@@ -87,6 +87,7 @@
   <ItemGroup>
     <Content Include="bin\RestSharp.dll.refresh" />
     <Content Include="bin\Task and Leave Tracker.dll.config" />
+    <Content Include="Index.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -164,6 +165,13 @@
   <ItemGroup>
     <Compile Include="App_Data\RestHelper.cs" />
     <Compile Include="App_Data\Utilities.cs" />
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Security.cs" />

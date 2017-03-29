@@ -298,7 +298,10 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
                 setTimeout(function () {
                 window.location.href = "SignIn.aspx";
                 }, 5000);
-            });
+            }),function myError(response) {
+                console.log(response);
+            }
+
 
             
         }
