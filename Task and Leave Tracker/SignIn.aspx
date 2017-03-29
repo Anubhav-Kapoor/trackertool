@@ -6,7 +6,7 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool-Sign in Page</title>
 </head>
-<body ng-app="myApp" ng-controller="sampleController" style="background-image :url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" style="background-image :url(images/background_pattern.jpg);">
     <div class="container container-resize" style="background-color: #f5f5f5;">
         <div header></div>
 
@@ -26,7 +26,7 @@
                         <span class="button-checkbox">
                             <button type="button" class="btn" data-color="info">Remember Me</button>
                             <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
-                            <a href="" class="forgot btn btn-link pull-right">Forgot Password?</a>
+                            <a class="forgot btn btn-link pull-right" ng-click="forgotPwdPopUp()">Forgot Password?</a>
 
                         </span>
                         <hr class="colorgraph">
@@ -71,6 +71,36 @@
             </fieldset>
         </div>
     </div>
+     <div class="modal fade" id="forgotPwd" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            
+            <h4 class="modal-title" id="myModalLabel">Send Password</h4>
+            </div>
+            <div class="modal-body">
+
+
+               <div class="form-group" style="margin-bottom:34px">
+                            <%--<label class="col-md-4 control-label"  >E-Mail</label>--%>
+                            <div class="col-md-4 inputGroupContainer" style="width:70%">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                    <input id="txt_email" name="email" placeholder="Enter your E-Mail Address" class="form-control" type="text"  ng-model="emailId"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+            </div>
+            <div class="modal-footer">
+                 <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-click="sendPwd()">Send</a>
+                <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal">Close</a>
+                
+        </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 

@@ -121,7 +121,7 @@
 
 
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
-                                <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
+                                <a class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
                                 <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="location.reload();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
                                 
 
@@ -159,11 +159,11 @@
             <h4 class="modal-title" id="myModalLabel">Message</h4>
             </div>
             <div class="modal-body">
-                <h3>Account Successfully Created!!</h3>
+                <h3>{{message}}</h3>
             </div>
             <div class="modal-footer">
-                 <button type="button" class="btn btn-default button" data-dismiss="modal">Get Started</button>
-                <button type="button" class="btn btn-default button" data-dismiss="modal" onclick="location.reload();">Close</button>
+                 <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-show="isSuccess" ng-click="GoToURL('SignIn.aspx')">Sign in</a>
+                <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-hide ="isSuccess">Close</a>
                 
         </div>
     </div>

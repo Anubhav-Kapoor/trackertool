@@ -41,7 +41,12 @@ app.directive('header', function () {
 
 app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
 
-    
+    //Navigate to Page
+    $scope.GoToURL = function (navigatePage) {
+
+        if (navigatePage != null && navigatePage != '')
+            window.location.href = navigatePage;
+    }
 
     //Code for Clock Ticking
     $interval(function () {
@@ -267,23 +272,26 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
                 async: false
             }).then(function mySuccess(response) {
 
+                var resp = JSON.parse(response.data.d);
 
+                //Case of NTID already existing
+                if (resp.Response.Status == 'Fail') {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = false;
+                } else {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = true;
+                }
                 //Successful creation of Account Message
                 var options = {
                     "backdrop" : "static"
                 }
                 $('#basicModal').modal(options);
 
-            }, function myError(response) {
-
-                var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Reason;
-                console.log(response);
-                $('#myModal').modal("show")
-                window.location.href = "SignIn.aspx";
-
-
+                //Redirect to Sign In page after a specific time interval 
+                setTimeout(function () {
+                    window.location.href = "SignIn.aspx";
+                }, 5000);
             });
 
             
@@ -292,7 +300,14 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval) {
             console.log("Passwords do not match");
         }
     }
+    //Code for Sending Forgot password
+    $scope.forgotPwdPopUp = function () {
 
+        var options = {
+            "backdrop": "static"
+        }
+        $('#forgotPwd').modal(options);
+    }
 
     //SignIn
     $scope.login = function () {

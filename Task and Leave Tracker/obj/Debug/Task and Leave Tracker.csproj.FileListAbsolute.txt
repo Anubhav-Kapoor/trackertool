@@ -48,3 +48,11 @@ C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.xml
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.xml
 C:\trackelToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.dll
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.xml
+D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.xml
