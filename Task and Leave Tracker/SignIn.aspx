@@ -23,8 +23,19 @@
                         <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control input-lg"  ng-model="password" placeholder="Password...">
                         </div>
-                        <span class="button-checkbox">
-                            <button type="button" class="btn" data-color="info">Remember Me</button>
+                        <span class="checkbox">
+                            <%--<button type="button" class="btn" data-color="info">Remember Me</button>--%>
+
+
+                            <%--<div class="checkbox">--%>
+                                <label>
+                                    <input type="checkbox" checked data-toggle="toggle" data-style="slow">
+                                    Remember Me
+                                </label>
+                            <%--</div>--%>
+
+
+
                             <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
                             <a class="forgot btn btn-link pull-right" ng-click="forgotPwdPopUp()">Forgot Password?</a>
 
