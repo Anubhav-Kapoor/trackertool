@@ -12,13 +12,13 @@
 
         <div class="row" style="margin-top:20px">
             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                <form role="form">
+                <form role="form" id="login_form" method="post">
                     <fieldset>
                         <h2>Please Sign In</h2>
                         <hr class="colorgraph">
 
                         <div class="form-group">
-                            <input type="text" name="email" id="email" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID...">
+                            <input type="text" name="ntid_name" id="login_ntid" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID...">
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control input-lg"  ng-model="password" placeholder="Password...">
@@ -43,7 +43,7 @@
                         <hr class="colorgraph">
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="submit" class="button"  ng-click="login()" value="Sign In">
+                                <input type="button" class="button"  ng-click="login()" value="Sign In">
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top:16px">Register</a>
@@ -53,7 +53,7 @@
                 </form>
             </div>
         </div>
-        <div id="myPopup" style="display:none;">
+       <%-- <div id="myPopup" style="display:none;">
             <fieldset>
                 <h2>Forgot Password</h2>
                 <hr class="colorgraph">
@@ -66,7 +66,7 @@
                             <label class="col-md-4 control-label">NTID</label>
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
-                                    <input name="first_name" placeholder="Enter your NTID" class="form-control" style="border-radius:10px" type="text">
+                                    <input  name="ntid_name" placeholder="Enter your NTID" class="form-control" style="border-radius:10px" type="text">
                                 </div>
                             </div>
                             <button class="button">Submit</button>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
             </fieldset>
-        </div>
+        </div>--%>
     </div>
      <div class="modal fade" id="forgotPwd" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -89,15 +89,16 @@
             
             <h4 class="modal-title" id="myModalLabel">Send Password</h4>
             </div>
+              <form id="forgot_form" method="post">
             <div class="modal-body">
 
-
+              
                <div class="form-group" style="margin-bottom:34px">
                             <%--<label class="col-md-4 control-label"  >E-Mail</label>--%>
                             <div class="col-md-4 inputGroupContainer" style="width:70%">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input id="txt_email" name="email" placeholder="Enter your E-Mail Address" class="form-control" type="text"  ng-model="emailId"/>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                                    <input id="forgot_ntid" name="ntid_name" placeholder="Network ID"  class="form-control" type="text"  ng-model="ntid"/>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +110,7 @@
                 <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal">Close</a>
                 
         </div>
+            </form>
     </div>
   </div>
 </div>

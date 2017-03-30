@@ -50,7 +50,7 @@ namespace ProjectTracker.BLL
 
         }
 
-        public int DeleteUserDetails(String Ntid)
+        public int DeleteUserDetailsBLL(String Ntid)
         {
             try
             {
@@ -70,12 +70,12 @@ namespace ProjectTracker.BLL
            
         }
 
-        public int UpdateUserDetails(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
+        public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
          {
             try
             {
 
-                 result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
+                 result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password, userGuid);
                 
             }
 

@@ -146,7 +146,7 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-        public int UpdateUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
+        public int UpdateUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
             int result = 0;
             try
@@ -161,6 +161,7 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@PhoneNo", PhoneNo);
                 cmd.Parameters.AddWithValue("@EmailId", EmailId);
                 cmd.Parameters.AddWithValue("@Password", Password);
+                cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 cmd.Parameters.AddWithValue("@Ntid", Ntid);
                 result = cmd.ExecuteNonQuery();
 

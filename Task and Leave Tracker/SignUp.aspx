@@ -7,7 +7,7 @@
     <link rel="import" href="header.html" />
     <title>Sign Up Team Member Page</title>
 </head>
-<body ng-init="loadPage()" ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
+<body  ng-app="myApp" ng-controller="registerCtrl" style="background-image: url(images/background_pattern.jpg);">
   <form class="well form-horizontal" id="contact_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
@@ -109,7 +109,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password"  ng-change="confirmPswd()" ng-model="confPassword" />
+                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password" ng-model="confPassword" />
                                 </div>
                             </div>
                         </div>
