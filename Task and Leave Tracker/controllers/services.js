@@ -35,15 +35,287 @@ app.directive('header', function () {
     };
 });
 
+//*******************Home Controller - Used for Home Page*******************//
+
+app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+
+    $(function () {
+
+        $("#typed").typed({
+            stringsElement: $('#typed-strings'),
+            typeSpeed: 30,
+            backDelay: 500,
+            loop: true,
+            contentType: 'html',
+            loopCount: false,
+            resetCallback: function () { newTyped(); }
+        });
+
+        $('#change_form').bootstrapValidator({
+            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                currentPwd: {
+                    validators: {
+                        stringLength: {
+                            min: 5,
+                        },
+                        notEmpty: {
+                            message: 'Please enter your current password (Min 5 Chars)'
+                        }
+                    }
+                },
+                newPwd: {
+                    validators: {
+                        stringLength: {
+                            min: 5,
+                        },
+                        notEmpty: {
+                            message: 'Please enter your new password (Min 5 Chars)'
+                        }
+                    }
+                },
+                confirmNewPwd: {
+                    validators: {
+                        stringLength: {
+                            min: 5,
+                        },
+                        notEmpty: {
+                            message: 'Re-enter your new password (Min 5 Chars)'
+                        },
+                        identical: {
+                            field: 'newPwd',
+                            message: 'Passwords do not match. Please check!!!'
+                        }
+                    }
+                }
+            }
+        });
+
+        $scope.changePassword = function () {
+
+            var userData = {
+                ntid: sessionStorage.getItem('username'),
+                currentPassword: $scope.currentPwd,
+                newPassword: $scope.newPwd
+            }
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/ChangePassword",
+                data: JSON.stringify(userData),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Status;
+                console.log(response);
+                //  $('#myModal').modal("show");
+
+                if ($scope.status == "Success") {
+                    window.location.href = "SignIn.aspx";
+                }
+            }, function myError(response) {
+                console.log(response);
+            });
+
+        }
 
 
-//*******************Login Controller - Used for Sign Up and Sign In form*******************//
 
-app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $cookies) {
+    });
+
+});
+
+//*******************Login Controller - Used for Sign In form*******************//
+
+app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+
+    //Code for Sub-Title Typing
+    $(function () {
+
+        $("#typed").typed({
+            stringsElement: $('#typed-strings'),
+            typeSpeed: 30,
+            backDelay: 500,
+            loop: true,
+            contentType: 'html',
+            loopCount: false,
+            resetCallback: function () { newTyped(); }
+        });
+
+        $(".reset").click(function () {
+            $("#typed").typed('reset');
+        });
+
+        $('#login_form').bootstrapValidator({
+            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ntid_name: {
+                    validators: {
+                        stringLength: {
+                            min: 2,
+                        },
+                        notEmpty: {
+                            message: 'Please supply your NTID'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        stringLength: {
+                            min: 5,
+                        },
+                        notEmpty: {
+                            message: 'Please supply your password(min 5 characters)'
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#forgot_form').bootstrapValidator({
+            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ntid_name: {
+                    validators: {
+                        stringLength: {
+                            min: 2,
+                        },
+                        notEmpty: {
+                            message: 'Please supply your NTID'
+                        }
+                    }
+                }
+            }
+        });
+
+        //SignIn
+        $scope.login = function () {
+
+            //Save it to a cookie
+            //$cookies.put('username', $scope.ntid);
+            
+            
+            //Save NTID in session storage
+            sessionStorage.setItem('username', $scope.ntid);
+
+            var user = {
+                ntid: $scope.ntid,
+                password: $scope.password,
+            }
+
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/Login",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Status;
+                console.log(response);
+              //  $('#myModal').modal("show");
+
+                if ($scope.status == "Success") {
+                    window.location.href = "Index.aspx";
+                }
+            }, function myError(response) {
+                console.log(response);
+            });
+
+            console.log(user.toString());
+
+
+        }
+        //Forgot Password
+        $scope.sendPwd = function () {
+
+
+            var user = {
+                ntid: $scope.ntid,
+            }
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/ForgotPassword",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Status;
+                console.log(response);
+                $('#myModal').modal("show");
+
+            }, function myError(response) {
+                console.log(response);
+            });
+
+            console.log(user.toString());
+
+
+        }
+
+        //Code for Sending Forgot password
+        $scope.forgotPwdPopUp = function () {
+
+            var options = {
+                "backdrop": "static"
+            }
+            $('#forgotPwd').modal(options);
+        }
+
+        //Navigate to Page
+        $scope.GoToURL = function (navigatePage) {
+
+            if (navigatePage != null && navigatePage != '')
+                window.location.href = navigatePage;
+        }
+
+
+    });
+
+    });
+
+
+//*******************Register Controller - Used for Sign Up form*******************//
+
+app.controller('registerCtrl', function ($scope, $http, httpService, $interval, $cookies) {
 
     //On Load of every page 
     $scope.loadPage = function () {
-        if ($cookies.get('username') == null || $cookies.get('username') == undefined) {
+        if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
             $scope.GoToURL('SignIn.aspx');
         }
     }
@@ -114,7 +386,7 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
                     validators: {
                         stringLength: {
                             min: 2,
-                },
+                        },
                         notEmpty: {
                             message: 'Please supply your last name'
                         }
@@ -188,21 +460,8 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
                     }
                 }
             }
-        })
-        .on('success.form.bv', function (e) {
-            $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
-            $('#contact_form').data('bootstrapValidator').resetForm();
-
-            // Prevent form submission
-            e.preventDefault();
-
-            // Get the form instance
-            var $form = $(e.target);
-
-            // Get the BootstrapValidator instance
-            var bv = $form.data('bootstrapValidator');
         });
-        //End of Sign Up form
+
 
         $('#myTable').DataTable({
             data: dataSet,
@@ -270,7 +529,7 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
             //Ajax method 
             $http({
                 method: "POST",
-              url: "/TaskManagerAPI.aspx/CreateAccount",
+                url: "/TaskManagerAPI.aspx/CreateAccount",
                 data: JSON.stringify(user),
                 cache: false,
                 contentType: "application/json; charset=utf-8",
@@ -296,9 +555,12 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
 
                 //Redirect to Sign In page after a specific time interval 
                 setTimeout(function () {
-                window.location.href = "SignIn.aspx";
+                    window.location.href = "SignIn.aspx";
                 }, 5000);
-            });
+            }),function myError(response) {
+                console.log(response);
+            }
+
 
             
         }
@@ -306,57 +568,9 @@ app.controller('loginCtrl',function ($scope, $http, httpService, $interval, $coo
             console.log("Passwords do not match");
         }
     }
-    //Code for Sending Forgot password
-    $scope.forgotPwdPopUp = function () {
+   
 
-        var options = {
-            "backdrop": "static"
-        }
-        $('#forgotPwd').modal(options);
-    }
-
-
-    //SignIn
-    $scope.login = function () {
-       
-            //Save it to a cookie
-                $cookies.put('username', $scope.ntid);            
-
-            var user = {
-                ntid: $scope.ntid,
-                password: $scope.password,
-            }
-
-
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/Login",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
-
-                var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Status;
-                console.log(response);
-                $('#myModal').modal("show");
-
-               if($scope.status=="Success")
-                {
-                 window.location.href = "index.html";
-                    }
-            }, function myError(response) {
-                console.log(response);
-            });
-
-            console.log(user.toString());
-
-
-}
+   
 
 
 });

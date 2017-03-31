@@ -87,6 +87,7 @@
   <ItemGroup>
     <Content Include="bin\RestSharp.dll.refresh" />
     <Content Include="bin\Task and Leave Tracker.dll.config" />
+    <Content Include="taskPage.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -125,7 +126,6 @@
     <Content Include="header.html" />
     <Content Include="images\background_pattern.jpg" />
     <Content Include="images\logo.png" />
-    <Content Include="index.html" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -164,6 +164,13 @@
   <ItemGroup>
     <Compile Include="App_Data\RestHelper.cs" />
     <Compile Include="App_Data\Utilities.cs" />
+    <Compile Include="taskPage.aspx.cs">
+      <DependentUpon>taskPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="taskPage.aspx.designer.cs">
+      <DependentUpon>taskPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Security.cs" />

@@ -109,7 +109,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password"  ng-change="confirmPswd()" ng-model="confPassword" />
+                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password" ng-model="confPassword" />
                                 </div>
                             </div>
                         </div>
