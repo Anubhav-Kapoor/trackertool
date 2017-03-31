@@ -15,6 +15,7 @@ namespace ProjectTracker.DEL
 
         SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\TLT.mdf;Integrated Security=True");
 
+        //Insertion in User Details Table
         public int InsertUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             Guid userGuid = System.Guid.NewGuid();
@@ -25,22 +26,7 @@ namespace ProjectTracker.DEL
           int result = 0;
            try
             {
-                //using (TLTEntities2 en = new TLTEntities2())
-                //{
-
-                //    tbl_user_details user = new tbl_user_details();
-
-                //    user.Ntid = Ntid;
-                //    user.FirstName = FirstName;
-                //    user.LastName = LastName;
-                //    user.RoleId = RoleId;
-                //    user.PhoneNo = PhoneNo;
-                //    user.EmailId = EmailId;
-                //    user.Password = Password;
-
-                //    en.tbl_user_details.Add(user);
-                //    result = en.SaveChanges();
-                //}
+               
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -58,23 +44,8 @@ namespace ProjectTracker.DEL
 
 
             }
-           catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
-           {
-               Exception raise = dbEx;
-               foreach (var validationErrors in dbEx.EntityValidationErrors)
-               {
-                   foreach (var validationError in validationErrors.ValidationErrors)
-                   {
-                       string message = string.Format("{0}:{1}",
-                           validationErrors.Entry.Entity.ToString(),
-                           validationError.ErrorMessage);
-                       // raise a new exception nesting  
-                       // the current instance as InnerException  
-                       raise = new InvalidOperationException(message, raise);
-                   }
-               }
-               throw raise;
-           }  
+          
+             
             catch (Exception ex)
             {
 
@@ -218,10 +189,137 @@ namespace ProjectTracker.DEL
             }
 
         }
-               
-               
 
-        
+
+        //InsertFunction[Task Details]
+        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, DateTime expiryDate,String createdBy,String assignedTo,String Status )
+        {
+            int result = 0;
+            try
+            {
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Insert");
+                cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
+                cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
+                cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
+                cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
+                cmd.Parameters.AddWithValue("@Status", Status);
+                result = cmd.ExecuteNonQuery();
+
+
+
+            }
+
+
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+        }
+
+        //ViewFunction[Task Details]
+        public DataTable ViewTaskDetailsDEL(int TaskId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View");
+                cmd.Parameters.AddWithValue("@TaskId", TaskId);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        //DeleteFunction[Task Details]
+        public int DeleteTaskDetailsDEL(int TaskId)
+        {
+            int result = 0;
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Delete");
+                cmd.Parameters.AddWithValue("@TaskId", TaskId);
+                result = cmd.ExecuteNonQuery();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+        }
+
+        //UpdateFunction[Task Details]
+        public int UpdateUserDetailsDEL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String Status)
+        {
+            int result = 0;
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Update");
+                cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
+                cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
+                cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
+                cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
+                cmd.Parameters.AddWithValue("@Status", Status);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                result = cmd.ExecuteNonQuery();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+        }
 
     }
 }

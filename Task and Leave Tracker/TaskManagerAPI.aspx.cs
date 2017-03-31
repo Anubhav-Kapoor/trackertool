@@ -168,7 +168,7 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
-        }
+         }
         #endregion
 
         #region  ForgotPassword
@@ -264,10 +264,10 @@ namespace Task_and_Leave_Tracker
                     if (OldPassword == hashedPwd)
                     {
                         Guid userGuid = System.Guid.NewGuid();
-
+                       
                         // Hash the newPassword together with our unique userGuid
-                        string hashedNewPassword = Security.HashSHA1(newPassword + userGuid.ToString());
-                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword,userGuid);
+                        String hashedNewPassword = Security.HashSHA1(newPassword + userGuid.ToString());
+                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword,userGuid.ToString());
 
                         if (result > 0)
                         {
