@@ -130,7 +130,42 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         }
 
+        $scope.createTask = function () {
 
+            var userData = {
+                taskDesc: $scope.taskDesc,
+                createdDate:$scope.createdDate,
+                expiryDate: $scope.expiryDate,
+                createdBy: $scope.createdBy,
+                assignedTo: $scope.assignedTo,
+                Status: $scope.Status
+        }
+
+        //Ajax method 
+        $http({
+            method: "POST",
+            url: "/TaskManagerAPI.aspx/CreateTask",
+            data: JSON.stringify(userData),
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false
+        }).then(function mySuccess(response) {
+
+            var responseJSON = JSON.parse(response.data.d);
+            console.log("Reason: " + responseJSON.Response.Reason);
+            $scope.status = responseJSON.Response.Status;
+            console.log(response);
+            //  $('#myModal').modal("show");
+
+            if ($scope.status == "Success") {
+                window.location.href = "SignIn.aspx";
+            }
+        }, function myError(response) {
+            console.log(response);
+        });
+
+    }
 
     });
 
@@ -240,10 +275,10 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                 console.log("Reason: " + responseJSON.Response.Reason);
                 $scope.status = responseJSON.Response.Status;
                 console.log(response);
-              //  $('#myModal').modal("show");
+                //  $('#myModal').modal("show");
 
                 if ($scope.status == "Success") {
-                    window.location.href = "Index.aspx";
+                    window.location.href = "taskPage.aspx";
                 }
             }, function myError(response) {
                 console.log(response);
@@ -306,7 +341,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
 
     });
 
-    });
+});
 
 
 //*******************Register Controller - Used for Sign Up form*******************//
