@@ -93,15 +93,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TLT.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TLT_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>TLT.mdf</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
     <None Include="packages.config" />
     <EntityDeploy Include="ProjectTracker.edmx">

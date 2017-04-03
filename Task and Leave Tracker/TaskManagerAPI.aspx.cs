@@ -137,30 +137,35 @@ namespace Task_and_Leave_Tracker
                 if (ntid != "" && password != "")
                 {
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
-                    String Ntid = dt.Rows[0]["Ntid"].ToString();
-                    String Password = dt.Rows[0]["Password"].ToString();
-                    String UserGuid = dt.Rows[0]["UserGuid"].ToString();
-                    string hashedPassword = Security.HashSHA1(password + UserGuid);
-
-
-                    if (Ntid == ntid && Password == hashedPassword)
+                    if (dt.Rows.Count > 0)
                     {
 
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Welcome!!";
+                        String Ntid = dt.Rows[0]["Ntid"].ToString();
+                        String Password = dt.Rows[0]["Password"].ToString();
+                        String UserGuid = dt.Rows[0]["UserGuid"].ToString();
+                        string hashedPassword = Security.HashSHA1(password + UserGuid);
+
+                        if (Password == hashedPassword)
+                        {
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "User Authentication Success";
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Reason = "Username Or Password is Incorrect!!!";
+                        }
 
                     }
-                    else
-                    {
-                        resultObject.Response.Status = "Fail";
-                        resultObject.Response.Reason = "Username Or Password is Incorrect";
+                    else {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "User does not exist!!!";
                     }
-
                 }
                 else
                 {
-                    resultObject.Response.Status = "Empty";
-                    resultObject.Response.Reason = "Enter your details !!";
+                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Reason = "Username or Password cannot be empty!!!";
                 }
             }
             catch (Exception ex)

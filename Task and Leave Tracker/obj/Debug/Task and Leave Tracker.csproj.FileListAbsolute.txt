@@ -56,3 +56,25 @@ D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Project
 D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
 D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
 D:\Projects\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
+C:\Projects\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll.config
+C:\Projects\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.pdb
+C:\Projects\trackertool\Task and Leave Tracker\bin\EntityFramework.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Web.Http.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.dll
+C:\Projects\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.pdb
+C:\Projects\trackertool\Task and Leave Tracker\bin\EntityFramework.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Web.Http.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.xml
+C:\Projects\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.pdb
+C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
+C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
+C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
