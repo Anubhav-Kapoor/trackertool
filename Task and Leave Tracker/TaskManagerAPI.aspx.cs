@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
+using System.Globalization;
 
 
 namespace Task_and_Leave_Tracker
@@ -18,7 +19,7 @@ namespace Task_and_Leave_Tracker
         static UserDetailsBLL userBll = new UserDetailsBLL();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         #region Sign-up
@@ -49,7 +50,7 @@ namespace Task_and_Leave_Tracker
                                 mailMessage.From = new MailAddress("bhawneet.singh@owenscorning.com");
                                 mailMessage.Subject = "Welcome to Tracker Tool";
                                 mailMessage.IsBodyHtml = true;
-                                mailMessage.Body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: "+ ntid +"<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                                mailMessage.Body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
                                 SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
                                 smtpClient.Send(mailMessage);
 
@@ -173,7 +174,7 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
-         }
+        }
         #endregion
 
         #region  ForgotPassword
@@ -185,7 +186,7 @@ namespace Task_and_Leave_Tracker
             resultObject.Response = new Response();
             try
             {
-               if (ntid != "")
+                if (ntid != "")
                 {
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
                     String FirstName = dt.Rows[0]["FirstName"].ToString();
@@ -245,7 +246,7 @@ namespace Task_and_Leave_Tracker
 
         #region  ChangePassword
         [System.Web.Services.WebMethod]
-        public static String ChangePassword(String ntid,String currentPassword, String newPassword)
+        public static String ChangePassword(String ntid, String currentPassword, String newPassword)
         {
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
@@ -255,7 +256,7 @@ namespace Task_and_Leave_Tracker
                 if (ntid != "")
                 {
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
-                   
+
                     String OldPassword = dt.Rows[0]["Password"].ToString();
                     String UserGuid = dt.Rows[0]["UserGuid"].ToString();
                     String hashedPwd = Security.HashSHA1(currentPassword + UserGuid);
@@ -269,10 +270,10 @@ namespace Task_and_Leave_Tracker
                     if (OldPassword == hashedPwd)
                     {
                         Guid userGuid = System.Guid.NewGuid();
-                       
+
                         // Hash the newPassword together with our unique userGuid
                         String hashedNewPassword = Security.HashSHA1(newPassword + userGuid.ToString());
-                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword,userGuid.ToString());
+                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword, userGuid.ToString());
 
                         if (result > 0)
                         {
@@ -301,7 +302,7 @@ namespace Task_and_Leave_Tracker
                             }
 
                         }
-                        
+
                     }
                     else
                     {
@@ -326,6 +327,111 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
+
+        #region Create Task
+        [System.Web.Services.WebMethod]
+        public static String CreateTask(String taskDesc,DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            try
+            {
+                DateTime createdDate = new DateTime();
+
+                if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
+                {
+                    try
+                    {
+                       
+
+                        int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
+
+                        if (result > 0)
+                        {
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "New Task Is Created!!";
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Fail";
+                            resultObject.Response.Reason = "Task is Not Created. Try again!!";
+                        }
+                       
+                    }
+
+                    catch (Exception ex)
+                    {
+                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Reason = "Error :  " + ex.Message;
+                    }
+                }
+                else
+                {
+                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Reason = "Fill All The Details";
+                }
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Fail";
+                resultObject.Response.Reason = ex.Message;
+            }
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
+
+        //#region View Task
+        //[System.Web.Services.WebMethod]
+        //public static String ViewTask(int taskId)
+        //{
+        //    JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+        //    RootObjectResponse resultObject = new RootObjectResponse();
+        //    resultObject.Response = new Response();
+        //    try
+        //    {
+
+        //        if (taskId !=null)
+        //        {
+        //            try
+        //            {
+        //                DataTable dt = userBll.ViewTaskDetailsBLL(taskId)
+
+        //             if (dt.rows.count>0)
+        //                {
+                              
+        //                    resultObject.Response.Status = "Success";
+                            
+        //                }
+        //                else
+        //                {
+        //                    resultObject.Response.Status = "Fail";
+        //                    resultObject.Response.Reason = "";
+        //                }
+
+        //            }
+
+        //            catch (Exception ex)
+        //            {
+        //                resultObject.Response.Status = "Fail";
+        //                resultObject.Response.Reason = "Error :  " + ex.Message;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            resultObject.Response.Status = "Fail";
+        //            resultObject.Response.Reason = "Enter the correct Task Id";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        resultObject.Response.Status = "Fail";
+        //        resultObject.Response.Reason = ex.Message;
+        //    }
+        //    return oSerializer.Serialize(resultObject);
+        //}
+        //#endregion
+
 
     }
 }

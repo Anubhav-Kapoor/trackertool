@@ -14,6 +14,8 @@ namespace ProjectTracker.BLL
 
         UserDetailsDEL userDEL = new UserDetailsDEL();
         int result = 0;
+
+        //InsertFunction[User Details]
         public int InsertUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             try
@@ -32,6 +34,7 @@ namespace ProjectTracker.BLL
             return result;
         }
 
+        //ViewFunction[User Details]
         public DataTable ViewUserDetailsBLL(String Ntid)
         {
             DataTable dt = null;
@@ -49,7 +52,25 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
+        //ViewByNameFunction[User Details]
+        public DataTable ViewIdBLL()
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewIdDEL();
 
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            return dt;
+
+        }
+        //DeleteFunction[User Details]
         public int DeleteUserDetailsBLL(String Ntid)
         {
             try
@@ -69,7 +90,7 @@ namespace ProjectTracker.BLL
 
            
         }
-
+        //UpdateFunction[User Details]
         public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
          {
             try
@@ -91,6 +112,7 @@ namespace ProjectTracker.BLL
 
           
         }
+        //CheckUserExistFunction[User Details]
         public Boolean ViewUserExistDetailsBLL(String Ntid)
         {
             Boolean value = false;
@@ -110,11 +132,11 @@ namespace ProjectTracker.BLL
         }
 
          //InsertFunction[Task Details]
-        public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String Status)
+        public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
         {
             try
             {
-                result = userDEL.InsertTaskDetailsDEL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, Status);
+                result = userDEL.InsertTaskDetailsDEL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
             }
             catch (Exception ex)
@@ -167,12 +189,12 @@ namespace ProjectTracker.BLL
         }
         
         //UpdateFunction[Task Details]
-        public int UpdateUserDetailsBLL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String Status)
+        public int UpdateUserDetailsBLL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
         {
             try
             {
 
-                result = userDEL.UpdateUserDetailsDEL(taskId, taskDesc, createdDate, expiryDate, createdBy, assignedTo, Status);
+                result = userDEL.UpdateUserDetailsDEL(taskId, taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
             }
 
