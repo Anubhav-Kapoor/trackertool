@@ -14,6 +14,8 @@ namespace ProjectTracker.BLL
 
         UserDetailsDEL userDEL = new UserDetailsDEL();
         int result = 0;
+
+        //InsertFunction[User Details]
         public int InsertUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             try
@@ -32,6 +34,7 @@ namespace ProjectTracker.BLL
             return result;
         }
 
+        //ViewFunction[User Details]
         public DataTable ViewUserDetailsBLL(String Ntid)
         {
             DataTable dt = null;
@@ -49,7 +52,7 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
-
+        //DeleteFunction[User Details]
         public int DeleteUserDetailsBLL(String Ntid)
         {
             try
@@ -69,7 +72,7 @@ namespace ProjectTracker.BLL
 
            
         }
-
+        //UpdateFunction[User Details]
         public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
          {
             try
@@ -91,6 +94,7 @@ namespace ProjectTracker.BLL
 
           
         }
+        //CheckUserExistFunction[User Details]
         public Boolean ViewUserExistDetailsBLL(String Ntid)
         {
             Boolean value = false;

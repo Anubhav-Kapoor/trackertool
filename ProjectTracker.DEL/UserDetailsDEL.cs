@@ -15,7 +15,7 @@ namespace ProjectTracker.DEL
 
         SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\TLT.mdf;Integrated Security=True");
 
-        //Insertion in User Details Table
+        //InsertFunction[User Details]
         public int InsertUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             Guid userGuid = System.Guid.NewGuid();
@@ -60,7 +60,7 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-
+        //ViewFunction[User Details]
         public DataTable ViewUserDetailsDEL(String Ntid)
         {
             DataTable dt = new DataTable();
@@ -89,7 +89,7 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-
+        //DeleteFunction[User Details]
         public int DeleteUserDetailsDEL(String Ntid)
         {
             int result = 0;
@@ -116,7 +116,7 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
-
+        //UpdateFunction[User Details]
         public int UpdateUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
             int result = 0;
@@ -151,11 +151,7 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-
-
-
-
-
+        //CheckUserExistFunction[User Details]
         public Boolean ViewUserExistDetailsDEL(String Ntid)
         {
             DataTable dt = new DataTable();
