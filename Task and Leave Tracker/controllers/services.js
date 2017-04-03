@@ -134,38 +134,38 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
             var userData = {
                 taskDesc: $scope.taskDesc,
-                createdDate:$scope.createdDate,
+                createdDate: $scope.createdDate,
                 expiryDate: $scope.expiryDate,
                 createdBy: $scope.createdBy,
                 assignedTo: $scope.assignedTo,
                 Status: $scope.Status
-        }
-
-        //Ajax method 
-        $http({
-            method: "POST",
-            url: "/TaskManagerAPI.aspx/CreateTask",
-            data: JSON.stringify(userData),
-            cache: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function mySuccess(response) {
-
-            var responseJSON = JSON.parse(response.data.d);
-            console.log("Reason: " + responseJSON.Response.Reason);
-            $scope.status = responseJSON.Response.Status;
-            console.log(response);
-            //  $('#myModal').modal("show");
-
-            if ($scope.status == "Success") {
-                window.location.href = "SignIn.aspx";
             }
-        }, function myError(response) {
-            console.log(response);
-        });
 
-    }
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/CreateTask",
+                data: JSON.stringify(userData),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.status = responseJSON.Response.Status;
+                console.log(response);
+                //  $('#myModal').modal("show");
+
+                //if ($scope.status == "Success") {
+                //    window.location.href = "SignIn.aspx";
+                //}
+            }, function myError(response) {
+                console.log(response);
+            });
+
+        }
 
     });
 
@@ -249,8 +249,8 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
 
             //Save it to a cookie
             //$cookies.put('username', $scope.ntid);
-            
-            
+
+
             //Save NTID in session storage
             sessionStorage.setItem('username', $scope.ntid);
 
@@ -354,7 +354,7 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
             $scope.GoToURL('SignIn.aspx');
         }
     }
-    
+
     //Navigate to Page
     $scope.GoToURL = function (navigatePage) {
 
@@ -540,7 +540,7 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
     }).then(function mySucces(response) {
 
         console.log(response);
-   
+
     }, function myError(response) {
         console.log(response);
     });
@@ -560,7 +560,7 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
                 email: $scope.emailId,
                 password: $scope.password,
             }
-        
+
             //Ajax method 
             $http({
                 method: "POST",
@@ -584,7 +584,7 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
                 }
                 //Successful creation of Account Message
                 var options = {
-                    "backdrop" : "static"
+                    "backdrop": "static"
                 }
                 $('#basicModal').modal(options);
 
@@ -592,20 +592,20 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
                 setTimeout(function () {
                     window.location.href = "SignIn.aspx";
                 }, 5000);
-            }),function myError(response) {
+            }), function myError(response) {
                 console.log(response);
             }
 
 
-            
+
         }
         else {
             console.log("Passwords do not match");
         }
     }
-   
 
-   
+
+
 
 
 });

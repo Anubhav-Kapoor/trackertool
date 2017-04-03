@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
+using System.Globalization;
 
 
 namespace Task_and_Leave_Tracker
@@ -18,7 +19,7 @@ namespace Task_and_Leave_Tracker
         static UserDetailsBLL userBll = new UserDetailsBLL();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         #region Sign-up
@@ -324,19 +325,22 @@ namespace Task_and_Leave_Tracker
 
         #region Create Task
         [System.Web.Services.WebMethod]
-        public static String CreateTask(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String Status)
+        public static String CreateTask(String taskDesc,DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
         {
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
             try
             {
+                DateTime createdDate = new DateTime();
 
-                if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && Status != "")
+                if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
                 {
                     try
                     {
-                        int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, Status);
+                       
+
+                        int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
                         if (result > 0)
                         {
@@ -371,5 +375,58 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
+
+        //#region View Task
+        //[System.Web.Services.WebMethod]
+        //public static String ViewTask(int taskId)
+        //{
+        //    JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+        //    RootObjectResponse resultObject = new RootObjectResponse();
+        //    resultObject.Response = new Response();
+        //    try
+        //    {
+
+        //        if (taskId !=null)
+        //        {
+        //            try
+        //            {
+        //                DataTable dt = userBll.ViewTaskDetailsBLL(taskId)
+
+        //             if (dt.rows.count>0)
+        //                {
+                              
+        //                    resultObject.Response.Status = "Success";
+                            
+        //                }
+        //                else
+        //                {
+        //                    resultObject.Response.Status = "Fail";
+        //                    resultObject.Response.Reason = "";
+        //                }
+
+        //            }
+
+        //            catch (Exception ex)
+        //            {
+        //                resultObject.Response.Status = "Fail";
+        //                resultObject.Response.Reason = "Error :  " + ex.Message;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            resultObject.Response.Status = "Fail";
+        //            resultObject.Response.Reason = "Enter the correct Task Id";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        resultObject.Response.Status = "Fail";
+        //        resultObject.Response.Reason = ex.Message;
+        //    }
+        //    return oSerializer.Serialize(resultObject);
+        //}
+        //#endregion
+
+
     }
 }

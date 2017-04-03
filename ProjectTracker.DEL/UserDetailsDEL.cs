@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace ProjectTracker.DEL
 {
@@ -81,6 +82,34 @@ namespace ProjectTracker.DEL
 
                 Console.WriteLine(ex.Message);
                
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        //ViewIdFunction[User Details]
+        public DataTable ViewIdDEL()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("Select Ntid from tbl_user_details where RoleID='PM'", con);
+                cmd.CommandType = CommandType.Text;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
 
             }
             finally
@@ -188,11 +217,12 @@ namespace ProjectTracker.DEL
 
 
         //InsertFunction[Task Details]
-        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, DateTime expiryDate,String createdBy,String assignedTo,String Status )
+        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
         {
             int result = 0;
             try
             {
+              
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
@@ -200,10 +230,12 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "Insert");
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
-                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
-                cmd.Parameters.AddWithValue("@Status", Status);
+                cmd.Parameters.AddWithValue("@Status", status);
+                cmd.Parameters.AddWithValue("@TaskName", taskName);
+                cmd.Parameters.AddWithValue("@Start_Date", startDate.Date);
                 result = cmd.ExecuteNonQuery();
 
 
@@ -284,7 +316,7 @@ namespace ProjectTracker.DEL
         }
 
         //UpdateFunction[Task Details]
-        public int UpdateUserDetailsDEL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String Status)
+        public int UpdateUserDetailsDEL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
         {
             int result = 0;
             try
@@ -295,10 +327,12 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "Update");
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
-                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
-                cmd.Parameters.AddWithValue("@Status", Status);
+                cmd.Parameters.AddWithValue("@Status", status);
+                cmd.Parameters.AddWithValue("@TaskName", taskName);
+                cmd.Parameters.AddWithValue("@Start_Date", startDate.Date);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
 

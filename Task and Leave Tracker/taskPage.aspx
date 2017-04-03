@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-6">
                 <i class="fa fa-plus-circle"></i>
-                <button style="display: inline" type="button" class="button" ng-click="createTask()">Create Task</button>
+                <button style="display: inline" type="button" class="button">Create Task</button>
                 <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" data-toggle="modal" data-target="#changePwdModal">Change Password</button>
 
             </div>
