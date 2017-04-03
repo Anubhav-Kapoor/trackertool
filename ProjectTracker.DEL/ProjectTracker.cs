@@ -7,3 +7,109 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
+public partial class tbl_leave_details
+{
+    public int LeaveId { get; set; }
+    public string Leavedesc { get; set; }
+    public Nullable<System.DateTime> FromDate { get; set; }
+    public Nullable<System.DateTime> ToDate { get; set; }
+    public string AppliedBy { get; set; }
+    public string LeaveType { get; set; }
+    public string Status { get; set; }
+
+    public virtual tbl_user_details tbl_user_details { get; set; }
+}
+
+public partial class tbl_task_details
+{
+    public int TaskId { get; set; }
+    public string Taskdesc { get; set; }
+    public Nullable<System.DateTime> Created_Date { get; set; }
+    public Nullable<System.DateTime> Expiry_Date { get; set; }
+    public string CreatedBy { get; set; }
+    public string AssignedTo { get; set; }
+    public string Status { get; set; }
+
+    public virtual tbl_user_details tbl_user_details { get; set; }
+    public virtual tbl_user_details tbl_user_details1 { get; set; }
+}
+
+public partial class tbl_user_details
+{
+    public tbl_user_details()
+    {
+        this.tbl_leave_details = new HashSet<tbl_leave_details>();
+        this.tbl_task_details = new HashSet<tbl_task_details>();
+        this.tbl_task_details1 = new HashSet<tbl_task_details>();
+    }
+
+    public string Ntid { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string RoleId { get; set; }
+    public string PhoneNo { get; set; }
+    public string EmailId { get; set; }
+    public string Password { get; set; }
+
+    public virtual ICollection<tbl_leave_details> tbl_leave_details { get; set; }
+    public virtual ICollection<tbl_task_details> tbl_task_details { get; set; }
+    public virtual ICollection<tbl_task_details> tbl_task_details1 { get; set; }
+    public virtual tbl_user_roles tbl_user_roles { get; set; }
+}
+
+public partial class tbl_user_roles
+{
+    public tbl_user_roles()
+    {
+        this.tbl_user_details = new HashSet<tbl_user_details>();
+    }
+
+    public string RoleId { get; set; }
+    public string RoleDesc { get; set; }
+    public string Rights { get; set; }
+
+    public virtual ICollection<tbl_user_details> tbl_user_details { get; set; }
+}
+
+public partial class sp_all_tbl_leave_details_Result
+{
+    public int LeaveId { get; set; }
+    public string Leavedesc { get; set; }
+    public Nullable<System.DateTime> FromDate { get; set; }
+    public Nullable<System.DateTime> ToDate { get; set; }
+    public string AppliedBy { get; set; }
+    public string LeaveType { get; set; }
+    public string Status { get; set; }
+}
+
+public partial class sp_all_tbl_task_details_Result
+{
+    public int TaskId { get; set; }
+    public string Taskdesc { get; set; }
+    public Nullable<System.DateTime> Created_Date { get; set; }
+    public Nullable<System.DateTime> Expiry_Date { get; set; }
+    public string CreatedBy { get; set; }
+    public string AssignedTo { get; set; }
+    public string Status { get; set; }
+}
+
+public partial class sp_all_tbl_user_details_Result
+{
+    public string Ntid { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string RoleId { get; set; }
+    public string PhoneNo { get; set; }
+    public string EmailId { get; set; }
+    public string Password { get; set; }
+}
+
+public partial class sp_all_tbl_user_roles_Result
+{
+    public string RoleId { get; set; }
+    public string RoleDesc { get; set; }
+    public string Rights { get; set; }
+}

@@ -8,7 +8,7 @@
     <title>Sign Up Team Member Page</title>
 </head>
 <body ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
-  <form class="well form-horizontal" id="contact_form">
+  <form class="well form-horizontal" id="register_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
             <div class="row">
