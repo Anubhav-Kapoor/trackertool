@@ -60,11 +60,8 @@
         </div>
 
     </div>
-<<<<<<< HEAD
     <!-- Change Password Modal -->
-=======
      <!--Change Password-->
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
     <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

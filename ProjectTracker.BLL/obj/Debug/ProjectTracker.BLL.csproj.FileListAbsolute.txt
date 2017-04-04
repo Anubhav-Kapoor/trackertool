@@ -9,8 +9,6 @@ C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\Pr
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\bin\Debug\EntityFramework.xml
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.dll
 C:\Users\SinghB3\Documents\Visual Studio 2013\Projects\Task and Leave Tracker\ProjectTracker.BLL\obj\Debug\ProjectTracker.BLL.pdb
-C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\TLT.mdf
-C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\TLT_log.ldf
 C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.dll
 C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.BLL.pdb
 C:\trackelToolRepository\trackertool\ProjectTracker.BLL\bin\Debug\ProjectTracker.DEL.dll

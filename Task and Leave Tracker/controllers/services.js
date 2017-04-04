@@ -246,13 +246,6 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
                 console.log(response);
 
-                // $('#myModal').modal("show");
-
-                //if ($scope.status == "Success") {
-
-                // window.location.href = "SignIn.aspx";
-
-                //}
 
             }, function myError(response) {
 
@@ -348,9 +341,6 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
         }
 
         $scope.createTask = function () {
-
-<<<<<<< HEAD
-=======
             var userData = {
                 taskDesc: $scope.taskDesc,
                 createdDate: $scope.createdDate,
@@ -386,7 +376,6 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         }
 
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
     });
 
 });
@@ -457,8 +446,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
         // Function - Sign-In 
         $scope.login = function () {
 
-<<<<<<< HEAD
-=======
+
             //Save it to a cookie
             //$cookies.put('username', $scope.ntid);
 
@@ -466,7 +454,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
             //Save NTID in session storage
             sessionStorage.setItem('username', $scope.ntid);
 
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
+
             var user = {
                 ntid: $scope.ntid,
                 password: $scope.password,
@@ -487,7 +475,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                 var responseJSON = JSON.parse(response.data.d);
 
                 $scope.status = responseJSON.Response.Status;
-<<<<<<< HEAD
+
                 $scope.reason = responseJSON.Response.Reason;
 
                 if ($scope.status == "Success") {
@@ -498,273 +486,67 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                 else if ($scope.status == "Failure") {
 
                     $("#statusModal").modal("show");
-=======
-                console.log(response);
-                //  $('#myModal').modal("show");
 
-                if ($scope.status == "Success") {
-                    window.location.href = "taskPage.aspx";
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
+                    console.log(response);
+              
+                    if ($scope.status == "Success") {
+                        window.location.href = "taskPage.aspx";
+
+                    }
+
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+                console.log(user.toString());
+            }
+
+            /**************************** FORGET PASSWORD CODE ***************************************/
+
+            // Display Popup - Forgot password 
+            ($scope.forgotPwdPopUp = function () {
+
+                var options = {
+                    "backdrop": "static"          
                 }
+                $('#forgotPwd').modal(options);
+            }
 
-            }, function myError(response) {
-                console.log(response);
+
+            // Form Validation - Forget Password
+            $('#forgot_form').bootstrapValidator({
+                // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    ntid_name: {
+                        validators: {
+                            stringLength: {
+                                min: 2,
+                            },
+                            notEmpty: {
+                                message: 'Please supply your NTID'
+                            }
+                        }
+                    }
+                }
             });
+        
 
-            console.log(user.toString());
-        }
-
-        /**************************** FORGET PASSWORD CODE ***************************************/
-
-        // Display Popup - Forgot password 
-        $scope.forgotPwdPopUp = function () {
-
-            var options = {
-                "backdrop": "static"
-            }
-            $('#forgotPwd').modal(options);
-        }
-
-
-        // Form Validation - Forget Password
-        $('#forgot_form').bootstrapValidator({
-            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                ntid_name: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your NTID'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Function - Forgot Password 
-        $scope.sendPwd = function () {
-
-            var user = {
-                ntid: $scope.ntid,
-            }
-
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/ForgotPassword",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
-
-                var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
-                $scope.status = responseJSON.Response.Status;
-                console.log(response);
-                $('#myModal').modal("show");
-
-            }, function myError(response) {
-                console.log(response);
-            });
-
-            console.log(user.toString());
-
-        }
-
-        /**************************** SIGN-UP CODE ***************************************/
-
-<<<<<<< HEAD
-        // Form Validation - Sign-Up 
-        $('#register_form').bootstrapValidator({
-=======
-
-    });
-
-});
-
-
-//*******************Register Controller - Used for Sign Up form*******************//
-
-app.controller('registerCtrl', function ($scope, $http, httpService, $interval, $cookies) {
-
-    //On Load of every page 
-    $scope.loadPage = function () {
-        if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
-            $scope.GoToURL('SignIn.aspx');
-        }
-    }
-
-    //Navigate to Page
-    $scope.GoToURL = function (navigatePage) {
-
-        if (navigatePage != null && navigatePage != '')
-            window.location.href = navigatePage;
-    }
-
-    //Code for Clock Ticking
-    //$interval(function () {
-    //    $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
-    //}, 1000);
-
-    //Code for Sub-Title Typing
-    $(function () {
-
-        $("#typed").typed({
-            stringsElement: $('#typed-strings'),
-            typeSpeed: 30,
-            backDelay: 500,
-            loop: true,
-            contentType: 'html',
-            loopCount: false,
-            resetCallback: function () { newTyped(); }
-        });
-
-        $(".reset").click(function () {
-            $("#typed").typed('reset');
-        });
-
-    });
-
-    //Table initialization
-    var dataSet = [
-  ["1", "Fill Appraisal", "Pending", "12-03-2018", ""],
-  ["2", "Fill Timesheet", "In Progress", "30-01-2023", ""],
-  ["3", "Onsite Travel", "Completed", "16-03-2019", ""],
-
-    ];
-    var self = this;
-
-
-    //Data Table Plugin
-    $(document).ready(function () {
-
-
-        $('#contact_form').bootstrapValidator({
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
-            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                first_name: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your first name'
-                        }
-                    }
-                }, last_name: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your last name'
-                        }
-                    }
-                },
-
-
-                role_id: {
-                    validators: {
-                        stringLength: {
-                            min: 3,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your role id'
-                        }
-                    }
-                },
-                ntid_name: {
-                    validators: {
-                        stringLength: {
-                            min: 2,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your NTID'
-                        }
-                    }
-                },
-                password: {
-                    validators: {
-                        stringLength: {
-                            min: 5,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your password(min 5 characters)'
-                        }
-                    }
-                },
-                confpassword: {
-                    validators: {
-                        stringLength: {
-                            min: 5,
-                        },
-                        notEmpty: {
-                            message: 'Please supply your confirm pasword(same as password above)'
-                        },
-                        identical: {
-                            field: 'password',
-                            message: 'The password and its confirm are not the same'
-                        }
-                    }
-                },
-                email: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Please supply your email address'
-                        },
-                        emailAddress: {
-                            message: 'Please supply a valid email address'
-                        }
-                    }
-                },
-                phone: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Please supply your phone number'
-                        },
-                        phone: {
-                            country: 'IN',
-                            message: 'Please supply a vaild phone number'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Function - Sign-Up 
-        $scope.createAccount = function () {
-            if ($scope.password == $scope.confPassword) {
-
+            // Function - Forgot Password 
+            $scope.sendPwd = function () {
 
                 var user = {
                     ntid: $scope.ntid,
-                    firstName: $scope.firstName,
-                    lastName: $scope.lastName,
-                    roleId: $scope.roleId,
-                    phone: $scope.phoneNo,
-                    email: $scope.emailId,
-                    password: $scope.password,
                 }
 
                 //Ajax method 
                 $http({
                     method: "POST",
-                    url: "/TaskManagerAPI.aspx/CreateAccount",
+                    url: "/TaskManagerAPI.aspx/ForgotPassword",
                     data: JSON.stringify(user),
                     cache: false,
                     contentType: "application/json; charset=utf-8",
@@ -772,144 +554,324 @@ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, 
                     async: false
                 }).then(function mySuccess(response) {
 
-                    var resp = JSON.parse(response.data.d);
-
-                    //Case of NTID already existing
-                    if (resp.Response.Status == 'Fail') {
-                        $scope.message = resp.Response.Reason;
-                        $scope.isSuccess = false;
-                    } else {
-                        $scope.message = resp.Response.Reason;
-                        $scope.isSuccess = true;
-                    }
-                    //Successful creation of Account Message
-                    var options = {
-                        "backdrop": "static"
-                    }
-                    $('#basicModal').modal(options);
-
-                    //Redirect to Sign In page after a specific time interval 
-                    setTimeout(function () {
-                        window.location.href = "SignIn.aspx";
-                    }, 5000);
-                }), function myError(response) {
+                    var responseJSON = JSON.parse(response.data.d);
+                    console.log("Reason: " + responseJSON.Response.Reason);
+                    $scope.status = responseJSON.Response.Status;
                     console.log(response);
+                    $('#myModal').modal("show");
+
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+                console.log(user.toString());
+
+            }
+
+       
+
+
+
+            //*******************Register Controller - Used for Sign Up form*******************//
+
+ app.controller('registerCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+
+                //On Load of every page 
+                $scope.loadPage = function () {
+                    if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
+                        $scope.GoToURL('SignIn.aspx');
+                    }
                 }
-            }
-            else {
-                console.log("Passwords do not match");
-            }
-        }
 
-<<<<<<< HEAD
+                //Navigate to Page
+                $scope.GoToURL = function (navigatePage) {
 
-
-        //Ajax method - To Get User Details
-        $http({
-            method: "GET",
-            url: "/TaskManagerAPI.aspx/GetUserDetails",
-            cache: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function mySucces(response) {
-=======
-    //Ajax method - To Get User Details
-    $http({
-        method: "GET",
-        url: "/TaskManagerAPI.aspx/GetUserDetails",
-        cache: false,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        async: false
-    }).then(function mySucces(response) {
-
-        console.log(response);
-
-    }, function myError(response) {
-        console.log(response);
-    });
-
-
-    //SignUp
-    $scope.createAccount = function () {
-        if ($scope.password == $scope.confPassword) {
-
-
-            var user = {
-                ntid: $scope.ntid,
-                firstName: $scope.firstName,
-                lastName: $scope.lastName,
-                roleId: $scope.roleId,
-                phone: $scope.phoneNo,
-                email: $scope.emailId,
-                password: $scope.password,
-            }
-
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/CreateAccount",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
-
-            console.log(response);
-
-<<<<<<< HEAD
-        }, function myError(response) {
-            console.log(response);
-        });
-
-    });
-=======
-                //Case of NTID already existing
-                if (resp.Response.Status == 'Fail') {
-                    $scope.message = resp.Response.Reason;
-                    $scope.isSuccess = false;
-                } else {
-                    $scope.message = resp.Response.Reason;
-                    $scope.isSuccess = true;
+                    if (navigatePage != null && navigatePage != '')
+                        window.location.href = navigatePage;
                 }
-                //Successful creation of Account Message
-                var options = {
-                    "backdrop": "static"
-                }
-                $('#basicModal').modal(options);
 
-                //Redirect to Sign In page after a specific time interval 
-                setTimeout(function () {
-                    window.location.href = "SignIn.aspx";
-                }, 5000);
-            }), function myError(response) {
-                console.log(response);
-            }
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
+                //Code for Clock Ticking
+                //$interval(function () {
+                //    $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
+                //}, 1000);
 
-});// Login Controller Ends Here
+                //Code for Sub-Title Typing
+                $(function () {
 
-<<<<<<< HEAD
-/******************************** UTILITY FUNCTIONS *********************************/
+                    $("#typed").typed({
+                        stringsElement: $('#typed-strings'),
+                        typeSpeed: 30,
+                        backDelay: 500,
+                        loop: true,
+                        contentType: 'html',
+                        loopCount: false,
+                        resetCallback: function () { newTyped(); }
+                    });
 
-//Navigate to Page
-function goToURL(navigatePage) {
-=======
+                    $(".reset").click(function () {
+                        $("#typed").typed('reset');
+                    });
 
-        }
-        else {
-            console.log("Passwords do not match");
-        }
-    }
+                });
+
+                //Table initialization
+                var dataSet = [
+              ["1", "Fill Appraisal", "Pending", "12-03-2018", ""],
+              ["2", "Fill Timesheet", "In Progress", "30-01-2023", ""],
+              ["3", "Onsite Travel", "Completed", "16-03-2019", ""],
+
+                ];
+                var self = this;
 
 
+                //Data Table Plugin
+                $(document).ready(function () {
 
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
 
-    if (navigatePage != null && navigatePage != '')
-        window.location.href = navigatePage;
-}
+                    $('#register_form').bootstrapValidator({
+                        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                        feedbackIcons: {
+                            valid: 'glyphicon glyphicon-ok',
+                            invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+                            first_name: {
+                                validators: {
+                                    stringLength: {
+                                        min: 2,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your first name'
+                                    }
+                                }
+                            }, last_name: {
+                                validators: {
+                                    stringLength: {
+                                        min: 2,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your last name'
+                                    }
+                                }
+                            },
 
+
+                            role_id: {
+                                validators: {
+                                    stringLength: {
+                                        min: 3,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your role id'
+                                    }
+                                }
+                            },
+                            ntid_name: {
+                                validators: {
+                                    stringLength: {
+                                        min: 2,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your NTID'
+                                    }
+                                }
+                            },
+                            password: {
+                                validators: {
+                                    stringLength: {
+                                        min: 5,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your password(min 5 characters)'
+                                    }
+                                }
+                            },
+                            confpassword: {
+                                validators: {
+                                    stringLength: {
+                                        min: 5,
+                                    },
+                                    notEmpty: {
+                                        message: 'Please supply your confirm pasword(same as password above)'
+                                    },
+                                    identical: {
+                                        field: 'password',
+                                        message: 'The password and its confirm are not the same'
+                                    }
+                                }
+                            },
+                            email: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Please supply your email address'
+                                    },
+                                    emailAddress: {
+                                        message: 'Please supply a valid email address'
+                                    }
+                                }
+                            },
+                            phone: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Please supply your phone number'
+                                    },
+                                    phone: {
+                                        country: 'IN',
+                                        message: 'Please supply a vaild phone number'
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Function - Sign-Up 
+                    $scope.createAccount = function () {
+                        if ($scope.password == $scope.confPassword) {
+
+
+                            var user = {
+                                ntid: $scope.ntid,
+                                firstName: $scope.firstName,
+                                lastName: $scope.lastName,
+                                roleId: $scope.roleId,
+                                phone: $scope.phoneNo,
+                                email: $scope.emailId,
+                                password: $scope.password,
+                            }
+
+                            //Ajax method 
+                            $http({
+                                method: "POST",
+                                url: "/TaskManagerAPI.aspx/CreateAccount",
+                                data: JSON.stringify(user),
+                                cache: false,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                async: false
+                            }).then(function mySuccess(response) {
+
+                                var resp = JSON.parse(response.data.d);
+
+                                //Case of NTID already existing
+                                if (resp.Response.Status == 'Fail') {
+                                    $scope.message = resp.Response.Reason;
+                                    $scope.isSuccess = false;
+                                } else {
+                                    $scope.message = resp.Response.Reason;
+                                    $scope.isSuccess = true;
+                                }
+                                //Successful creation of Account Message
+                                var options = {
+                                    "backdrop": "static"
+                                }
+                                $('#basicModal').modal(options);
+
+                                //Redirect to Sign In page after a specific time interval 
+                                setTimeout(function () {
+                                    window.location.href = "SignIn.aspx";
+                                }, 5000);
+                            }), function myError(response) {
+                                console.log(response);
+                            }
+                        }
+                        else {
+                            console.log("Passwords do not match");
+                        }
+                    }
+              
+
+
+                    //Ajax method - To Get User Details
+                    $http({
+                        method: "GET",
+                        url: "/TaskManagerAPI.aspx/GetUserDetails",
+                        cache: false,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: false
+                    }).then(function mySucces(response) {
+                        //Ajax method - To Get User Details
+                        $http({
+                            method: "GET",
+                            url: "/TaskManagerAPI.aspx/GetUserDetails",
+                            cache: false,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: false
+                        }).then(function mySucces(response) {
+
+                            console.log(response);
+
+                        }, function myError(response) {
+                            console.log(response);
+                        });
+
+
+                        //SignUp
+                        $scope.createAccount = function () {
+                            if ($scope.password == $scope.confPassword) {
+
+
+                                var user = {
+                                    ntid: $scope.ntid,
+                                    firstName: $scope.firstName,
+                                    lastName: $scope.lastName,
+                                    roleId: $scope.roleId,
+                                    phone: $scope.phoneNo,
+                                    email: $scope.emailId,
+                                    password: $scope.password,
+                                }
+
+                                //Ajax method 
+                                $http({
+                                    method: "POST",
+                                    url: "/TaskManagerAPI.aspx/CreateAccount",
+                                    data: JSON.stringify(user),
+                                    cache: false,
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    async: false
+                                }).then(function mySuccess(response) {
+
+                                    console.log(response);
+
+                                }, function myError(response) {
+                                    console.log(response);
+                                });
+
+  
+                                //Case of NTID already existing
+                                if (resp.Response.Status == 'Fail') {
+                                    $scope.message = resp.Response.Reason;
+                                    $scope.isSuccess = false;
+                                } else {
+                                    $scope.message = resp.Response.Reason;
+                                    $scope.isSuccess = true;
+                                }
+                                //Successful creation of Account Message
+                                var options = {
+                                    "backdrop": "static"
+                                }
+                                $('#basicModal').modal(options);
+
+                                //Redirect to Sign In page after a specific time interval 
+                                setTimeout(function () {
+                                    window.location.href = "SignIn.aspx";
+                                }, 5000);
+                                function myError(response) {
+                                    console.log(response);
+                                }
+
+                            }};// Login Controller Ends Here
+
+                        /******************************** UTILITY FUNCTIONS *********************************/
+
+                        //Navigate to Page
+                        function goToURL(navigatePage) {
+
+                            if (navigatePage != null && navigatePage != '')
+                                window.location.href = navigatePage;
+                        }
+                    });
+               
