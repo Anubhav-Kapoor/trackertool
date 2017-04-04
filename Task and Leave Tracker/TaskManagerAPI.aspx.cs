@@ -337,7 +337,8 @@ namespace Task_and_Leave_Tracker
             resultObject.Response = new Response();
             try
             {
-                DateTime createdDate = new DateTime();
+                DateTime createdDate = DateTime.Now;
+
 
                 if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
                 {

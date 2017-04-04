@@ -228,6 +228,7 @@ namespace ProjectTracker.DEL
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "Insert");
+                cmd.Parameters.AddWithValue("@TaskId ", 0);
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
                 cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
