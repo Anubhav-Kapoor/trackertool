@@ -228,12 +228,12 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
                 var userData = {
 
                     taskDesc: $scope.taskDesc,
-                    expiryDate: moment($scope.taskEndDate.toUTCString()).format('DD/MM/YYYY'),
+                    expiryDate: moment($scope.taskEndDate.toUTCString()).format('MM/DD/YYYY'),
                     createdBy: sessionStorage.getItem("username"),
                     assignedTo: $scope.assignedTo,
                     status: "In Progress",
                     taskName: $scope.taskName,
-                    startDate: moment($scope.taskStartDate.toUTCString()).format('DD/MM/YYYY')
+                    startDate: moment($scope.taskStartDate.toUTCString()).format('MM/DD/YYYY')
 
                 }
 

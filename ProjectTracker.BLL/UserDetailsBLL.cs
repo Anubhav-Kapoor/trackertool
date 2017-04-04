@@ -132,7 +132,7 @@ namespace ProjectTracker.BLL
         }
 
          //InsertFunction[Task Details]
-        public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             try
             {

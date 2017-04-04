@@ -217,7 +217,7 @@ namespace ProjectTracker.DEL
 
 
         //InsertFunction[Task Details]
-        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             int result = 0;
             try
@@ -231,12 +231,12 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskId ", 0);
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
-                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
                 cmd.Parameters.AddWithValue("@Status", status);
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
-                cmd.Parameters.AddWithValue("@Start_Date", startDate.Date);
+                cmd.Parameters.AddWithValue("@Start_Date", startDate);
                 result = cmd.ExecuteNonQuery();
 
 

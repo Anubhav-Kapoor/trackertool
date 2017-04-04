@@ -330,7 +330,7 @@ namespace Task_and_Leave_Tracker
 
         #region Create Task
         [System.Web.Services.WebMethod]
-        public static String CreateTask(String taskDesc,DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public static String CreateTask(String taskDesc, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
@@ -339,6 +339,7 @@ namespace Task_and_Leave_Tracker
             {
                 DateTime createdDate = DateTime.Now;
 
+                //createdDate.Date.ToString();
 
                 if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
                 {
