@@ -46,7 +46,7 @@ jQuery.fn.extend({
 
 //*******************Home Controller - Used for Home Page*******************//
 
-app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $interval, $cookies) {
 
     $(function () {
 
@@ -72,15 +72,12 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         /******************************** HOME PAGE CODE *********************************/
 
-        //Table initialization
-        $scope.tasks = [];
-        var self = this;
 
         $scope.loadTable = function (tableData) {
-          $scope.taskTable =   $('#myTable').DataTable({
+            $scope.taskTable = $('#myTable').DataTable({
                 data: tableData,
                 columns: [
-                    { title: "Task ID" ,width: "10%"},
+                    { title: "Task ID", width: "10%" },
                     { title: "Task Name", width: "10%" },
                     { title: "Assigned To", width: "10%" },
                     { title: "Start Date", width: "10%" },
@@ -97,6 +94,56 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
             });
         }
 
+        $scope.homeInit = function () {
+
+            var ntid = sessionStorage.getItem("username");
+            if (ntid != null || ntid != undefined) {
+
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/",
+                    data: ntid,
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: false
+
+                }).then(function mySuccess(response) {
+
+                    var responseJSON = JSON.parse(response.data.d);
+
+                    $scope.status = responseJSON.Response.Status;
+
+                    if ($scope.status == "Success") {
+
+                        $scope.user = JSON.parse(responseJSON.Response.userObject)[0];
+                       
+                        $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
+                    
+                        //Table initialization
+                        $scope.tasks = parseTaskList($scope.taskListON);
+
+                        $scope.loadTable($scope.tasks);
+
+                      
+                    }
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+            } else {
+                window.location.href = "signin";
+            }
+
+        }
+
+
+        
+        var self = this;
+
+        
+
         $scope.refreshTable = function (tableData) {
 
             $scope.taskTable.clear();
@@ -107,7 +154,6 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
         }
 
 
-        $scope.loadTable($scope.tasks);
         
         $('#myTable tbody').on('click', "#edit", function () {
             //var data = table.row($(this).parents('tr')).data();
@@ -425,7 +471,7 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
 //******************* Login Controller *******************//
 
-app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
 
 
     $(function () {

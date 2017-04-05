@@ -157,12 +157,12 @@ namespace Task_and_Leave_Tracker
                             resultObject.Response.userObject = oSerializer.Serialize(userList);
                             DataTable dt1 = null;
                             List<Task> taskList = new List<Task>();
-                            if (u.roleId == "200")
+                            if (u.roleId == "201")
                             {
                                 dt1 = userBll.ViewByCreateBLL(u.ntid);
                             }
 
-                            else if (u.roleId == "201")
+                            else if (u.roleId == "200")
                             {
 
                                 dt1 = userBll.ViewByAssignBLL(u.ntid);
