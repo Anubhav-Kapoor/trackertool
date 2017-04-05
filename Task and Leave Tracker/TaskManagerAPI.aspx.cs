@@ -339,13 +339,14 @@ namespace Task_and_Leave_Tracker
             {
                 DateTime createdDate = DateTime.Now;
 
-                //createdDate.Date.ToString();
+               
+                        
 
                 if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
                 {
                     try
                     {
-                       
+                        
                         
                         int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
@@ -401,56 +402,55 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
-        //#region View Task
-        //[System.Web.Services.WebMethod]
-        //public static String ViewTask(int taskId)
-        //{
-        //    JavaScriptSerializer oSerializer = new JavaScriptSerializer();
-        //    RootObjectResponse resultObject = new RootObjectResponse();
-        //    resultObject.Response = new Response();
-        //    try
-        //    {
+        #region Get User List
+        [System.Web.Services.WebMethod]
+        public static String GetUserList()
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+           
 
-        //        if (taskId !=null)
-        //        {
-        //            try
-        //            {
-        //                DataTable dt = userBll.ViewTaskDetailsBLL(taskId)
+               
+                    try
+                    {
+                        DataTable dt = userBll.ViewIdBLL();
 
-        //             if (dt.rows.count>0)
-        //                {
-                              
-        //                    resultObject.Response.Status = "Success";
-                            
-        //                }
-        //                else
-        //                {
-        //                    resultObject.Response.Status = "Fail";
-        //                    resultObject.Response.Reason = "";
-        //                }
+                     if (dt.Rows.Count>0)
+                        {
+                          List<User> userList = new List<User>();
 
-        //            }
+                          for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                User t = new User();
+                                t.ntid = dt.Rows[i]["Ntid"].ToString();
+                                t.firstName = dt.Rows[i]["FirstName"].ToString();
+                                t.lastName = dt.Rows[i]["LastName"].ToString();
+                                t.name = t.firstName +" "+ t.lastName;
+                                userList.Add(t);
+                            }
+                          resultObject.Response.userObject = oSerializer.Serialize(userList);
+                          resultObject.Response.Status = "Success";
+                          resultObject.Response.Reason = "Users are added!!";
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Fail";
+                            resultObject.Response.Reason = "";
+                        }
 
-        //            catch (Exception ex)
-        //            {
-        //                resultObject.Response.Status = "Fail";
-        //                resultObject.Response.Reason = "Error :  " + ex.Message;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            resultObject.Response.Status = "Fail";
-        //            resultObject.Response.Reason = "Enter the correct Task Id";
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        resultObject.Response.Status = "Fail";
-        //        resultObject.Response.Reason = ex.Message;
-        //    }
-        //    return oSerializer.Serialize(resultObject);
-        //}
-        //#endregion
+                    }
+
+                    catch (Exception ex)
+                    {
+                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Reason = "Error :  " + ex.Message;
+                    }              
+                       
+            return oSerializer.Serialize(resultObject);
+            
+        }
+        #endregion
 
 
     }

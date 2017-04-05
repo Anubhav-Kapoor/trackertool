@@ -39,6 +39,7 @@ namespace Task_and_Leave_Tracker
         public string ntid { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string name { get; set; }
         public string roleId { get; set; }
         public String phoneNo { get; set; }
         public string emailId { get; set; }

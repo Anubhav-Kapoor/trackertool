@@ -183,13 +183,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
                                     <select title="Select Associate" id="assignedTo" name="assignedTo" class="form-control" ng-model="assignedTo">
-                                        <option value="sethir">sethir</option>
-                                        <option value="jauharia">jauharia</option>
-                                        <option value="kapoora1">kapoora1</option>
-                                        <option value="raic1">raic1</option>
-                                        <option value="pandeya1">pandeya1</option>
-                                        <option value="singhb3">singhb3</option>
-                                        <option value="sharmak">sharmak</option>
+                                        <option ng-repeat="tm in availableTeamMembers track by $index" value={{tm.ntid}}>{{tm.name}}</option>
                                     </select>
                                     
                                 </div>

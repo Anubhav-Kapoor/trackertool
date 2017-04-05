@@ -126,11 +126,37 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         // Display Popup - Create Task
         $scope.createTaskPopup = function () {
-            $scope.isTaskFormValid = true;
-            var options = {
-                "backdrop": "static"
-            }
-            $('#createTaskModal').modal(options);
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/GetUserList",
+                data: "",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+               
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+           
+                $scope.status = responseJSON.Response.Status;
+            
+                if ($scope.status == "Success") {
+                    usersJSON = JSON.parse(responseJSON.Response.userObject);
+                    $scope.availableTeamMembers = parseTeamMembers(usersJSON);
+                    $scope.isTaskFormValid = true;
+                    var options = {
+                        "backdrop": "static"
+                    }
+                    $('#createTaskModal').modal(options);
+                }
+            }, function myError(response) {
+                console.log(response);
+            });
+
+          
         }
 
         // Form Validation - Task Form 
@@ -492,6 +518,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                     //Save NTID in session storage
                     sessionStorage.setItem('username', $scope.ntid);
                     window.location.href = "taskPage.aspx";
+
                 }
                 else if ($scope.status == "Failure") {
 
@@ -782,7 +809,6 @@ function goToURL(navigatePage) {
 }
 
 // Function - Task List Parsing
-
 function parseTaskList(taskList){
 
     var refinedTaskList = [];
@@ -801,4 +827,16 @@ function parseTaskList(taskList){
 
     return refinedTaskList;
 
+}
+
+// Function - Team Members List Parsing
+function parseTeamMembers(tmList) {
+    var teamMembersList = [];
+    for (i = 0; i < tmList.length; i++) {
+        var tm = {};
+        tm.name = tmList[i].name;
+        tm.ntid = tmList[i].ntid;
+        teamMembersList.push(tm);
+    }
+    return teamMembersList;
 }
