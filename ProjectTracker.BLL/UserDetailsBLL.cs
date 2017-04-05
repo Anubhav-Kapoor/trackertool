@@ -52,13 +52,13 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
-        //ViewByNameFunction[User Details]
+        //ViewIdFunction[User Details]
         public DataTable ViewIdBLL()
         {
             DataTable dt = null;
             try
             {
-               // dt = userDEL.ViewIdDEL();
+                dt = userDEL.ViewIdDEL();
 
             }
             catch (Exception ex)

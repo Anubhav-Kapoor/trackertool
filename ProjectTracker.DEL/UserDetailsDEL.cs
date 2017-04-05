@@ -98,7 +98,7 @@ namespace ProjectTracker.DEL
             try
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("Select Ntid from tbl_user_details where RoleID='PM'", con);
+                SqlCommand cmd = new SqlCommand("Select Ntid,FirstName,LastName from tbl_user_details where RoleID='200'", con);
                 cmd.CommandType = CommandType.Text;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
