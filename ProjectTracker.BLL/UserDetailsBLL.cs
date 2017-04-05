@@ -58,7 +58,7 @@ namespace ProjectTracker.BLL
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewIdDEL();
+               // dt = userDEL.ViewIdDEL();
 
             }
             catch (Exception ex)

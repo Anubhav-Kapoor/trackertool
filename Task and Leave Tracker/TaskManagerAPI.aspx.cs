@@ -62,7 +62,7 @@ namespace Task_and_Leave_Tracker
 
                             catch (Exception ex)
                             {
-                                resultObject.Response.Status = "Failure";
+                                resultObject.Response.Status = "Fail";
                                 resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                             }
                             resultObject.Response.Status = "Success";
@@ -71,13 +71,13 @@ namespace Task_and_Leave_Tracker
                         }
                         else
                         {
-                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Status = "Fail";
                             resultObject.Response.Reason = "Please try to register with different email id";
                         }
                     }
                     else
                     {
-                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Status = "Fail";
                         resultObject.Response.Reason = "Input Data invalid.";
 
                     }
@@ -85,14 +85,14 @@ namespace Task_and_Leave_Tracker
 
                 else
                 {
-                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Status = "Fail";
                     resultObject.Response.Reason = "User Already exists!!";
                 }
 
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -116,7 +116,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -164,13 +164,13 @@ namespace Task_and_Leave_Tracker
                 }
                 else
                 {
-                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Status = "Fail";
                     resultObject.Response.Reason = "Username or Password cannot be empty!!!";
                 }
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -219,7 +219,7 @@ namespace Task_and_Leave_Tracker
 
                         catch (Exception ex)
                         {
-                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Status = "Fail";
                             resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                         }
 
@@ -236,7 +236,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -297,7 +297,7 @@ namespace Task_and_Leave_Tracker
 
                             catch (Exception ex)
                             {
-                                resultObject.Response.Status = "Failure";
+                                resultObject.Response.Status = "Fail";
                                 resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                             }
 
@@ -306,7 +306,7 @@ namespace Task_and_Leave_Tracker
                     }
                     else
                     {
-                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Status = "Fail";
                         resultObject.Response.Reason = "Passwords Do Not Match!!";
                     }
 
@@ -321,7 +321,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -338,8 +338,9 @@ namespace Task_and_Leave_Tracker
             try
             {
                 DateTime createdDate = DateTime.Now;
-             
-                
+
+                //createdDate.Date.ToString();
+
                 if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
                 {
                     try
@@ -350,14 +351,12 @@ namespace Task_and_Leave_Tracker
 
                         if (result > 0)
                         {
-
-                            
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "New Task Is Created!!";
                         }
                         else
                         {
-                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Status = "Fail";
                             resultObject.Response.Reason = "Task is Not Created. Try again!!";
                         }
                        
@@ -365,19 +364,19 @@ namespace Task_and_Leave_Tracker
 
                     catch (Exception ex)
                     {
-                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Status = "Fail";
                         resultObject.Response.Reason = "Error :  " + ex.Message;
                     }
                 }
                 else
                 {
-                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Status = "Fail";
                     resultObject.Response.Reason = "Fill All The Details";
                 }
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Failure";
+                resultObject.Response.Status = "Fail";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -386,7 +385,7 @@ namespace Task_and_Leave_Tracker
 
         //#region View Task
         //[System.Web.Services.WebMethod]
-        //public static String ViewTask(String createdBy)
+        //public static String ViewTask(int taskId)
         //{
         //    JavaScriptSerializer oSerializer = new JavaScriptSerializer();
         //    RootObjectResponse resultObject = new RootObjectResponse();
@@ -394,13 +393,13 @@ namespace Task_and_Leave_Tracker
         //    try
         //    {
 
-        //        if (createdBy != null)
+        //        if (taskId !=null)
         //        {
         //            try
         //            {
-        //                DataTable dt = userBll.ViewTaskDetailsBLL(createdBy);
+        //                DataTable dt = userBll.ViewTaskDetailsBLL(taskId)
 
-        //             if (dt.Rows.Count>0)
+        //             if (dt.rows.count>0)
         //                {
                               
         //                    resultObject.Response.Status = "Success";
@@ -408,7 +407,7 @@ namespace Task_and_Leave_Tracker
         //                }
         //                else
         //                {
-        //                    resultObject.Response.Status = "Failure";
+        //                    resultObject.Response.Status = "Fail";
         //                    resultObject.Response.Reason = "";
         //                }
 
@@ -416,19 +415,19 @@ namespace Task_and_Leave_Tracker
 
         //            catch (Exception ex)
         //            {
-        //                resultObject.Response.Status = "Failure";
+        //                resultObject.Response.Status = "Fail";
         //                resultObject.Response.Reason = "Error :  " + ex.Message;
         //            }
         //        }
         //        else
         //        {
-        //            resultObject.Response.Status = "Failure";
+        //            resultObject.Response.Status = "Fail";
         //            resultObject.Response.Reason = "Enter the correct Task Id";
         //        }
         //    }
         //    catch (Exception ex)
         //    {
-        //        resultObject.Response.Status = "Failure";
+        //        resultObject.Response.Status = "Fail";
         //        resultObject.Response.Reason = ex.Message;
         //    }
         //    return oSerializer.Serialize(resultObject);

@@ -60,11 +60,8 @@
         </div>
 
     </div>
-<<<<<<< HEAD
+
     <!-- Change Password Modal -->
-=======
-     <!--Change Password-->
->>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
     <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -202,11 +199,29 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-default button" style="padding-top: 16px; width: auto" data-dismiss="modal" ng-click="createTask()">Create Task</a>
+                    <a href="#" class="btn btn-default button" id="createTaskButton" style="padding-top: 16px; width: auto" ng-click="createTask()">Create Task</a>
                     <a href="#" class="btn btn-default button" style="padding-top: 16px" data-dismiss="modal">Cancel</a>
 
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+     <!-- Status Notification Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalTitle" style="text-align:center">Create Task - <span ng-bind="status"></span></h4>
+                </div>
+                <div class="modal-body">
+                   <h3 style="text-align:center" ng-bind="reason"></h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
             </div>
         </div>
     </div>
