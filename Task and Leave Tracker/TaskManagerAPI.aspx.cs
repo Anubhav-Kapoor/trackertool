@@ -19,7 +19,7 @@ namespace Task_and_Leave_Tracker
         static UserDetailsBLL userBll = new UserDetailsBLL();
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         #region Sign-up
@@ -62,7 +62,7 @@ namespace Task_and_Leave_Tracker
 
                             catch (Exception ex)
                             {
-                                resultObject.Response.Status = "Fail";
+                                resultObject.Response.Status = "Failure";
                                 resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                             }
                             resultObject.Response.Status = "Success";
@@ -71,13 +71,13 @@ namespace Task_and_Leave_Tracker
                         }
                         else
                         {
-                            resultObject.Response.Status = "Fail";
-                            resultObject.Response.Reason = "Please try to register with different email id";
+                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Reason = "Please try to register with different ntid";
                         }
                     }
                     else
                     {
-                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Status = "Failure";
                         resultObject.Response.Reason = "Input Data invalid.";
 
                     }
@@ -85,14 +85,14 @@ namespace Task_and_Leave_Tracker
 
                 else
                 {
-                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Status = "Failure";
                     resultObject.Response.Reason = "User Already exists!!";
                 }
 
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -116,7 +116,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -139,16 +139,64 @@ namespace Task_and_Leave_Tracker
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
                     if (dt.Rows.Count > 0)
                     {
-
-                        String Ntid = dt.Rows[0]["Ntid"].ToString();
+                        List<User> userList = new List<User>();
+                        User u = new User();
+                        u.ntid = dt.Rows[0]["Ntid"].ToString();
+                        u.firstName = dt.Rows[0]["FirstName"].ToString();
+                        u.lastName = dt.Rows[0]["LastName"].ToString();
+                        u.roleId = dt.Rows[0]["RoleId"].ToString();
+                        u.phoneNo = dt.Rows[0]["PhoneNo"].ToString();
+                        u.emailId = dt.Rows[0]["EmailId"].ToString();
                         String Password = dt.Rows[0]["Password"].ToString();
                         String UserGuid = dt.Rows[0]["UserGuid"].ToString();
                         string hashedPassword = Security.HashSHA1(password + UserGuid);
 
                         if (Password == hashedPassword)
                         {
+                            userList.Add(u);
+                            resultObject.Response.userObject = oSerializer.Serialize(userList);
+                            DataTable dt1 = null;
+                            List<Task> taskList = new List<Task>();
+                            if (u.roleId == "200")
+                            {
+                                dt1 = userBll.ViewByCreateBLL(u.ntid);
+                            }
+
+                            else if (u.roleId == "201")
+                            {
+
+                                dt1 = userBll.ViewByAssignBLL(u.ntid);
+                            }
+
+                            if (dt1.Rows.Count > 0)
+                            {
+                                for (int i = 0; i < dt1.Rows.Count; i++)
+                                {
+                                    Task t = new Task();
+                                    t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
+                                    t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
+                                    t.createdDate = Convert.ToDateTime(dt1.Rows[i]["Created_Date"]);
+                                    t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
+                                    t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
+                                    t.assignedTo = dt1.Rows[i]["AssignedTo"].ToString();
+                                    t.status = dt1.Rows[i]["Status"].ToString();
+                                    t.taskname = dt1.Rows[i]["TaskName"].ToString();
+                                    t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
+                                    taskList.Add(t);
+                                }
+                                resultObject.Response.taskObject = oSerializer.Serialize(taskList);
+                            }
+                            else
+                            {
+                                resultObject.Response.Status = "Failure";
+                                resultObject.Response.Reason = "Data Not Retreived!!!";
+                            }
+
+
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "User Authentication Success";
+
+
                         }
                         else
                         {
@@ -157,20 +205,21 @@ namespace Task_and_Leave_Tracker
                         }
 
                     }
-                    else {
+                    else
+                    {
                         resultObject.Response.Status = "Failure";
                         resultObject.Response.Reason = "User does not exist!!!";
                     }
                 }
                 else
                 {
-                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Status = "Failure";
                     resultObject.Response.Reason = "Username or Password cannot be empty!!!";
                 }
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -219,7 +268,7 @@ namespace Task_and_Leave_Tracker
 
                         catch (Exception ex)
                         {
-                            resultObject.Response.Status = "Fail";
+                            resultObject.Response.Status = "Failure";
                             resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                         }
 
@@ -236,7 +285,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -297,7 +346,7 @@ namespace Task_and_Leave_Tracker
 
                             catch (Exception ex)
                             {
-                                resultObject.Response.Status = "Fail";
+                                resultObject.Response.Status = "Failure";
                                 resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                             }
 
@@ -306,7 +355,7 @@ namespace Task_and_Leave_Tracker
                     }
                     else
                     {
-                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Status = "Failure";
                         resultObject.Response.Reason = "Passwords Do Not Match!!";
                     }
 
@@ -321,7 +370,7 @@ namespace Task_and_Leave_Tracker
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -339,23 +388,23 @@ namespace Task_and_Leave_Tracker
             {
                 DateTime createdDate = DateTime.Now;
 
-               
-                        
 
-                if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName!="" && startDate!=null)
+
+
+                if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName != "" && startDate != null)
                 {
                     try
                     {
-                        
-                        
+
+
                         int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
                         if (result > 0)
                         {
                             List<Task> taskList = new List<Task>();
-                            DataTable dt = userBll.ViewTaskDetailsBLL(createdBy);
-                            
-                            for (int i = 0; i < dt.Rows.Count;i++ )
+                            DataTable dt = userBll.ViewByCreateBLL(createdBy);
+
+                            for (int i = 0; i < dt.Rows.Count; i++)
                             {
                                 Task t = new Task();
                                 t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
@@ -375,27 +424,27 @@ namespace Task_and_Leave_Tracker
                         }
                         else
                         {
-                            resultObject.Response.Status = "Fail";
+                            resultObject.Response.Status = "Failure";
                             resultObject.Response.Reason = "Task is Not Created. Try again!!";
                         }
-                       
+
                     }
 
                     catch (Exception ex)
                     {
-                        resultObject.Response.Status = "Fail";
+                        resultObject.Response.Status = "Failure";
                         resultObject.Response.Reason = "Error :  " + ex.Message;
                     }
                 }
                 else
                 {
-                    resultObject.Response.Status = "Fail";
+                    resultObject.Response.Status = "Failure";
                     resultObject.Response.Reason = "Fill All The Details";
                 }
             }
             catch (Exception ex)
             {
-                resultObject.Response.Status = "Fail";
+                resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
@@ -409,46 +458,46 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-           
 
-               
-                    try
+
+
+            try
+            {
+                DataTable dt = userBll.ViewIdBLL();
+
+                if (dt.Rows.Count > 0)
+                {
+                    List<User> userList = new List<User>();
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        DataTable dt = userBll.ViewIdBLL();
-
-                     if (dt.Rows.Count>0)
-                        {
-                          List<User> userList = new List<User>();
-
-                          for (int i = 0; i < dt.Rows.Count; i++)
-                            {
-                                User t = new User();
-                                t.ntid = dt.Rows[i]["Ntid"].ToString();
-                                t.firstName = dt.Rows[i]["FirstName"].ToString();
-                                t.lastName = dt.Rows[i]["LastName"].ToString();
-                                t.name = t.firstName +" "+ t.lastName;
-                                userList.Add(t);
-                            }
-                          resultObject.Response.userObject = oSerializer.Serialize(userList);
-                          resultObject.Response.Status = "Success";
-                          resultObject.Response.Reason = "Users are added!!";
-                        }
-                        else
-                        {
-                            resultObject.Response.Status = "Fail";
-                            resultObject.Response.Reason = "";
-                        }
-
+                        User t = new User();
+                        t.ntid = dt.Rows[i]["Ntid"].ToString();
+                        t.firstName = dt.Rows[i]["FirstName"].ToString();
+                        t.lastName = dt.Rows[i]["LastName"].ToString();
+                        t.name = t.firstName + " " + t.lastName;
+                        userList.Add(t);
                     }
+                    resultObject.Response.userObject = oSerializer.Serialize(userList);
+                    resultObject.Response.Status = "Success";
+                    resultObject.Response.Reason = "Users are added!!";
+                }
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "";
+                }
 
-                    catch (Exception ex)
-                    {
-                        resultObject.Response.Status = "Fail";
-                        resultObject.Response.Reason = "Error :  " + ex.Message;
-                    }              
-                       
+            }
+
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = "Error :  " + ex.Message;
+            }
+
             return oSerializer.Serialize(resultObject);
-            
+
         }
         #endregion
 

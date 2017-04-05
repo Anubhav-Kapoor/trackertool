@@ -259,7 +259,7 @@ namespace ProjectTracker.DEL
         }
 
         //ViewFunction[Task Details]
-        public DataTable ViewTaskDetailsDEL(String createdBy)
+        public DataTable ViewByCreateDEL(String createdBy)
         {
             DataTable dt = new DataTable();
             try
@@ -267,7 +267,7 @@ namespace ProjectTracker.DEL
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "View");
+                cmd.Parameters.AddWithValue("@Action", "View C");
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
@@ -287,7 +287,35 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
+        //ViewFunction[Task Details]
+        public DataTable ViewByAssignDEL(String assignedTo)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View A");
+                cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
 
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
         //DeleteFunction[Task Details]
         public int DeleteTaskDetailsDEL(int TaskId)
         {
