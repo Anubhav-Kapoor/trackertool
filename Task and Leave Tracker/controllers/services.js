@@ -81,11 +81,12 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
                 data: tableData,
                 columns: [
                     { title: "Task ID" ,width: "10%"},
-                    { title: "Task Name", width: "15%" },
-                    { title: "Assigned To", width: "14%" },
-                    { title: "Start Date", width: "13%" },
-                    { title: "End Date", width: "13%" },
-                    { title: "Status", width: "35%" },
+                    { title: "Task Name", width: "10%" },
+                    { title: "Assigned To", width: "10%" },
+                    { title: "Start Date", width: "10%" },
+                    { title: "End Date", width: "10%" },
+                    { title: "Status", width: "10%" },
+                    { title: "Actions", width: "35%" }
 
                 ],
                 "columnDefs": [{

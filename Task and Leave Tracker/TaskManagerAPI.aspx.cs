@@ -360,12 +360,12 @@ namespace Task_and_Leave_Tracker
                                 t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
                                 t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
                                 t.createdDate = Convert.ToDateTime(dt.Rows[i]["Created_Date"]);
-                                t.expiryDate = dt.Rows[i]["Expiry_Date"].ToString();
+                                t.expiryDate = Convert.ToDateTime(dt.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
                                 t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
                                 t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
                                 t.status = dt.Rows[i]["Status"].ToString();
                                 t.taskname = dt.Rows[i]["TaskName"].ToString();
-                                t.startDate = dt.Rows[i]["Start_Date"].ToString();
+                                t.startDate = Convert.ToDateTime(dt.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
                                 taskList.Add(t);
                             }
                             resultObject.Response.taskObject = oSerializer.Serialize(taskList);
