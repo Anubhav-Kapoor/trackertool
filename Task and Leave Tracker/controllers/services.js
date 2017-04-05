@@ -707,7 +707,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                     var resp = JSON.parse(response.data.d);
 
                     //Case of NTID already existing
-                    if (resp.Response.Status == 'Fail') {
+                    if (resp.Response.Status == 'Failure') {
                         $scope.message = resp.Response.Reason;
                         $scope.isSuccess = false;
                     } else {

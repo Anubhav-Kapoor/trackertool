@@ -152,12 +152,31 @@ namespace ProjectTracker.BLL
 
 
         //ViewFunction[Task Details]
-        public DataTable ViewTaskDetailsBLL(String createdBy)
+        public DataTable ViewByAssignBLL(String assignedTo)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewTaskDetailsDEL(createdBy);
+                dt = userDEL.ViewByAssignDEL(assignedTo);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            return dt;
+        }
+
+
+        //ViewFunction[Task Details]
+        public DataTable ViewByCreateBLL(String createdBy)
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewByCreateDEL(createdBy);
 
             }
             catch (Exception ex)
