@@ -259,7 +259,7 @@ namespace ProjectTracker.DEL
         }
 
         //ViewFunction[Task Details]
-        public DataTable ViewTaskDetailsDEL(int TaskId)
+        public DataTable ViewTaskDetailsDEL(String createdBy)
         {
             DataTable dt = new DataTable();
             try
@@ -268,7 +268,7 @@ namespace ProjectTracker.DEL
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "View");
-                cmd.Parameters.AddWithValue("@TaskId", TaskId);
+                cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 

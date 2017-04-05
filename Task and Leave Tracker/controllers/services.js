@@ -73,28 +73,38 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
         /******************************** HOME PAGE CODE *********************************/
 
         //Table initialization
-        var dataSet = [
-            ["1", "Fill Appraisal", "Pending", "12-03-2018", ""],
-            ["2", "Fill Timesheet", "In Progress", "30-01-2023", ""],
-            ["3", "Onsite Travel", "Completed", "16-03-2019", ""],
-        ];
+        $scope.tasks = [];
         var self = this;
 
-        $('#myTable').DataTable({
-            data: dataSet,
-            columns: [
-                { title: "S.No" },
-                { title: "Task Description" },
-                { title: "Status" },
-                { title: "Completion Date" },
-                { title: "Command" }
-            ],
-            "columnDefs": [{
-                "targets": -1,
-                "data": null,
-                "defaultContent": "<button class='button' id='edit' style='border-radius: 5px;'>Edit</button><button class='button' id='delete' style='margin-left: 10px;border-radius: 5px;'>Delete</button><button class='button' id='done'style='margin-left: 10px;border-radius: 5px;'>Done</button>"
-            }]
-        });
+        $scope.loadTable = function (tableData) {
+          $scope.taskTable =   $('#myTable').DataTable({
+                data: tableData,
+                columns: [
+                    { title: "Task ID" },
+                    { title: "Task Name" },
+                    { title: "Assigned To" },
+                    { title: "Start Date" },
+                    { title: "End Date" },
+                    { title: "Status" },
+
+                ],
+                "columnDefs": [{
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": "<button class='button' id='edit' style='border-radius: 5px;'>Edit</button><button class='button' id='delete' style='margin-left: 10px;border-radius: 5px;'>Delete</button><button class='button' id='done'style='margin-left: 10px;border-radius: 5px;'>Done</button>"
+                }]
+            });
+        }
+
+        $scope.refreshTable = function (tableData) {
+
+
+
+        }
+
+
+        $scope.loadTable($scope.tasks);
+        
         $('#myTable tbody').on('click', "#edit", function () {
             //var data = table.row($(this).parents('tr')).data();
             //alert('Hi Edit');
@@ -264,6 +274,10 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
                     $scope.reason = responseJSON.Response.Reason;
 
                     if ($scope.status == "Success") {
+
+                        var taskJSON = JSON.parse(responseJSON.Response.taskObject);
+                        $scope.refreshTable(parseTaskList(taskJSON));
+
                         $('#statusModal').modal('show');
 
                     }
@@ -763,3 +777,24 @@ function goToURL(navigatePage) {
         window.location.href = navigatePage;
 }
 
+// Function - Task List Parsing
+
+function parseTaskList(taskList){
+
+    var refinedTaskList = [];
+
+    for (i = 0; i < taskList.length; i++) {
+        var taskArr = [];
+        taskArr.push(taskList[i].taskId.toString());
+        taskArr.push(taskList[i].taskname);
+        taskArr.push(taskList[i].assignedTo);
+        taskArr.push(taskList[i].startDate);
+        taskArr.push(taskList[i].expiryDate);
+        taskArr.push(taskList[i].status);
+
+        refinedTaskList.push(taskArr);
+    }
+
+    return refinedTaskList;
+
+}
