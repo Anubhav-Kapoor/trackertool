@@ -151,13 +151,13 @@ namespace ProjectTracker.BLL
         }
 
 
-        //ViewFunction[Task Details]
-        public DataTable ViewByAssignBLL(String assignedTo)
+        //View Method For TM Function[Task Details]
+        public DataTable ViewByTMBLL(String assignedTo)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewByAssignDEL(assignedTo);
+                dt = userDEL.ViewByTMDEL(assignedTo);
 
             }
             catch (Exception ex)
@@ -170,13 +170,13 @@ namespace ProjectTracker.BLL
         }
 
 
-        //ViewFunction[Task Details]
-        public DataTable ViewByCreateBLL(String createdBy)
+        //View Method For PM Function[Task Details]
+        public DataTable ViewByPMBLL(String createdBy)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewByCreateDEL(createdBy);
+                dt = userDEL.ViewByPMDEL(createdBy);
 
             }
             catch (Exception ex)
