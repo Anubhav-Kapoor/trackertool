@@ -139,59 +139,13 @@ namespace Task_and_Leave_Tracker
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
                     if (dt.Rows.Count > 0)
                     {
-                        List<User> userList = new List<User>();
-                        User u = new User();
-                        u.ntid = dt.Rows[0]["Ntid"].ToString();
-                        u.firstName = dt.Rows[0]["FirstName"].ToString();
-                        u.lastName = dt.Rows[0]["LastName"].ToString();
-                        u.roleId = dt.Rows[0]["RoleId"].ToString();
-                        u.phoneNo = dt.Rows[0]["PhoneNo"].ToString();
-                        u.emailId = dt.Rows[0]["EmailId"].ToString();
+
                         String Password = dt.Rows[0]["Password"].ToString();
                         String UserGuid = dt.Rows[0]["UserGuid"].ToString();
                         string hashedPassword = Security.HashSHA1(password + UserGuid);
 
                         if (Password == hashedPassword)
                         {
-                            userList.Add(u);
-                            resultObject.Response.userObject = oSerializer.Serialize(userList);
-                            DataTable dt1 = null;
-                            List<Task> taskList = new List<Task>();
-                            if (u.roleId == "200")
-                            {
-                                dt1 = userBll.ViewByCreateBLL(u.ntid);
-                            }
-
-                            else if (u.roleId == "201")
-                            {
-
-                                dt1 = userBll.ViewByAssignBLL(u.ntid);
-                            }
-
-                            if (dt1.Rows.Count > 0)
-                            {
-                                for (int i = 0; i < dt1.Rows.Count; i++)
-                                {
-                                    Task t = new Task();
-                                    t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
-                                    t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
-                                    t.createdDate = Convert.ToDateTime(dt1.Rows[i]["Created_Date"]);
-                                    t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
-                                    t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
-                                    t.assignedTo = dt1.Rows[i]["AssignedTo"].ToString();
-                                    t.status = dt1.Rows[i]["Status"].ToString();
-                                    t.taskname = dt1.Rows[i]["TaskName"].ToString();
-                                    t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
-                                    taskList.Add(t);
-                                }
-                                resultObject.Response.taskObject = oSerializer.Serialize(taskList);
-                            }
-                            else
-                            {
-                                resultObject.Response.Status = "Failure";
-                                resultObject.Response.Reason = "Data Not Retreived!!!";
-                            }
-
 
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "User Authentication Success";
@@ -402,7 +356,7 @@ namespace Task_and_Leave_Tracker
                         if (result > 0)
                         {
                             List<Task> taskList = new List<Task>();
-                            DataTable dt = userBll.ViewByCreateBLL(createdBy);
+                            DataTable dt = userBll.ViewByPMBLL(createdBy);
 
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
@@ -501,6 +455,74 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+        #region Show Data On Page Load
+        [System.Web.Services.WebMethod]
+        public static String ShowData(String ntid)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+            if (dt.Rows.Count > 0)
+            {
+                List<User> userList = new List<User>();
+                User u = new User();
+                u.ntid = dt.Rows[0]["Ntid"].ToString();
+                u.firstName = dt.Rows[0]["FirstName"].ToString();
+                u.lastName = dt.Rows[0]["LastName"].ToString();
+                u.roleId = dt.Rows[0]["RoleId"].ToString();
+                u.phoneNo = dt.Rows[0]["PhoneNo"].ToString();
+                u.emailId = dt.Rows[0]["EmailId"].ToString();
 
+
+                userList.Add(u);
+                resultObject.Response.userObject = oSerializer.Serialize(userList);
+
+                DataTable dt1 = null;
+                List<Task> taskList = new List<Task>();
+                if (u.roleId == "201")
+                {
+                    dt1 = userBll.ViewByPMBLL(u.ntid);
+                }
+
+                else if (u.roleId == "200")
+                {
+
+                    dt1 = userBll.ViewByTMBLL(u.ntid);
+                }
+
+                if (dt1.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt1.Rows.Count; i++)
+                    {
+                        Task t = new Task();
+                        t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
+                        t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
+                        t.createdDate = Convert.ToDateTime(dt1.Rows[i]["Created_Date"]);
+                        t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
+                        t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
+                        t.assignedTo = dt1.Rows[i]["AssignedTo"].ToString();
+                        t.status = dt1.Rows[i]["Status"].ToString();
+                        t.taskname = dt1.Rows[i]["TaskName"].ToString();
+                        t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
+                        taskList.Add(t);
+                    }
+                    resultObject.Response.taskObject = oSerializer.Serialize(taskList);
+                }
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "Data Not Retreived!!!";
+                }
+            }
+            else
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = "User Does'nt Exist!!!";
+            }
+                return oSerializer.Serialize(resultObject);
+            
+        }
+        #endregion
     }
 }

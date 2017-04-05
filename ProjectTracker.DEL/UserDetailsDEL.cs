@@ -258,8 +258,8 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-        //ViewFunction[Task Details]
-        public DataTable ViewByCreateDEL(String createdBy)
+        //View Method For PM Function[Task Details]
+        public DataTable ViewByPMDEL(String createdBy)
         {
             DataTable dt = new DataTable();
             try
@@ -287,8 +287,8 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //ViewFunction[Task Details]
-        public DataTable ViewByAssignDEL(String assignedTo)
+        //View Method For TM Function[Task Details]
+        public DataTable ViewByTMDEL(String assignedTo)
         {
             DataTable dt = new DataTable();
             try
