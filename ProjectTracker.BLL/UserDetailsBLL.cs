@@ -152,12 +152,12 @@ namespace ProjectTracker.BLL
 
 
         //ViewFunction[Task Details]
-        public DataTable ViewTaskDetailsBLL(int TaskId)
+        public DataTable ViewTaskDetailsBLL(String createdBy)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewTaskDetailsDEL(TaskId);
+                dt = userDEL.ViewTaskDetailsDEL(createdBy);
 
             }
             catch (Exception ex)

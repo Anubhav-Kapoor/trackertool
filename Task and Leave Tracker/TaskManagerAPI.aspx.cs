@@ -346,11 +346,29 @@ namespace Task_and_Leave_Tracker
                     try
                     {
                        
-
+                        
                         int result = userBll.InsertTaskDetailsBLL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
 
                         if (result > 0)
                         {
+                            List<Task> taskList = new List<Task>();
+                            DataTable dt = userBll.ViewTaskDetailsBLL(createdBy);
+                            
+                            for (int i = 0; i < dt.Rows.Count;i++ )
+                            {
+                                Task t = new Task();
+                                t.taskId = Convert.ToInt32(dt.Rows[0]["TaskId"]);
+                                t.taskDesc = dt.Rows[0]["Taskdesc"].ToString();
+                                t.createdDate = Convert.ToDateTime(dt.Rows[0]["Created_Date"]);
+                                t.expiryDate = dt.Rows[0]["Expiry_Date"].ToString();
+                                t.createdBy = dt.Rows[0]["CreatedBy"].ToString();
+                                t.assignedTo = dt.Rows[0]["AssignedTo"].ToString();
+                                t.status = dt.Rows[0]["Status"].ToString();
+                                t.taskname = dt.Rows[0]["TaskName"].ToString();
+                                t.startDate = dt.Rows[0]["Start_Date"].ToString();
+                                taskList.Add(t);
+                            }
+                            resultObject.Response.taskObject = oSerializer.Serialize(taskList);
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "New Task Is Created!!";
                         }
