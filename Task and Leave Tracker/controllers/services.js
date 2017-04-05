@@ -80,12 +80,12 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
           $scope.taskTable =   $('#myTable').DataTable({
                 data: tableData,
                 columns: [
-                    { title: "Task ID" },
-                    { title: "Task Name" },
-                    { title: "Assigned To" },
-                    { title: "Start Date" },
-                    { title: "End Date" },
-                    { title: "Status" },
+                    { title: "Task ID" ,width: "10%"},
+                    { title: "Task Name", width: "15%" },
+                    { title: "Assigned To", width: "14%" },
+                    { title: "Start Date", width: "13%" },
+                    { title: "End Date", width: "13%" },
+                    { title: "Status", width: "35%" },
 
                 ],
                 "columnDefs": [{
@@ -98,6 +98,9 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         $scope.refreshTable = function (tableData) {
 
+            $scope.taskTable.clear();
+            $scope.taskTable.rows.add(tableData);
+            $scope.taskTable.draw();
 
 
         }
