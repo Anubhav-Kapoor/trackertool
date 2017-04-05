@@ -99,11 +99,13 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
             var ntid = sessionStorage.getItem("username");
             if (ntid != null || ntid != undefined) {
 
+                var postData = { ntid: ntid };
+
                 //Ajax method 
                 $http({
                     method: "POST",
-                    url: "/TaskManagerAPI.aspx/",
-                    data: ntid,
+                    url: "/TaskManagerAPI.aspx/ShowData",
+                    data: JSON.stringify(postData),
                     cache: false,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -122,7 +124,7 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
                     
                         //Table initialization
-                        $scope.tasks = parseTaskList($scope.taskListON);
+                        $scope.tasks = parseTaskList($scope.taskList);
 
                         $scope.loadTable($scope.tasks);
 
@@ -465,6 +467,8 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 console.log(response);
             });
         }
+
+        $scope.homeInit();
     });
 
 });

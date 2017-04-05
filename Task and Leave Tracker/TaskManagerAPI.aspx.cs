@@ -508,6 +508,10 @@ namespace Task_and_Leave_Tracker
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
+
+                    resultObject.Response.Status = "Success";
+                    resultObject.Response.Reason = "Data Retreived!!!";
+
                 }
                 else
                 {

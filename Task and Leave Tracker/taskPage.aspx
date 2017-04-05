@@ -7,7 +7,7 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool</title>
 </head>
-<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="loadTable()">
+<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="homeInit()">
 
     <div class="container type-wrap" style="height: auto">
 
