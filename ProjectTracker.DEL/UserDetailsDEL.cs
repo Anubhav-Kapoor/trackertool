@@ -98,7 +98,7 @@ namespace ProjectTracker.DEL
             try
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("Select Ntid from tbl_user_details where RoleID='PM'", con);
+                SqlCommand cmd = new SqlCommand("Select Ntid,FirstName,LastName from tbl_user_details where RoleID='PM'", con);
                 cmd.CommandType = CommandType.Text;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
@@ -217,7 +217,7 @@ namespace ProjectTracker.DEL
 
 
         //InsertFunction[Task Details]
-        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             int result = 0;
             try
@@ -227,15 +227,15 @@ namespace ProjectTracker.DEL
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "Insert");
+                cmd.Parameters.AddWithValue("@Action", "Insert");               
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
-                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
                 cmd.Parameters.AddWithValue("@Status", status);
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
-                cmd.Parameters.AddWithValue("@Start_Date", startDate.Date);
+                cmd.Parameters.AddWithValue("@Start_Date", startDate);
                 result = cmd.ExecuteNonQuery();
 
 
@@ -258,7 +258,7 @@ namespace ProjectTracker.DEL
         }
 
         //ViewFunction[Task Details]
-        public DataTable ViewTaskDetailsDEL(int TaskId)
+        public DataTable ViewTaskDetailsDEL(String createdBy)
         {
             DataTable dt = new DataTable();
             try
@@ -267,7 +267,7 @@ namespace ProjectTracker.DEL
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "View");
-                cmd.Parameters.AddWithValue("@TaskId", TaskId);
+                cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 

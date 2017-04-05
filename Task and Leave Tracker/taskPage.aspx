@@ -60,8 +60,11 @@
         </div>
 
     </div>
+<<<<<<< HEAD
     <!-- Change Password Modal -->
+=======
      <!--Change Password-->
+>>>>>>> a7eea74fc2dbb2cc3a9d455004f993e1972b957c
     <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -188,7 +191,7 @@
                                         <option value="kapoora1">kapoora1</option>
                                         <option value="raic1">raic1</option>
                                         <option value="pandeya1">pandeya1</option>
-                                        <option value="singhb3">singhb3</option>
+                                        <option value="rnn_27">rnn_27</option>
                                         <option value="sharmak">sharmak</option>
                                     </select>
                                     

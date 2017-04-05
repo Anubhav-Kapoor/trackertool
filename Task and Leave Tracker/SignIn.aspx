@@ -15,13 +15,13 @@
                 <form role="form" id="login_form" method="post">
                     <fieldset>
                         <h2>Please Sign In</h2>
-                        <hr class="colorgraph">
+                        <hr class="colorgraph"/>
 
                         <div class="form-group">
-                            <input type="text" name="ntid_name" id="login_ntid" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID...">
+                            <input type="text" name="ntid_name" id="login_ntid" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID..."/>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control input-lg" ng-model="password" placeholder="Password...">
+                            <input type="password" name="password" id="password" class="form-control input-lg" ng-model="password" placeholder="Password..."/>
                         </div>
                         <span class="checkbox">
                             <%--<button type="button" class="btn" data-color="info">Remember Me</button>--%>
@@ -29,21 +29,21 @@
 
                             <%--<div class="checkbox">--%>
                             <label>
-                                <input type="checkbox" checked data-toggle="toggle" data-style="slow">
+                                <input type="checkbox" checked data-toggle="toggle" data-style="slow" />
                                 Remember Me
                             </label>
                             <%--</div>--%>
 
 
 
-                            <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden">
+                            <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden" />
                             <a class="forgot btn btn-link pull-right" ng-click="forgotPwdPopUp()">Forgot Password?</a>
 
                         </span>
                         <hr class="colorgraph">
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="button" ng-click="login()" value="Sign In">
+                                <input type="button" class="button" ng-click="login()" value="Sign In" />
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>
