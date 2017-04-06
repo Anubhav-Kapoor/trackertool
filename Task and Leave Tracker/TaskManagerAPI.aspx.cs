@@ -55,7 +55,7 @@ namespace Task_and_Leave_Tracker
                                 smtpClient.Send(mailMessage);
 
                                 resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "Email has been sent!!";
+                                resultObject.Response.Reason = "Email Has Been Sent!!";
 
                             }
 
@@ -72,7 +72,7 @@ namespace Task_and_Leave_Tracker
                         else
                         {
                             resultObject.Response.Status = "Failure";
-                            resultObject.Response.Reason = "Please try to register with different ntid";
+                            resultObject.Response.Reason = "Your Account Is Not Created!!";
                         }
                     }
                     else
@@ -99,6 +99,7 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+        #region Get User Details
         [System.Web.Services.WebMethod]
         public static String GetUserDetails()
         {
@@ -121,6 +122,8 @@ namespace Task_and_Leave_Tracker
             }
             return oSerializer.Serialize(resultObject);
         }
+        #endregion
+
 
 
 
@@ -256,7 +259,7 @@ namespace Task_and_Leave_Tracker
             resultObject.Response = new Response();
             try
             {
-                if (ntid != "")
+                if (ntid != "" && currentPassword!="" && newPassword!="")
                 {
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
 
@@ -293,7 +296,7 @@ namespace Task_and_Leave_Tracker
                                 smtpClient.Send(mailMessage);
 
                                 resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "Email has been sent!!";
+                                resultObject.Response.Reason = " Your Password is Changed!!"   ;
 
                             }
 
@@ -304,6 +307,11 @@ namespace Task_and_Leave_Tracker
                                 resultObject.Response.Reason = "Could not sent the email" + ex.Message;
                             }
 
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Reason = " Your Password Is Not Changed";
                         }
 
                     }
@@ -319,7 +327,7 @@ namespace Task_and_Leave_Tracker
                 else
                 {
                     resultObject.Response.Status = "Empty";
-                    resultObject.Response.Reason = "Enter your details !!";
+                    resultObject.Response.Reason = "Enter All The details !!";
                 }
             }
             catch (Exception ex)
@@ -439,7 +447,7 @@ namespace Task_and_Leave_Tracker
                 else
                 {
                     resultObject.Response.Status = "Failure";
-                    resultObject.Response.Reason = "";
+                    resultObject.Response.Reason = "Users are not added!!";
                 }
 
             }
@@ -508,8 +516,10 @@ namespace Task_and_Leave_Tracker
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
+
                     resultObject.Response.Status = "Success";
                     resultObject.Response.Reason = "Data Retreived!!!";
+
                 }
                 else
                 {
@@ -522,9 +532,66 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = "User Does'nt Exist!!!";
             }
-                return oSerializer.Serialize(resultObject);
-            
+            return oSerializer.Serialize(resultObject);
+
         }
         #endregion
+
+
+        #region Update Task
+        [System.Web.Services.WebMethod]
+        public static String UpdateTask(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName, String status)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            try
+            {
+                if (taskId != 0 && taskDesc != null && taskName != null && expiryDate != null && assignedTo != null && taskName != null)
+                {
+                    int result = userBll.UpdateTaskDetailsBLL(taskId, taskDesc, expiryDate, assignedTo, taskName);
+                    if (result > 0)
+                    {
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Task Details Has Been Updated!!";
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "Task Details Are Not Updated!!";
+                    }
+
+
+
+                }
+                else if (status != null)
+                {
+                    int res = userBll.UpdateTaskStatusBLL(taskId, status);
+                    if (res > 0)
+                    {
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Status Has Been Updated!!";
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "Status Is Not Updated!!";
+                    }
+                }
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "Enter All The Details!!";
+                }
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.Message;
+            }
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
+
     }
 }

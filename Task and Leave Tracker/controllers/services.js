@@ -46,7 +46,7 @@ jQuery.fn.extend({
 
 //*******************Home Controller - Used for Home Page*******************//
 
-app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $interval, $cookies) {
 
     $(function () {
 
@@ -72,20 +72,18 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         /******************************** HOME PAGE CODE *********************************/
 
-        //Table initialization
-        $scope.tasks = [];
-        var self = this;
 
         $scope.loadTable = function (tableData) {
-          $scope.taskTable =   $('#myTable').DataTable({
+            $scope.taskTable = $('#myTable').DataTable({
                 data: tableData,
                 columns: [
-                    { title: "Task ID" ,width: "10%"},
-                    { title: "Task Name", width: "15%" },
-                    { title: "Assigned To", width: "14%" },
-                    { title: "Start Date", width: "13%" },
-                    { title: "End Date", width: "13%" },
-                    { title: "Status", width: "35%" },
+                    { title: "Task ID", width: "10%" },
+                    { title: "Task Name", width: "10%" },
+                    { title: "Assigned To", width: "10%" },
+                    { title: "Start Date", width: "10%" },
+                    { title: "End Date", width: "10%" },
+                    { title: "Status", width: "10%" },
+                    { title: "Actions", width: "35%" }
 
                 ],
                 "columnDefs": [{
@@ -95,6 +93,58 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
                 }]
             });
         }
+
+        $scope.homeInit = function () {
+
+            var ntid = sessionStorage.getItem("username");
+            if (ntid != null || ntid != undefined) {
+
+                var postData = { ntid: ntid };
+
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/ShowData",
+                    data: JSON.stringify(postData),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: false
+
+                }).then(function mySuccess(response) {
+
+                    var responseJSON = JSON.parse(response.data.d);
+
+                    $scope.status = responseJSON.Response.Status;
+
+                    if ($scope.status == "Success") {
+
+                        $scope.user = JSON.parse(responseJSON.Response.userObject)[0];
+                       
+                        $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
+                    
+                        //Table initialization
+                        $scope.tasks = parseTaskList($scope.taskList);
+
+                        $scope.loadTable($scope.tasks);
+
+                      
+                    }
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+            } else {
+                window.location.href = "signin";
+            }
+
+        }
+
+
+        
+        var self = this;
+
+        
 
         $scope.refreshTable = function (tableData) {
 
@@ -106,7 +156,6 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
         }
 
 
-        $scope.loadTable($scope.tasks);
         
         $('#myTable tbody').on('click', "#edit", function () {
             //var data = table.row($(this).parents('tr')).data();
@@ -125,11 +174,37 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
 
         // Display Popup - Create Task
         $scope.createTaskPopup = function () {
-            $scope.isTaskFormValid = true;
-            var options = {
-                "backdrop": "static"
-            }
-            $('#createTaskModal').modal(options);
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/GetUserList",
+                data: "",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+               
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+           
+                $scope.status = responseJSON.Response.Status;
+            
+                if ($scope.status == "Success") {
+                    usersJSON = JSON.parse(responseJSON.Response.userObject);
+                    $scope.availableTeamMembers = parseTeamMembers(usersJSON);
+                    $scope.isTaskFormValid = true;
+                    var options = {
+                        "backdrop": "static"
+                    }
+                    $('#createTaskModal').modal(options);
+                }
+            }, function myError(response) {
+                console.log(response);
+            });
+
+          
         }
 
         // Form Validation - Task Form 
@@ -392,13 +467,15 @@ app.controller('homeCtrl', function ($scope, $http, httpService, $interval, $coo
                 console.log(response);
             });
         }
+
+        $scope.homeInit();
     });
 
 });
 
 //******************* Login Controller *******************//
 
-app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $cookies) {
+app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
 
 
     $(function () {
@@ -491,6 +568,7 @@ app.controller('loginCtrl', function ($scope, $http, httpService, $interval, $co
                     //Save NTID in session storage
                     sessionStorage.setItem('username', $scope.ntid);
                     window.location.href = "taskPage.aspx";
+
                 }
                 else if ($scope.status == "Failure") {
 
@@ -781,7 +859,6 @@ function goToURL(navigatePage) {
 }
 
 // Function - Task List Parsing
-
 function parseTaskList(taskList){
 
     var refinedTaskList = [];
@@ -800,4 +877,16 @@ function parseTaskList(taskList){
 
     return refinedTaskList;
 
+}
+
+// Function - Team Members List Parsing
+function parseTeamMembers(tmList) {
+    var teamMembersList = [];
+    for (i = 0; i < tmList.length; i++) {
+        var tm = {};
+        tm.name = tmList[i].name;
+        tm.ntid = tmList[i].ntid;
+        teamMembersList.push(tm);
+    }
+    return teamMembersList;
 }

@@ -7,7 +7,7 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool</title>
 </head>
-<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="loadTable()">
+<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="homeInit()">
 
     <div class="container type-wrap" style="height: auto">
 
@@ -183,13 +183,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
                                     <select title="Select Associate" id="assignedTo" name="assignedTo" class="form-control" ng-model="assignedTo">
-                                        <option value="sethir">sethir</option>
-                                        <option value="jauharia">jauharia</option>
-                                        <option value="kapoora1">kapoora1</option>
-                                        <option value="raic1">raic1</option>
-                                        <option value="pandeya1">pandeya1</option>
-                                        <option value="rnn_27">rnn_27</option>
-                                        <option value="sharmak">sharmak</option>
+                                        <option ng-repeat="tm in availableTeamMembers track by $index" value={{tm.ntid}}>{{tm.name}}</option>
                                     </select>
                                     
                                 </div>

@@ -41,9 +41,9 @@
 
                         </span>
                         <hr class="colorgraph">
-                        <div class="row">
+                        <div class="row form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="button" ng-click="login()" value="Sign In" />
+                                <button class="button" ng-click="login()" value="Sign In" >Sign In</button>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>

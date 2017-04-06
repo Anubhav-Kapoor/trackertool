@@ -24,10 +24,10 @@ namespace ProjectTracker.DEL
             // Hash the password together with our unique userGuid
             string hashedPassword = Security.HashSHA1(Password + userGuid.ToString());
 
-          int result = 0;
-           try
+            int result = 0;
+            try
             {
-               
+
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -45,8 +45,8 @@ namespace ProjectTracker.DEL
 
 
             }
-          
-             
+
+
             catch (Exception ex)
             {
 
@@ -81,7 +81,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-               
+
 
             }
             finally
@@ -137,7 +137,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-               
+
             }
             finally
             {
@@ -171,7 +171,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-                        
+
             }
             finally
             {
@@ -222,7 +222,7 @@ namespace ProjectTracker.DEL
             int result = 0;
             try
             {
-              
+
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
@@ -345,7 +345,7 @@ namespace ProjectTracker.DEL
         }
 
         //UpdateFunction[Task Details]
-        public int UpdateUserDetailsDEL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public int UpdateTaskDetailsDEL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
             int result = 0;
             try
@@ -353,15 +353,40 @@ namespace ProjectTracker.DEL
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "Update");
+                cmd.Parameters.AddWithValue("@Action", "Update T");
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
-                cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
-                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate.Date);
-                cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
+                cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
-                cmd.Parameters.AddWithValue("@Status", status);
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
-                cmd.Parameters.AddWithValue("@Start_Date", startDate.Date);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                result = cmd.ExecuteNonQuery();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+        }
+
+        //Update Status [Task Details]
+        public int UpdateTaskStatusDEL(int taskId, String status)
+        {
+            int result = 0;
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Update S");
+                cmd.Parameters.AddWithValue("@Status ", status);               
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
 

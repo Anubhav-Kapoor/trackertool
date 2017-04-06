@@ -208,12 +208,33 @@ namespace ProjectTracker.BLL
         }
         
         //UpdateFunction[Task Details]
-        public int UpdateUserDetailsBLL(int taskId, String taskDesc, DateTime createdDate, DateTime expiryDate, String createdBy, String assignedTo, String status, String taskName, DateTime startDate)
+        public int UpdateTaskDetailsBLL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
             try
             {
 
-                result = userDEL.UpdateUserDetailsDEL(taskId, taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
+                result = userDEL.UpdateTaskDetailsDEL(taskId, taskDesc, expiryDate, assignedTo, taskName);
+
+            }
+
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+
+
+            return result;
+        }
+
+        //UpdateFunction[Task Details]
+        public int UpdateTaskStatusBLL(int taskId, String status)
+        {
+            try
+            {
+
+                result = userDEL.UpdateTaskStatusDEL(taskId,status);
 
             }
 
