@@ -6,44 +6,38 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool-Sign in Page</title>
 </head>
-<body ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageLoad()" style="background-image: url(images/background_pattern.jpg);">
     <div class="container container-resize" style="background-color: #f5f5f5;">
         <div header></div>
 
         <div class="row" style="margin-top: 20px">
             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                <form role="form" id="login_form" method="post">
+                <form role="form" id="login_form">
                     <fieldset>
                         <h2>Please Sign In</h2>
-                        <hr class="colorgraph"/>
+                        <hr class="colorgraph" />
 
                         <div class="form-group">
-                            <input type="text" name="ntid_name" id="login_ntid" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID..."/>
+                            <input type="text" name="ntid_name" id="login_ntid" class="form-control input-lg" ng-model="ntid" placeholder="Enter NTID..." />
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control input-lg" ng-model="password" placeholder="Password..."/>
+                            <input type="password" name="password" id="password" class="form-control input-lg" ng-model="password" placeholder="Password..." />
                         </div>
                         <span class="checkbox">
-                            <%--<button type="button" class="btn" data-color="info">Remember Me</button>--%>
 
-
-                            <%--<div class="checkbox">--%>
                             <label>
                                 <input type="checkbox" checked data-toggle="toggle" data-style="slow" />
                                 Remember Me
                             </label>
-                            <%--</div>--%>
-
-
 
                             <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden" />
                             <a class="forgot btn btn-link pull-right" ng-click="forgotPwdPopUp()">Forgot Password?</a>
 
                         </span>
-                        <hr class="colorgraph">
+                        <hr class="colorgraph" />
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="button" ng-click="login()" value="Sign In" />
+                                <button class="button" ng-click="login()">Sign In</button>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>
@@ -61,25 +55,22 @@
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <h4 class="modal-title" id="myModalLabel">Send Password</h4>
+                    <h4 class="modal-title" id="myModalLabel">Forgot Password</h4>
                 </div>
-                <form id="forgot_form" method="post">
+                <form id="forgot_form" class="form-horizontal">
                     <div class="modal-body">
-
-
-                        <div class="form-group" style="margin-bottom: 34px">
-                            <%--<label class="col-md-4 control-label"  >E-Mail</label>--%>
+                        <div class="form-group" >                     
                             <div class="col-md-4 inputGroupContainer" style="width: 70%">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                                    <input id="forgot_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="ntid" />
+                                    <input id="forgot_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="forgot_ntid" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-default button" style="padding-top: 16px" data-dismiss="modal" ng-click="sendPwd()">Send</a>
-                        <a href="#" class="btn btn-default button" style="padding-top: 16px" data-dismiss="modal">Close</a>
+                        <button class="button" ng-click="sendPwd()">Send</button>
+                        <button class="button"  data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -92,10 +83,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalTitle" style="text-align:center">Authentication <span ng-bind="status"></span></h4>
+                    <h4 class="modal-title" id="myModalTitle" style="text-align: center">Authentication <span ng-bind="status"></span></h4>
                 </div>
                 <div class="modal-body">
-                   <h3 style="text-align:center" ng-bind="reason"></h3>
+                    <h3 style="text-align: center" ng-bind="reason"></h3>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>

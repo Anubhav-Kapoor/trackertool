@@ -7,7 +7,7 @@
     <link rel="import" href="header.html" />
     <title>Sign Up Team Member Page</title>
 </head>
-<body ng-app="myApp" ng-controller="loginCtrl" style="background-image: url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageLoad()" style="background-image: url(images/background_pattern.jpg);">
   <form class="well form-horizontal" id="register_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
@@ -62,7 +62,12 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_roleId" name="role_id" placeholder="Role Id" class="form-control" type="text"   ng-model="roleId" />
+                                    <select name="role_id" class="form-control" ng-model="roleId">       
+                                        <option value="">Select Role</option>
+                                        <option value="200">Team Member</option>
+                                        <option value="201">Project Manager</option>
+                                    </select>
+                                 
                                 </div>
                             </div>
                         </div>

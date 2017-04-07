@@ -36,8 +36,8 @@ app.directive('header', function () {
 });
 
 jQuery.fn.extend({
-    disable: function(state) {
-        return this.each(function() {
+    disable: function (state) {
+        return this.each(function () {
             var $this = $(this);
             $this.toggleClass('disabled', state);
         });
@@ -46,7 +46,7 @@ jQuery.fn.extend({
 
 //*******************Home Controller - Used for Home Page*******************//
 
-app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $interval, $cookies) {
+app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
 
     $(function () {
 
@@ -56,7 +56,8 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
 
         var taskMinStartDate = moment().format('YYYY-MM-DD');;
 
-
+        $scope.isProjectManager = false;
+        $scope.taskActions = "";
 
 
         //Sub-Title Typing Plugin Initialization
@@ -89,9 +90,37 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 "columnDefs": [{
                     "targets": -1,
                     "data": null,
-                    "defaultContent": "<button class='button' id='edit' style='border-radius: 5px;'>Edit</button><button class='button' id='delete' style='margin-left: 10px;border-radius: 5px;'>Delete</button><button class='button' id='done'style='margin-left: 10px;border-radius: 5px;'>Done</button>"
-                }]
+                    "defaultContent": ""
+                }],
+                "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                    var isTaskInProgress = (aData[5] == "In Progress") ? true : false;
+                    var isTaskCompleted = (aData[5] == "Completed") ? true : false;
+                    var isTaskApproved = (aData[5] == "Approved") ? true : false;
+                    $('td:eq(6)', nRow).append("<button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='delete' style='margin-left: 10px;border-radius: 5px;'>Delete</button><button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='done' style='margin-left: 10px;border-radius: 5px;'>Done</button><button class='button" + (isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='margin-left: 10px;border-radius: 5px;'>Approve</button><button class='button" + (isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='margin-left: 10px;border-radius: 5px;'>Reject</button>");
+                }
             });
+
+            $('#myTable tbody').on('click', "#edit", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                alert('Hi Edit');
+            });
+            $('#myTable tbody').on('click', "#delete", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                alert('Hi Delete');
+            });
+            $('#myTable tbody').on('click', "#done", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                alert('Hi Done');
+            });
+            $('#myTable tbody').on('click', "#approve", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                alert('Hi Approve');
+            });
+            $('#myTable tbody').on('click', "#reject", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                alert('Hi Reject');
+            });
+
         }
 
         $scope.homeInit = function () {
@@ -120,15 +149,18 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                     if ($scope.status == "Success") {
 
                         $scope.user = JSON.parse(responseJSON.Response.userObject)[0];
-                       
+                        if ($scope.user.roleId == "201")
+                            $scope.isProjectManager = true;
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
-                    
+
                         //Table initialization
                         $scope.tasks = parseTaskList($scope.taskList);
 
                         $scope.loadTable($scope.tasks);
 
-                      
+
+
+
                     }
                 }, function myError(response) {
                     console.log(response);
@@ -141,34 +173,24 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
         }
 
 
-        
+
         var self = this;
 
-        
+
 
         $scope.refreshTable = function (tableData) {
-
-            $scope.taskTable.clear();
-            $scope.taskTable.rows.add(tableData);
-            $scope.taskTable.draw();
-
-
+            if ($scope.taskTable != null || $scope.taskTable != undefined) {
+                $scope.taskTable.clear();
+                $scope.taskTable.rows.add(tableData);
+                $scope.taskTable.draw();
+            } else {
+                $scope.loadTable(tableData);
+            }
         }
 
 
-        
-        $('#myTable tbody').on('click', "#edit", function () {
-            //var data = table.row($(this).parents('tr')).data();
-            //alert('Hi Edit');
-        });
-        $('#myTable tbody').on('click', "#delete", function () {
-            //var data = table.row($(this).parents('tr')).data();
-            //alert('Hi Delete');
-        });
-        $('#myTable tbody').on('click', "#done", function () {
-            //var data = table.row($(this).parents('tr')).data();
-            //alert('Hi Done');
-        });
+
+
 
         /******************************** CREATE NEW TASK CODE *********************************/
 
@@ -184,13 +206,13 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
-               
+
             }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
-           
+
                 $scope.status = responseJSON.Response.Status;
-            
+
                 if ($scope.status == "Success") {
                     usersJSON = JSON.parse(responseJSON.Response.userObject);
                     $scope.availableTeamMembers = parseTeamMembers(usersJSON);
@@ -204,7 +226,7 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 console.log(response);
             });
 
-          
+
         }
 
         // Form Validation - Task Form 
@@ -376,7 +398,7 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 $scope.reason = "Please fill the form properly and try again!!!";
                 $('#statusModal').modal('show');
             }
-            
+
 
         }
 
@@ -428,14 +450,14 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                     }
                 }
             }
-        }).on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
-                data.fv.disableSubmitButtons(true);
-            }
         });
 
         // Function - Change Password
         $scope.changePassword = function () {
+
+            if ($('#change_form').hasClass('ng-pristine') || $('#change_form').has('.has-error').length > 0) {
+                return
+            }
 
             var userData = {
                 ntid: sessionStorage.getItem('username'),
@@ -453,16 +475,21 @@ app.controller('homeCtrl', function ($scope,$rootScope, $http, httpService, $int
                 dataType: "json",
                 async: false
             }).then(function mySuccess(response) {
-
+                
                 var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
+                $scope.reason = responseJSON.Response.Reason;
                 $scope.status = responseJSON.Response.Status;
-                console.log(response);
-                //  $('#myModal').modal("show");
 
                 if ($scope.status == "Success") {
-                    window.location.href = "SignIn.aspx";
+                    
+                } else if ($scope.status == "Failure") {
+
                 }
+
+
+                $('#changePwdModal').hide();
+                $('#statusModal').show();
+
             }, function myError(response) {
                 console.log(response);
             });
@@ -481,7 +508,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
     $(function () {
 
         //On Load of every page 
-        $scope.loadPage = function () {
+        $scope.pageLoad = function () {
             if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
                 $scope.GoToURL('SignIn.aspx');
             }
@@ -534,15 +561,15 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     }
                 }
             }
-        }).on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
-                data.fv.disableSubmitButtons(true);
-            }
         });
 
         // Function - Sign-In 
         $scope.login = function () {
 
+            if ( $('#login_form').hasClass('ng-pristine') || $('#login_form').has('.has-error').length > 0) {
+                return
+            }
+            
             var user = {
                 ntid: $scope.ntid,
                 password: $scope.password,
@@ -614,17 +641,17 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     }
                 }
             }
-        }).on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
-                data.fv.disableSubmitButtons(true);
-            }
         });
 
         // Function - Forgot Password 
         $scope.sendPwd = function () {
 
+            if ($('#forgot_form').hasClass('ng-pristine') || $('#forgot_form').has('.has-error').length > 0) {
+                return
+            }
+
             var user = {
-                ntid: $scope.ntid,
+                ntid: $scope.forgot_ntid,
             }
 
             //Ajax method 
@@ -639,10 +666,13 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
             }).then(function mySuccess(response) {
 
                 var responseJSON = JSON.parse(response.data.d);
-                console.log("Reason: " + responseJSON.Response.Reason);
+             
                 $scope.status = responseJSON.Response.Status;
-                console.log(response);
-                $('#myModal').modal("show");
+                $scope.reason = responseJSON.Response.Reason;
+             
+                $('#forgotPwd').modal("hide");
+
+                $('#statusModal').modal("show");
 
             }, function myError(response) {
                 console.log(response);
@@ -686,9 +716,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
                 role_id: {
                     validators: {
-                        stringLength: {
-                            min: 3,
-                        },
+
                         notEmpty: {
                             message: 'Please supply your role id'
                         }
@@ -750,65 +778,59 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     }
                 }
             }
-        }).on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
-                data.fv.disableSubmitButtons(true);
-            }
         });
 
         // Function - Sign-Up 
         $scope.createAccount = function () {
-            if ($scope.password == $scope.confPassword) {
 
-
-                var user = {
-                    ntid: $scope.ntid,
-                    firstName: $scope.firstName,
-                    lastName: $scope.lastName,
-                    roleId: $scope.roleId,
-                    phone: $scope.phoneNo,
-                    email: $scope.emailId,
-                    password: $scope.password,
-                }
-
-                //Ajax method 
-                $http({
-                    method: "POST",
-                    url: "/TaskManagerAPI.aspx/CreateAccount",
-                    data: JSON.stringify(user),
-                    cache: false,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    async: false
-                }).then(function mySuccess(response) {
-
-                    var resp = JSON.parse(response.data.d);
-
-                    //Case of NTID already existing
-                    if (resp.Response.Status == 'Failure') {
-                        $scope.message = resp.Response.Reason;
-                        $scope.isSuccess = false;
-                    } else {
-                        $scope.message = resp.Response.Reason;
-                        $scope.isSuccess = true;
-                    }
-                    //Successful creation of Account Message
-                    var options = {
-                        "backdrop": "static"
-                    }
-                    $('#basicModal').modal(options);
-
-                    //Redirect to Sign In page after a specific time interval 
-                    setTimeout(function () {
-                        window.location.href = "SignIn.aspx";
-                    }, 5000);
-                }), function myError(response) {
-                    console.log(response);
-                }
+            if ($('#register_form').hasClass('ng-pristine') || $('#register_form').has('.has-error').length > 0) {
+                return
             }
-            else {
-                console.log("Passwords do not match");
+            var user = {
+                ntid: $scope.ntid,
+                firstName: $scope.firstName,
+                lastName: $scope.lastName,
+                roleId: $scope.roleId,
+                phone: $scope.phoneNo,
+                email: $scope.emailId,
+                password: $scope.password,
             }
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/CreateAccount",
+                data: JSON.stringify(user),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false
+            }).then(function mySuccess(response) {
+
+                var resp = JSON.parse(response.data.d);
+
+                //Case of NTID already existing
+                if (resp.Response.Status == 'Failure') {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = false;
+                } else {
+                    $scope.message = resp.Response.Reason;
+                    $scope.isSuccess = true;
+                }
+                //Successful creation of Account Message
+                var options = {
+                    "backdrop": "static"
+                }
+                $('#basicModal').modal(options);
+
+                //Redirect to Sign In page after a specific time interval 
+                setTimeout(function () {
+                    window.location.href = "SignIn.aspx";
+                }, 5000);
+            }), function myError(response) {
+                console.log(response);
+            }
+
         }
 
 
@@ -859,7 +881,7 @@ function goToURL(navigatePage) {
 }
 
 // Function - Task List Parsing
-function parseTaskList(taskList){
+function parseTaskList(taskList) {
 
     var refinedTaskList = [];
 
@@ -889,4 +911,17 @@ function parseTeamMembers(tmList) {
         teamMembersList.push(tm);
     }
     return teamMembersList;
+}
+
+// Function - Create Button for Task Table
+function createTaskButton(name, classname, clickHandler) {
+
+    var button = document.createElement("button");
+    button.setAttribute("name", name);
+    button.setAttribute("class", classname);
+    button.setAttribute("id", name);
+    //   button.setAttribute("ng-click", clickHandler + "()");
+    button.innerText = name;
+    button.style.borderRadius = "5px";
+    return button;
 }
