@@ -34,10 +34,17 @@
                             <a class="forgot btn btn-link pull-right" ng-click="forgotPwdPopUp()">Forgot Password?</a>
 
                         </span>
+<<<<<<< HEAD
                         <hr class="colorgraph" />
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <button class="button" ng-click="login()">Sign In</button>
+=======
+                        <hr class="colorgraph">
+                        <div class="row form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <button class="button" ng-click="login()" value="Sign In" >Sign In</button>
+>>>>>>> 10f8a6c7b20c7dd083b6d0f94110c9b0439995af
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>
