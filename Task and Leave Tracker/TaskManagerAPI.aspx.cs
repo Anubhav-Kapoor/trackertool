@@ -202,7 +202,8 @@ namespace Task_and_Leave_Tracker
                     String EmailId = dt.Rows[0]["EmailId"].ToString();
                     String UserGuid = dt.Rows[0]["UserGuid"].ToString();
                     String Password = Membership.GeneratePassword(12, 9);
-                    int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password, UserGuid);
+                    String hashedPwd = Security.HashSHA1(Password + UserGuid);
+                    int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedPwd, UserGuid);
                     if (result > 0)
                     {
 
@@ -291,7 +292,7 @@ namespace Task_and_Leave_Tracker
                                 mailMessage.From = new MailAddress("bhawneet.singh@owenscorning.com");
                                 mailMessage.Subject = "Tracker Tool - Password Changed";
                                 mailMessage.IsBodyHtml = true;
-                                mailMessage.Body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your New Password for TrackerTool is : " + newPassword + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                                mailMessage.Body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your New Password for TrackerTool has been Changed!!"+  "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
                                 SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
                                 smtpClient.Send(mailMessage);
 
