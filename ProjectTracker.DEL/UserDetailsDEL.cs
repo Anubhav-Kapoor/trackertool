@@ -81,7 +81,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
 
             }
             finally
@@ -109,7 +109,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
 
             }
             finally
@@ -137,7 +137,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             finally
             {
@@ -171,7 +171,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             finally
             {
@@ -228,7 +228,6 @@ namespace ProjectTracker.DEL
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "Insert");
-                cmd.Parameters.AddWithValue("@TaskId ", 0);
                 cmd.Parameters.AddWithValue("@Taskdesc ", taskDesc);
                 cmd.Parameters.AddWithValue("@Created_Date ", createdDate);
                 cmd.Parameters.AddWithValue("@Expiry_Date ", expiryDate);
@@ -278,7 +277,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
 
             }
             finally
@@ -307,7 +306,36 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
+                throw;
 
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+        // View By Id[Task Details]
+        public DataTable ViewByIdDEL(int taskId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View ALL");
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
 
             }
             finally
@@ -335,7 +363,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             finally
             {
@@ -367,7 +395,7 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             finally
             {
@@ -386,7 +414,7 @@ namespace ProjectTracker.DEL
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "Update S");
-                cmd.Parameters.AddWithValue("@Status ", status);               
+                cmd.Parameters.AddWithValue("@Status ", status);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
 
@@ -396,7 +424,44 @@ namespace ProjectTracker.DEL
             {
 
                 Console.WriteLine(ex.Message);
+                throw;
 
+            }
+            finally
+            {
+                con.Close();
+
+            }
+            return result;
+        }
+
+        //Insert Function[Leave Details]
+        public int InsertLeaveDetailsDEL(String leaveDesc, DateTime fromDate, String toDate, String appliedBy, String leaveType, String status)
+        {
+            int result = 0;
+            try
+            {
+
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Insert");
+                cmd.Parameters.AddWithValue("@LeaveDesc ", leaveDesc);
+                cmd.Parameters.AddWithValue("@FromDate ", fromDate);
+                cmd.Parameters.AddWithValue("@ToDate ", toDate);
+                cmd.Parameters.AddWithValue("@AppliedBy", appliedBy);
+                cmd.Parameters.AddWithValue("@LeaveType", leaveType);
+                cmd.Parameters.AddWithValue("@Status", status);
+                result = cmd.ExecuteNonQuery();
+
+            }
+
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
             }
             finally
             {

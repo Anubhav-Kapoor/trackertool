@@ -170,6 +170,7 @@
   <ItemGroup>
     <Compile Include="App_Data\RestHelper.cs" />
     <Compile Include="App_Data\Utilities.cs" />
+    <Compile Include="ExceptionHandler.cs" />
     <Compile Include="taskPage.aspx.cs">
       <DependentUpon>taskPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

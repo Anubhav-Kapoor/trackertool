@@ -27,7 +27,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
             
@@ -47,7 +47,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             } 
             return dt;
 
@@ -65,7 +65,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             return dt;
 
@@ -82,7 +82,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
@@ -104,7 +104,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
@@ -125,7 +125,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
             return value;
@@ -143,7 +143,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
@@ -164,7 +164,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
             return dt;
         }
@@ -183,7 +183,25 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
+                throw;
+            }
+            return dt;
+        }
+         // View By Id[Task Details]
+        public DataTable ViewByIdBLL(int taskId)
+        {
 
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewByIdDEL(taskId);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
             }
             return dt;
         }
@@ -200,7 +218,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
@@ -221,7 +239,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
@@ -242,7 +260,7 @@ namespace ProjectTracker.BLL
             {
 
                 Console.WriteLine(ex.Message);
-
+                throw;
             }
 
 
