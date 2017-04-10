@@ -365,7 +365,7 @@ namespace Task_and_Leave_Tracker
                                 t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
                                 t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
                                 t.status = dt.Rows[i]["Status"].ToString();
-                                t.taskname = dt.Rows[i]["TaskName"].ToString();
+                                t.taskName = dt.Rows[i]["TaskName"].ToString();
                                 t.startDate = Convert.ToDateTime(dt.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
                                 taskList.Add(t);
                             }
@@ -497,6 +497,7 @@ namespace Task_and_Leave_Tracker
                         Task t = new Task();
                         t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
                         t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
+<<<<<<< HEAD
                         t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
                         t.expiryDate = Convert.ToDateTime(dt.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
                         t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
@@ -504,6 +505,15 @@ namespace Task_and_Leave_Tracker
                         t.status = dt.Rows[i]["Status"].ToString();
                         t.taskname = dt.Rows[i]["TaskName"].ToString();
                         t.startDate = Convert.ToDateTime(dt.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
+=======
+                        t.createdDate = Convert.ToString(dt1.Rows[i]["Created_Date"]);
+                        t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
+                        t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
+                        t.assignedTo = dt1.Rows[i]["AssignedTo"].ToString();
+                        t.status = dt1.Rows[i]["Status"].ToString();
+                        t.taskName = dt1.Rows[i]["TaskName"].ToString();
+                        t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
+>>>>>>> 1c109cba72c5de98002469cb6d7a61274e97f6f9
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
@@ -528,7 +538,6 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
-
         #region Update Task
         [System.Web.Services.WebMethod]
         public static String UpdateTask(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName, String status)
@@ -551,6 +560,7 @@ namespace Task_and_Leave_Tracker
                         resultObject.Response.Status = "Failure";
                         resultObject.Response.Reason = "Task Details Are Not Updated!!";
                     }
+<<<<<<< HEAD
 
                     DataTable dt = userBll.ViewByIdBLL(taskId);
                     if (dt.Rows.Count > 0)
@@ -584,6 +594,8 @@ namespace Task_and_Leave_Tracker
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "Data is Not Retrieved!!";
                     }
+=======
+>>>>>>> 1c109cba72c5de98002469cb6d7a61274e97f6f9
                 }
                 else if (status != null)
                 {

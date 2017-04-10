@@ -36,17 +36,15 @@
                         </span>
 
                         <hr class="colorgraph" />
-                        <div class="row">
+                        <div class="row form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <button class="button" ng-click="login()" value="Sign In" >Sign In</button>
 
-                           
-                            <div class="row form-group">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <button class="button" ng-click="login()" value="Sign In">Sign In</button>
-                                </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>
-                                </div>
                             </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <a href="/SignUp.aspx" class="btn btn-default button" style="padding-top: 16px">Register</a>
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
             </div>
@@ -63,7 +61,7 @@
                 </div>
                 <form id="forgot_form" class="form-horizontal">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group" >                     
                             <div class="col-md-4 inputGroupContainer" style="width: 70%">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
@@ -74,7 +72,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="button" ng-click="sendPwd()">Send</button>
-                        <button class="button" data-dismiss="modal">Cancel</button>
+                        <button class="button"  data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
