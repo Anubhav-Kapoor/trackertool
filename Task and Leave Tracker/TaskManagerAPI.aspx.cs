@@ -22,6 +22,40 @@ namespace Task_and_Leave_Tracker
 
         }
 
+        #region Mail Method
+        [System.Web.Services.WebMethod]
+        public static String SendingMail(String mailId, String from, String subject, String body)
+        {
+
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            try
+            {
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.To.Add(mailId);
+                mailMessage.From = new MailAddress(from);
+                mailMessage.Subject = subject;
+                mailMessage.IsBodyHtml = true;
+                mailMessage.Body = body;
+                SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
+                smtpClient.Send(mailMessage);
+
+                resultObject.Response.Status = "Success";
+                resultObject.Response.Reason = "Email has been sent!!";
+
+            }
+
+
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = "Could not sent the email" + ex.Message;
+            }
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
+
         #region Sign-up
         [System.Web.Services.WebMethod]
         public static String CreateAccount(String ntid, String firstName, String lastName, String roleId, String phone, String email, String password)
@@ -43,28 +77,12 @@ namespace Task_and_Leave_Tracker
                         if (result > 0)
                         {
 
-                            try
-                            {
-                                MailMessage mailMessage = new MailMessage();
-                                mailMessage.To.Add(email);
-                                mailMessage.From = new MailAddress("bhawneet.singh@owenscorning.com");
-                                mailMessage.Subject = "Welcome to Tracker Tool";
-                                mailMessage.IsBodyHtml = true;
-                                mailMessage.Body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-                                SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
-                                smtpClient.Send(mailMessage);
-
-                                resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "Email Has Been Sent!!";
-
-                            }
-
-
-                            catch (Exception ex)
-                            {
-                                resultObject.Response.Status = "Failure";
-                                resultObject.Response.Reason = "Could not sent the email" + ex.Message;
-                            }
+                            String from = "bhawneet.singh@owenscorning.com";
+                            String subject = "Welcome to Tracker Tool";
+                            String body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                           
+                            SendingMail(email, from, subject, body);  
+                            
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "You are successfully registered.";
 
@@ -99,6 +117,7 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+
         #region Get User Details
         [System.Web.Services.WebMethod]
         public static String GetUserDetails()
@@ -123,8 +142,6 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
-
-
 
 
         #region Sign-in
@@ -183,6 +200,7 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+
         #region  ForgotPassword
         [System.Web.Services.WebMethod]
         public static String ForgotPassword(String ntid)
@@ -206,39 +224,27 @@ namespace Task_and_Leave_Tracker
                     int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedPwd, UserGuid);
                     if (result > 0)
                     {
+                        String from="bhawneet.singh@owenscorning.com";
+                        String subject = "Tracker Tool - Password Reset";
+                        String body="Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
 
-                        try
-                        {
-                            MailMessage mailMessage = new MailMessage();
-                            mailMessage.To.Add(EmailId);
-                            mailMessage.From = new MailAddress("bhawneet.singh@owenscorning.com");
-                            mailMessage.Subject = "Tracker Tool - Password Reset";
-                            mailMessage.IsBodyHtml = true;
-                            mailMessage.Body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-                            SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
-                            smtpClient.Send(mailMessage);
+                        SendingMail(EmailId,from,subject,body);
 
-                            resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "Email has been sent!!";
-
-                        }
-
-
-                        catch (Exception ex)
-                        {
-                            resultObject.Response.Status = "Failure";
-                            resultObject.Response.Reason = "Could not sent the email" + ex.Message;
-                        }
-
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Your Password Has Been Reset";
                     }
-
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = " User Details Are Not Updated!!";
+                    }
 
                 }
 
                 else
                 {
-                    resultObject.Response.Status = "Empty";
-                    resultObject.Response.Reason = "Enter your details !!";
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "Enter Your Correct Ntid !!";
                 }
             }
             catch (Exception ex)
@@ -260,7 +266,7 @@ namespace Task_and_Leave_Tracker
             resultObject.Response = new Response();
             try
             {
-                if (ntid != "" && currentPassword!="" && newPassword!="")
+                if (ntid != "" && currentPassword != "" && newPassword != "")
                 {
                     DataTable dt = userBll.ViewUserDetailsBLL(ntid);
 
@@ -284,29 +290,13 @@ namespace Task_and_Leave_Tracker
 
                         if (result > 0)
                         {
+                            String from = "bhawneet.singh@owenscorning.com";
+                            String subject = "Tracker Tool -  Password Changed";
+                            String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your New Password for TrackerTool has been Changed!!" + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
 
-                            try
-                            {
-                                MailMessage mailMessage = new MailMessage();
-                                mailMessage.To.Add(EmailId);
-                                mailMessage.From = new MailAddress("bhawneet.singh@owenscorning.com");
-                                mailMessage.Subject = "Tracker Tool - Password Changed";
-                                mailMessage.IsBodyHtml = true;
-                                mailMessage.Body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your New Password for TrackerTool has been Changed!!"+  "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-                                SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
-                                smtpClient.Send(mailMessage);
-
-                                resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = " Your Password is Changed!!"   ;
-
-                            }
-
-
-                            catch (Exception ex)
-                            {
-                                resultObject.Response.Status = "Failure";
-                                resultObject.Response.Reason = "Could not sent the email" + ex.Message;
-                            }
+                            SendingMail(EmailId, from, subject, body);
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "Your Password Has Been Changed.";
 
                         }
                         else
@@ -340,6 +330,7 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+
         #region Create Task
         [System.Web.Services.WebMethod]
         public static String CreateTask(String taskDesc, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
@@ -350,9 +341,6 @@ namespace Task_and_Leave_Tracker
             try
             {
                 DateTime createdDate = DateTime.Now;
-
-
-
 
                 if (taskDesc != "" && createdDate != null && expiryDate != null && createdBy != "" && assignedTo != "" && status != "" && taskName != "" && startDate != null)
                 {
@@ -372,7 +360,7 @@ namespace Task_and_Leave_Tracker
                                 Task t = new Task();
                                 t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
                                 t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
-                                t.createdDate = Convert.ToDateTime(dt.Rows[i]["Created_Date"]);
+                                t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
                                 t.expiryDate = Convert.ToDateTime(dt.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
                                 t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
                                 t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
@@ -413,6 +401,7 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
+
 
         #region Get User List
         [System.Web.Services.WebMethod]
@@ -464,6 +453,7 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+
         #region Show Data On Page Load
         [System.Web.Services.WebMethod]
         public static String ShowData(String ntid)
@@ -507,13 +497,13 @@ namespace Task_and_Leave_Tracker
                         Task t = new Task();
                         t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
                         t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
-                        t.createdDate = Convert.ToDateTime(dt1.Rows[i]["Created_Date"]);
-                        t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
-                        t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
-                        t.assignedTo = dt1.Rows[i]["AssignedTo"].ToString();
-                        t.status = dt1.Rows[i]["Status"].ToString();
-                        t.taskname = dt1.Rows[i]["TaskName"].ToString();
-                        t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
+                        t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
+                        t.expiryDate = Convert.ToDateTime(dt.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
+                        t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
+                        t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
+                        t.status = dt.Rows[i]["Status"].ToString();
+                        t.taskname = dt.Rows[i]["TaskName"].ToString();
+                        t.startDate = Convert.ToDateTime(dt.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
@@ -562,8 +552,38 @@ namespace Task_and_Leave_Tracker
                         resultObject.Response.Reason = "Task Details Are Not Updated!!";
                     }
 
+                    DataTable dt = userBll.ViewByIdBLL(taskId);
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<Task> taskList = new List<Task>();
+                        Task t = new Task();
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
 
 
+                            t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
+                            t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
+                            t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
+                            t.expiryDate = Convert.ToString(dt.Rows[i]["Expiry_Date"]);
+                            t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
+                            t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
+                            t.status = dt.Rows[i]["Status"].ToString();
+                            t.taskname = dt.Rows[i]["TaskName"].ToString();
+                            t.startDate = Convert.ToString(dt.Rows[i]["Start_Date"]);
+                            taskList.Add(t);
+                        }
+
+
+                        resultObject.Response.userObject = oSerializer.Serialize(taskList);
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Data Has Been Retrieved!!";
+
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Data is Not Retrieved!!";
+                    }
                 }
                 else if (status != null)
                 {
@@ -593,6 +613,7 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
+
 
     }
 }
