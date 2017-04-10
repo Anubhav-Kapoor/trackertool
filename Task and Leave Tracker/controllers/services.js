@@ -46,15 +46,23 @@ jQuery.fn.extend({
 
 //*******************Home Controller - Used for Home Page*******************//
 
-app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
+app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies, $timeout) {
 
     $(function () {
+
+        //Check weather user has already logged 
+        $scope.pageLoad = function () {
+            if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
+                goToURL('SignIn.aspx');
+            }
+        }
+        $scope.pageLoad();
 
         var dateObject = new Date();
 
         var createdDate = dateObject.toUTCString();
 
-        var taskMinStartDate = moment().format('YYYY-MM-DD');;
+
 
         $scope.isProjectManager = false;
         $scope.taskActions = "";
@@ -78,13 +86,13 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             $scope.taskTable = $('#myTable').DataTable({
                 data: tableData,
                 columns: [
-                    { title: "Task ID", width: "10%" },
-                    { title: "Task Name", width: "10%" },
-                    { title: "Assigned To", width: "10%" },
-                    { title: "Start Date", width: "10%" },
-                    { title: "End Date", width: "10%" },
-                    { title: "Status", width: "10%" },
-                    { title: "Actions", width: "35%" }
+                    { data: "taskId", title: "Task ID", width: "10%" },
+                    { data: "taskName", title: "Task Name", width: "10%" },
+                    { data: "assignedTo", title: "Assigned To", width: "10%" },
+                    { data: "startDate", title: "Start Date", width: "10%" },
+                    { data: "expiryDate", title: "End Date", width: "10%" },
+                    { data: "status", title: "Status", width: "10%" },
+                    { data: "actions", title: "Actions", width: "35%" }
 
                 ],
                 "columnDefs": [{
@@ -93,32 +101,49 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     "defaultContent": ""
                 }],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
-                    var isTaskInProgress = (aData[5] == "In Progress") ? true : false;
-                    var isTaskCompleted = (aData[5] == "Completed") ? true : false;
-                    var isTaskApproved = (aData[5] == "Approved") ? true : false;
-                    $('td:eq(6)', nRow).append("<button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='delete' style='margin-left: 10px;border-radius: 5px;'>Delete</button><button class='button" + (isTaskInProgress ? "" : " ng-hide") + "' id='done' style='margin-left: 10px;border-radius: 5px;'>Done</button><button class='button" + (isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='margin-left: 10px;border-radius: 5px;'>Approve</button><button class='button" + (isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='margin-left: 10px;border-radius: 5px;'>Reject</button>");
+                    var isTaskInProgress = (aData.status == "In Progress") ? true : false;
+                    var isTaskCompleted = (aData.status == "Complete") ? true : false;
+                    var isTaskApproved = (aData.status == "Approved") ? true : false;
+                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager &&  isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
+            });
+
+            $('#myTable tbody').on('click', "#view", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                $scope.currentTask = getTaskDetailByTaskId(data.taskId, $scope.taskList);
+                $('#taskDetailModal').modal("show");
             });
 
             $('#myTable tbody').on('click', "#edit", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                alert('Hi Edit');
+
+                $scope.editTaskPopup(getTaskDetailByTaskId(data.taskId, $scope.taskList));
+                //alert('Hi Edit');
             });
-            $('#myTable tbody').on('click', "#delete", function () {
+            $('#myTable tbody').on('click', "#cancel", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                alert('Hi Delete');
+
+                $scope.updateTaskStatus(data.taskId, "Cancelled");
+
+              //  alert('Hi Cancel');
             });
             $('#myTable tbody').on('click', "#done", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                alert('Hi Done');
+              //  $('button#done').confirmation("toggle");
+               
+                $scope.updateTaskStatus(data.taskId,"Complete");
+
+               // alert('Hi Done');
             });
             $('#myTable tbody').on('click', "#approve", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                alert('Hi Approve');
+                $scope.updateTaskStatus(data.taskId, "Approved");
+               // alert('Hi Approve');
             });
             $('#myTable tbody').on('click', "#reject", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                alert('Hi Reject');
+                $scope.updateTaskStatus(data.taskId, "In Progress");
+               // alert('Hi Reject');
             });
 
         }
@@ -138,7 +163,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     cache: false,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    async: false
+                    async: true
 
                 }).then(function mySuccess(response) {
 
@@ -154,11 +179,57 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
 
                         //Table initialization
-                        $scope.tasks = parseTaskList($scope.taskList);
+                        // $scope.tasks = parseTaskList($scope.taskList);
 
-                        $scope.loadTable($scope.tasks);
+                        $scope.loadTable($scope.taskList);
 
+                        $('button#done').confirmation({
+                            rootSelector: 'button#done',
+                            // other options
+                            onConfirm: function () {
 
+                            },
+                            onCancel: function () {
+                               
+                            }
+                          
+                        });
+
+                        $('button#cancel').confirmation({
+                            rootSelector: 'button#cancel',
+                            // other options
+                            onConfirm: function () {
+
+                            },
+                            onCancel: function () {
+
+                            }
+
+                        });
+
+                        $('button#approve').confirmation({
+                            rootSelector: 'button#approve',
+                            // other options
+                            onConfirm: function () {
+
+                            },
+                            onCancel: function () {
+
+                            }
+
+                        });
+                       
+                        $('button#reject').confirmation({
+                            rootSelector: 'button#reject',
+                            // other options
+                            onConfirm: function () {
+
+                            },
+                            onCancel: function () {
+
+                            }
+
+                        });
 
 
                     }
@@ -189,13 +260,31 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         }
 
 
+        /******************************** LOGOUT CODE *********************************/
 
-
+        // Function - Logout
+        $scope.logout = function () {
+            sessionStorage.removeItem("username");
+            window.location.href = "signin";
+        }
 
         /******************************** CREATE NEW TASK CODE *********************************/
 
+
+        // Task Handler - Decides whether to create a new task or to update a task
+        $scope.taskHandler = function () {
+            if ($scope.taskModalTitle == "Create New Task")
+                $scope.createTask();
+
+            else if ($scope.taskModalTitle == "Edit Task Detail")
+                $scope.editTask();
+        }
+
+
         // Display Popup - Create Task
         $scope.createTaskPopup = function () {
+
+
 
             //Ajax method 
             $http({
@@ -205,7 +294,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 cache: false,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                async: false
+                async: true
 
             }).then(function mySuccess(response) {
 
@@ -216,11 +305,19 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 if ($scope.status == "Success") {
                     usersJSON = JSON.parse(responseJSON.Response.userObject);
                     $scope.availableTeamMembers = parseTeamMembers(usersJSON);
-                    $scope.isTaskFormValid = true;
-                    var options = {
-                        "backdrop": "static"
-                    }
-                    $('#createTaskModal').modal(options);
+
+                    $scope.taskModalTitle = "Create New Task";
+                    $scope.task = {};
+
+                    taskMinStartDate = moment().format('MM/DD/YYYY');
+
+                    $('#taskModal').modal("show");
+                    $scope.task = {};
+                    $timeout(function () {
+                        $('#taskForm').data('formValidation').resetForm();
+                    }, 200);
+
+
                 }
             }, function myError(response) {
                 console.log(response);
@@ -230,7 +327,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         }
 
         // Form Validation - Task Form 
-        $('#taskForm').bootstrapValidator({
+        $('#taskForm').formValidation({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -262,9 +359,11 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 taskStartDate: {
                     validators: {
                         stringLength: {
+                            min: 10,
                             max: 10,
                         },
                         date: {
+
                             format: 'MM/DD/YYYY',
                             message: 'The value is not a valid date'
 
@@ -272,11 +371,12 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         callback: {
                             message: 'The date is not in the range',
                             callback: function (value, validator) {
-                                var m = new moment(value, 'YYYY-MM-DD', true);
+                                var m = new moment(value, 'MM/DD/YYYY', true);
                                 if (!m.isValid()) {
                                     return false;
                                 }
-                                return m.isAfter(taskMinStartDate) || m.isSame(taskMinStartDate);
+                                $scope.task.taskStartDate = value;
+                                return m.isSameOrAfter(moment(taskMinStartDate));
                             }
                         },
                         notEmpty: {
@@ -287,9 +387,11 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 taskEndDate: {
                     validators: {
                         stringLength: {
+                            min: 10,
                             max: 10,
                         },
                         date: {
+
                             format: 'MM/DD/YYYY',
                             message: 'The value is not a valid date'
 
@@ -297,11 +399,12 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         callback: {
                             message: 'The date is not in the range',
                             callback: function (value, validator) {
-                                var m = new moment(value, 'YYYY-MM-DD', true);
+                                var m = new moment(value, 'MM/DD/YYYY', true);
                                 if (!m.isValid()) {
                                     return false;
                                 }
-                                return m.isAfter(moment($scope.taskStartDate.toUTCString()).format('YYYY-MM-DD')) || m.isSame(moment($scope.taskStartDate.toUTCString()).format('YYYY-MM-DD'));
+                                $scope.task.taskEndDate = value;
+                                return m.isSameOrAfter(moment($scope.task.taskStartDate));
                             }
                         },
 
@@ -311,6 +414,10 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     }
                 },
                 assignedTo: {
+                    stringLength: {
+                        min: 5,
+
+                    },
                     validators: {
                         notEmpty: {
                             message: 'Please select an associate to assign task'
@@ -318,56 +425,43 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     }
                 }
             }
-        }).on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
-                //data.fv.disableSubmitButtons(true);
-                ////$('#createTaskButton').disable(true);
-                //$scope.isTaskFormValid = false;
-            }
-            else {
-                ////$('#createTaskButton').disable(false);
-                //$scope.isTaskFormValid = true;
-            }
         });
 
         // Function - Create Task
         $scope.createTask = function () {
 
-            if ($scope.isTaskFormValid) {
 
-                var userData = {
+            $('#taskForm').data('formValidation').validate();
 
-                    taskDesc: $scope.taskDesc,
-                    expiryDate: moment($scope.taskEndDate.toUTCString()).format('MM/DD/YYYY'),
+            if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
+
+                var postData = {
+
+                    taskDesc: $scope.task.taskDesc,
+                    expiryDate: $scope.task.taskEndDate,
                     createdBy: sessionStorage.getItem("username"),
-                    assignedTo: $scope.assignedTo,
+                    assignedTo: $scope.task.assignedTo,
                     status: "In Progress",
-                    taskName: $scope.taskName,
-                    startDate: moment($scope.taskStartDate.toUTCString()).format('MM/DD/YYYY')
+                    taskName: $scope.task.taskName,
+                    startDate: $scope.task.taskStartDate
 
                 }
 
                 //Ajax method 
 
                 $http({
-
                     method: "POST",
-
                     url: "/TaskManagerAPI.aspx/CreateTask",
-
-                    data: JSON.stringify(userData),
-
+                    data: JSON.stringify(postData),
                     cache: false,
-
                     contentType: "application/json; charset=utf-8",
-
                     dataType: "json",
-
-                    async: false
-
+                    async: true
                 }).then(function mySuccess(response) {
 
-                    $('#createTaskModal').modal("hide");
+                    $scope.task = {};
+
+                    $('#taskModal').modal("hide");
 
                     var responseJSON = JSON.parse(response.data.d);
                     $scope.status = responseJSON.Response.Status;
@@ -375,8 +469,8 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                     if ($scope.status == "Success") {
 
-                        var taskJSON = JSON.parse(responseJSON.Response.taskObject);
-                        $scope.refreshTable(parseTaskList(taskJSON));
+                        $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
+                        $scope.refreshTable($scope.taskList);
 
                         $('#statusModal').modal('show');
 
@@ -390,13 +484,123 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                 });
             }
-            else {
 
-                $('#createTaskModal').modal("hide");
+        }
 
-                $scope.status = "Incomplete Form";
-                $scope.reason = "Please fill the form properly and try again!!!";
-                $('#statusModal').modal('show');
+        /******************************** EDIT TASK DETAIL CODE *********************************/
+
+
+        $scope.editTaskPopup = function (taskData) {
+
+
+
+
+            //Ajax method 
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/GetUserList",
+                data: "",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true
+
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+
+                $scope.status = responseJSON.Response.Status;
+
+                if ($scope.status == "Success") {
+                    usersJSON = JSON.parse(responseJSON.Response.userObject);
+                    $scope.availableTeamMembers = parseTeamMembers(usersJSON);
+                    $scope.taskModalTitle = "Edit Task Detail";
+
+                    $scope.task = {
+                        taskId: taskData.taskId,
+                        taskName: taskData.taskName,
+                        taskDesc: taskData.taskDesc,
+                        taskStartDate: moment(taskData.startDate).format('MM/DD/YYYY'),
+                        taskEndDate: moment(taskData.expiryDate).format('MM/DD/YYYY'),
+                        assignedTo: taskData.assignedTo,
+                        status: taskData.status
+                    }
+
+                    taskMinStartDate = $scope.task.taskStartDate;
+
+                    $('#taskModal').modal("show");
+
+                    $timeout(function () {
+                        $('#taskForm').data('formValidation').resetForm();
+                    }, 200);
+
+                }
+            }, function myError(response) {
+                console.log(response);
+            });
+
+
+
+        }
+
+
+        $scope.editTask = function () {
+
+            $('#taskForm').data('formValidation').validate();
+
+            if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
+
+                var postData = {
+                    taskId: $scope.task.taskId,
+                    taskDesc: $scope.task.taskDesc,
+                    expiryDate: $scope.task.taskEndDate,
+                    assignedTo: $scope.task.assignedTo,
+                    taskName: $scope.task.taskName,
+                    status: null
+                }
+
+                //Ajax method 
+
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/UpdateTask",
+                    data: JSON.stringify(postData),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
+
+                   
+
+                    $('#taskModal').modal("hide");
+
+                    var responseJSON = JSON.parse(response.data.d);
+                    $scope.status = responseJSON.Response.Status;
+                    $scope.reason = responseJSON.Response.Reason;
+
+                    if ($scope.status == "Success") {
+
+                        $scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
+                        $scope.refreshTable($scope.taskList);
+
+                        //var taskJSON = JSON.parse(responseJSON.Response.taskObject);
+                        //$scope.refreshTable(parseTaskList(taskJSON));
+                        $scope.task = {};
+                        $('#statusModal').modal('show');
+
+                    }
+                    else if ($scope.status == "Failure")
+                        $('#statusModal').modal('show');
+
+                }, function myError(response) {
+
+                    console.log(response);
+
+                });
+
+
+
             }
 
 
@@ -404,10 +608,86 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 
 
+        /******************************** VIEW TASK DETAIL CODE *********************************/
+
+        $scope.viewTaskDetail = function () {
+
+
+
+
+        }
+
+
+        /******************************** Cancel TASK CODE *********************************/
+
+
+        /******************************** MARK COMPLETE TASK CODE *********************************/
+
+        $scope.updateTaskStatus = function (taskId,status) {
+
+            var postData = {
+                taskId: taskId,
+                taskDesc: null,
+                expiryDate: null,
+                assignedTo: null,
+                taskName: null,
+                status: status
+            }
+
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/UpdateTask",
+                data: JSON.stringify(postData),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                $scope.status = responseJSON.Response.Status;
+                $scope.reason = responseJSON.Response.Reason;
+
+                if ($scope.status == "Success") {
+
+                    //$scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
+                    //$scope.refreshTable($scope.taskList);
+
+                    //var taskJSON = JSON.parse(responseJSON.Response.taskObject);
+                    //$scope.refreshTable(parseTaskList(taskJSON));
+                    $('#statusModal').modal('show');
+
+                }
+                else if ($scope.status == "Failure")
+                    $('#statusModal').modal('show');
+
+            }, function myError(response) {
+
+                console.log(response);
+
+            });
+
+         
+
+        }
+
+
+
         /******************************** CHANGE PASSWORD CODE *********************************/
 
+
+        // Display Popup - Change password 
+        $scope.changePwdPopUp = function () {
+
+            var options = {
+                "backdrop": "static"
+            }
+            $('#changePwdModal').modal(options);
+        }
+
+
         // Form Validation - Change Password
-        $('#change_form').bootstrapValidator({
+        $('#change_form').formValidation({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -455,47 +735,49 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         // Function - Change Password
         $scope.changePassword = function () {
 
-            if ($('#change_form').hasClass('ng-pristine') || $('#change_form').has('.has-error').length > 0) {
-                return
-            }
+            $('#change_form').data('formValidation').validate();
 
-            var userData = {
-                ntid: sessionStorage.getItem('username'),
-                currentPassword: $scope.currentPwd,
-                newPassword: $scope.newPwd
-            }
+            if ($('#change_form').data('formValidation').isValid() != null && $('#change_form').data('formValidation').isValid()) {
 
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/ChangePassword",
-                data: JSON.stringify(userData),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
-                
-                var responseJSON = JSON.parse(response.data.d);
-                $scope.reason = responseJSON.Response.Reason;
-                $scope.status = responseJSON.Response.Status;
-
-                if ($scope.status == "Success") {
-                    
-                } else if ($scope.status == "Failure") {
-
+                var userData = {
+                    ntid: sessionStorage.getItem('username'),
+                    currentPassword: $scope.currentPwd,
+                    newPassword: $scope.newPwd
                 }
 
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/ChangePassword",
+                    data: JSON.stringify(userData),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
 
-                $('#changePwdModal').hide();
-                $('#statusModal').show();
+                    var responseJSON = JSON.parse(response.data.d);
+                    $scope.reason = responseJSON.Response.Reason;
+                    $scope.status = responseJSON.Response.Status;
 
-            }, function myError(response) {
-                console.log(response);
-            });
+                    if ($scope.status == "Success") {
+
+                    } else if ($scope.status == "Failure") {
+
+                    }
+
+
+                    $('#changePwdModal').modal("hide");
+                    $('#statusModal').modal("show");
+
+                }, function myError(response) {
+                    console.log(response);
+                });
+            }
         }
 
         $scope.homeInit();
+       
     });
 
 });
@@ -507,12 +789,13 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
     $(function () {
 
-        //On Load of every page 
+        //Check weather user has already logged 
         $scope.pageLoad = function () {
-            if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
-                $scope.GoToURL('SignIn.aspx');
+            if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
+                goToURL('taskPage.aspx');
             }
         }
+        $scope.pageLoad();
 
         //Sub-Title Typing Plugin Initialization
         $("#typed").typed({
@@ -532,7 +815,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
         /**************************** SIGN-IN CODE ***************************************/
 
         // Form Validation - Sign-In 
-        $('#login_form').bootstrapValidator({
+        $('#login_form').formValidation({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -566,47 +849,48 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
         // Function - Sign-In 
         $scope.login = function () {
 
-            if ( $('#login_form').hasClass('ng-pristine') || $('#login_form').has('.has-error').length > 0) {
-                return
-            }
-            
-            var user = {
-                ntid: $scope.ntid,
-                password: $scope.password,
-            }
+            $('#login_form').data('formValidation').validate();
 
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/Login",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
+            if ($('#login_form').data('formValidation').isValid() != null && $('#login_form').data('formValidation').isValid()) {
 
-                var responseJSON = JSON.parse(response.data.d);
-
-                $scope.status = responseJSON.Response.Status;
-                $scope.reason = responseJSON.Response.Reason;
-
-                if ($scope.status == "Success") {
-                    //Save NTID in session storage
-                    sessionStorage.setItem('username', $scope.ntid);
-                    window.location.href = "taskPage.aspx";
-
+                var user = {
+                    ntid: $scope.ntid,
+                    password: $scope.password,
                 }
-                else if ($scope.status == "Failure") {
 
-                    $("#statusModal").modal("show");
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/Login",
+                    data: JSON.stringify(user),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
 
-                }
-            }, function myError(response) {
-                console.log(response);
-            });
+                    var responseJSON = JSON.parse(response.data.d);
 
-            console.log(user.toString());
+                    $scope.status = responseJSON.Response.Status;
+                    $scope.reason = responseJSON.Response.Reason;
+
+                    if ($scope.status == "Success") {
+                        //Save NTID in session storage
+                        sessionStorage.setItem('username', $scope.ntid);
+                        window.location.href = "taskPage.aspx";
+
+                    }
+                    else if ($scope.status == "Failure") {
+
+                        $("#statusModal").modal("show");
+
+                    }
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+
+            }
         }
 
         /**************************** FORGET PASSWORD CODE ***************************************/
@@ -622,7 +906,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
 
         // Form Validation - Forget Password
-        $('#forgot_form').bootstrapValidator({
+        $('#forgot_form').formValidation({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -646,45 +930,46 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
         // Function - Forgot Password 
         $scope.sendPwd = function () {
 
-            if ($('#forgot_form').hasClass('ng-pristine') || $('#forgot_form').has('.has-error').length > 0) {
-                return
+            $('#forgot_form').data('formValidation').validate();
+
+            if ($('#forgot_form').data('formValidation').isValid() != null && $('#forgot_form').data('formValidation').isValid()) {
+
+
+                var user = {
+                    ntid: $scope.forgot_ntid,
+                }
+
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/ForgotPassword",
+                    data: JSON.stringify(user),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
+
+                    var responseJSON = JSON.parse(response.data.d);
+
+                    $scope.status = responseJSON.Response.Status;
+                    $scope.reason = responseJSON.Response.Reason;
+
+                    $('#forgotPwd').modal("hide");
+
+                    $('#statusModal').modal("show");
+
+                }, function myError(response) {
+                    console.log(response);
+                });
+
+                console.log(user.toString());
             }
-
-            var user = {
-                ntid: $scope.forgot_ntid,
-            }
-
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/ForgotPassword",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
-
-                var responseJSON = JSON.parse(response.data.d);
-             
-                $scope.status = responseJSON.Response.Status;
-                $scope.reason = responseJSON.Response.Reason;
-             
-                $('#forgotPwd').modal("hide");
-
-                $('#statusModal').modal("show");
-
-            }, function myError(response) {
-                console.log(response);
-            });
-
-            console.log(user.toString());
-
         }
 
         /**************************** SIGN-UP CODE ***************************************/
 
-        $('#register_form').bootstrapValidator({
+        $('#register_form').formValidation({
 
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
@@ -783,67 +1068,59 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
         // Function - Sign-Up 
         $scope.createAccount = function () {
 
-            if ($('#register_form').hasClass('ng-pristine') || $('#register_form').has('.has-error').length > 0) {
-                return
-            }
-            var user = {
-                ntid: $scope.ntid,
-                firstName: $scope.firstName,
-                lastName: $scope.lastName,
-                roleId: $scope.roleId,
-                phone: $scope.phoneNo,
-                email: $scope.emailId,
-                password: $scope.password,
-            }
+            $('#register_form').data('formValidation').validate();
 
-            //Ajax method 
-            $http({
-                method: "POST",
-                url: "/TaskManagerAPI.aspx/CreateAccount",
-                data: JSON.stringify(user),
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false
-            }).then(function mySuccess(response) {
+            if ($('#register_form').data('formValidation').isValid() != null && $('#register_form').data('formValidation').isValid()) {
 
-                var resp = JSON.parse(response.data.d);
 
-                //Case of NTID already existing
-                if (resp.Response.Status == 'Failure') {
-                    $scope.message = resp.Response.Reason;
-                    $scope.isSuccess = false;
-                } else {
-                    $scope.message = resp.Response.Reason;
-                    $scope.isSuccess = true;
+                var user = {
+                    ntid: $scope.ntid,
+                    firstName: $scope.firstName,
+                    lastName: $scope.lastName,
+                    roleId: $scope.roleId,
+                    phone: $scope.phoneNo,
+                    email: $scope.emailId,
+                    password: $scope.password,
                 }
-                //Successful creation of Account Message
-                var options = {
-                    "backdrop": "static"
-                }
-                $('#basicModal').modal(options);
 
-                //Redirect to Sign In page after a specific time interval 
-                setTimeout(function () {
-                    window.location.href = "SignIn.aspx";
-                }, 5000);
-            }), function myError(response) {
-                console.log(response);
+                //Ajax method 
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/CreateAccount",
+                    data: JSON.stringify(user),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
+
+                    var resp = JSON.parse(response.data.d);
+
+                    //Case of NTID already existing
+                    if (resp.Response.Status == 'Failure') {
+                        $scope.message = resp.Response.Reason;
+                        $scope.isSuccess = false;
+                    } else {
+                        $scope.message = resp.Response.Reason;
+                        $scope.isSuccess = true;
+                    }
+                    //Successful creation of Account Message
+                    var options = {
+                        "backdrop": "static"
+                    }
+                    $('#basicModal').modal(options);
+
+                    //Redirect to Sign In page after a specific time interval 
+                    setTimeout(function () {
+                        window.location.href = "SignIn.aspx";
+                    }, 5000);
+                }), function myError(response) {
+                    console.log(response);
+                }
+
             }
 
-        }
 
-
-
-        //Ajax method - To Get User Details
-        $http({
-            method: "GET",
-            url: "/TaskManagerAPI.aspx/GetUserDetails",
-            cache: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function mySucces(response) {
 
             //Ajax method - To Get User Details
             $http({
@@ -852,7 +1129,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                 cache: false,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                async: false
+                async: true
             }).then(function mySucces(response) {
 
                 console.log(response);
@@ -861,13 +1138,9 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                 console.log(response);
             });
 
-
-
-        });
+        }
 
     });
-
-
 
 });// Login Controller Ends Here
 
@@ -888,7 +1161,7 @@ function parseTaskList(taskList) {
     for (i = 0; i < taskList.length; i++) {
         var taskArr = [];
         taskArr.push(taskList[i].taskId.toString());
-        taskArr.push(taskList[i].taskname);
+        taskArr.push(taskList[i].taskName);
         taskArr.push(taskList[i].assignedTo);
         taskArr.push(taskList[i].startDate);
         taskArr.push(taskList[i].expiryDate);
@@ -924,4 +1197,39 @@ function createTaskButton(name, classname, clickHandler) {
     button.innerText = name;
     button.style.borderRadius = "5px";
     return button;
+}
+
+// Function - Get Task Detail By Task Id
+function getTaskDetailByTaskId(taskId, taskList) {
+
+    var taskDetail = {};
+
+    for (i = 0; i < taskList.length; i++) {
+        if (taskList[i].taskId == taskId) {
+            taskDetail = taskList[i];
+            break;
+        }
+    }
+    return taskDetail;
+}
+
+function User(userData) {
+    this.firstName = userData.firstName;
+    this.lastName = userData.lastName;
+
+}
+
+
+function updateTaskDetails(task, taskList) {
+
+    for (i = 0; i < taskList.length; i++) {
+        if (taskList[i].taskId == task.taskId) {
+            taskList[i].taskName = task.taskName;
+            taskList[i].taskDesc = task.taskDesc;
+            taskList[i].expiryDate = task.taskEndDate;
+            taskList[i].assignedTo = task.assignedTo;
+            break;
+        }
+    }
+    return taskList;
 }

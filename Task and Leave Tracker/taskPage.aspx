@@ -17,7 +17,8 @@
             <div class="col-6">
                 <i class="fa fa-plus-circle"></i>
                 <button ng-show="isProjectManager" style="display: inline" type="button" class="button" ng-click="createTaskPopup()">Create Task</button>
-                <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" data-toggle="modal" data-target="#changePwdModal">Change Password</button>
+                <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="logout()">Logout</button>
+                <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="changePwdPopUp()">Change Password</button>
 
             </div>
 
@@ -62,7 +63,7 @@
     </div>
 
     <!-- Change Password Modal -->
-    <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -71,7 +72,6 @@
                 </div>
                 <form id="change_form" class="form-horizontal">
                     <div class="modal-body">
-
 
                         <!--Current Password-->
                         <div class="form-group">
@@ -119,24 +119,24 @@
     </div>
 
     <!-- Create Task Modal -->
-    <div class="modal fade" id="createTaskModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <h4 style="text-align: center" class="modal-title" id="createTaskTitle">Create New Task</h4>
+                    <h4 style="text-align: center" class="modal-title" ng-bind="taskModalTitle"></h4>
                 </div>
+                <form id="taskForm" class="form-horizontal">
+                    <div class="modal-body">
 
-                <div class="modal-body">
 
-                    <form id="taskForm" class="form-horizontal">
                         <!--Task Name-->
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task Name</label>
-                            <div class="col-md-4 inputGroupContainer">
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="taskName" name="taskName" placeholder="Enter Task Name" class="form-control" type="text" ng-model="taskName" />
+                                    <input id="taskName" name="taskName" placeholder="Enter Task Name" class="form-control" type="text" ng-model="task.taskName" />
                                 </div>
                             </div>
                         </div>
@@ -144,10 +144,10 @@
                         <!-- Task Description-->
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task Description</label>
-                            <div class="col-md-4 inputGroupContainer">
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <textarea id="taskDesc" name="taskDesc" rows="2" cols="40" placeholder="Enter Task Description" class="form-control" ng-model="taskDesc"> </textarea>
+                                    <textarea id="taskDesc" name="taskDesc" rows="2" cols="40" placeholder="Enter Task Description" class="form-control" ng-model="task.taskDesc"> </textarea>
 
                                 </div>
                             </div>
@@ -157,10 +157,130 @@
                         <!-- Task Start Date-->
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task Start Date</label>
-                            <div class="col-md-4 inputGroupContainer">
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group date" id="startDateField">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="taskStartDate" name="taskStartDate" class="form-control" placeholder="Select Start Date" type="text" ng-model="task.taskStartDate"  />
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#startDateField').datetimepicker({
+                                    format: 'MM/DD/YYYY',
+                                    viewMode: 'days',
+                                    showTodayButton: true
+                                });
+                            });
+                        </script>
+                        <!-- Task End Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task End Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group date" id="endDateField">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="taskEndDate" name="taskEndDate" class="form-control" placeholder="Select End Date" type="text" ng-model="task.taskEndDate"  />
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#endDateField').datetimepicker({
+                                    useCurrent: false,
+                                    format: 'MM/DD/YYYY',
+                                    viewMode: 'days',
+                                    showTodayButton: true
+                                });
+
+                                $("#startDateField").on("dp.change", function (e) {
+                                    $('#endDateField').data("DateTimePicker").minDate(e.date);
+                                    $('#taskForm').formValidation('revalidateField', 'taskStartDate');
+                                });
+                                $("#endDateField").on("dp.change", function (e) {
+                                    $('#startDateField').data("DateTimePicker").maxDate(e.date);
+                                    $('#taskForm').formValidation('revalidateField', 'taskEndDate');
+                                });
+                            });
+                        </script>
+                        <!-- Assigned To-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Assigned To</label>
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="taskStartDate" name="taskStartDate" class="form-control" type="date" ng-model="taskStartDate" />
+                                    <select id="assignedTo" name="assignedTo" class="form-control" ng-model="task.assignedTo">
+                                        <option value="">Select Associate</option>
+                                        <option ng-repeat="tm in availableTeamMembers track by $index" value="{{tm.ntid}}">{{tm.name}}</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button" ng-click="taskHandler()">Submit</button>
+                        <button class="button" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- View Task Detail Modal -->
+    <div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 style="text-align: center" class="modal-title" ">Task Detail</h4>
+                </div>
+               
+                    <div class="modal-body">
+                         <form id="taskDetailForm" class="form-horizontal">
+                         <!--Task ID-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task ID</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailTaskId" name="taskId" class="form-control" type="text" ng-model="currentTask.taskId" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Task Name-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task Name</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailTaskName" name="taskName" class="form-control" type="text" ng-model="currentTask.taskName" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Task Description-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task Description</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <textarea id="detailTaskDesc" name="taskDesc" class="form-control" rows="2" cols="40" ng-model="currentTask.taskDesc" readonly="readonly"> </textarea>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Task Start Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task Start Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="detailTaskStartDate" name="taskStartDate" class="form-control" type="text" ng-model="currentTask.startDate" readonly="readonly" />
                                 </div>
                             </div>
                         </div>
@@ -168,39 +288,67 @@
                         <!-- Task End Date-->
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task End Date</label>
-                            <div class="col-md-4 inputGroupContainer">
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="taskEndDate" name="taskEndDate" class="form-control" type="date" ng-model="taskEndDate" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="detailTaskEndDate" name="taskEndDate" class="form-control" type="text" ng-model="currentTask.expiryDate" readonly="readonly" />
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Created On-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Created On</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailCreatedOn" type="text" name="createdOn" class="form-control" ng-model="currentTask.createdDate" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Created By-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Created By</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailCreatedBy" type="text" name="createdBy" class="form-control" ng-model="currentTask.createdBy" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Task Status-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Status</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailStatus" type="text" name="status" class="form-control" ng-model="currentTask.status" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
                         <!-- Assigned To-->
                         <div class="form-group">
                             <label class="col-md-4 control-label">Assigned To</label>
-                            <div class="col-md-4 inputGroupContainer">
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <select title="Select Associate" id="assignedTo" name="assignedTo" class="form-control" ng-model="assignedTo">
-                                        <option ng-repeat="tm in availableTeamMembers track by $index" value="{{tm.ntid}}">{{tm.name}}</option>
-                                    </select>
-
+                                    <input id="detailAssignedTo" type="text" name="assignedTo" class="form-control" ng-model="currentTask.assignedTo" readonly="readonly" />
                                 </div>
                             </div>
                         </div>
+                              </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button" data-dismiss="modal">Close</button>
 
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default button" id="createTaskButton" style="padding-top: 16px; width: auto" ng-click="createTask()">Create Task</a>
-                    <a href="#" class="btn btn-default button" style="padding-top: 16px" data-dismiss="modal">Cancel</a>
-
-                </div>
-
+                    </div>
+          
             </div>
         </div>
     </div>
+
 
     <!-- Status Notification Modal -->
     <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">

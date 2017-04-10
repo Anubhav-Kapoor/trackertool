@@ -87,6 +87,12 @@
   <ItemGroup>
     <Content Include="bin\RestSharp.dll.refresh" />
     <Content Include="bin\Task and Leave Tracker.dll.config" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\formValidation.min.css" />
+    <Content Include="Scripts\bootstrap-confirmation.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\formValidation.bootstrap.min.js" />
+    <Content Include="Scripts\formValidation.min.js" />
     <Content Include="taskPage.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">

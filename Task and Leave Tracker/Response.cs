@@ -25,12 +25,12 @@ namespace Task_and_Leave_Tracker
     {
         public int taskId { get; set; }
         public string taskDesc { get; set; }
-        public DateTime createdDate { get; set; }
+        public string createdDate { get; set; }
         public string expiryDate { get; set; }
         public String createdBy { get; set; }
         public string assignedTo { get; set; }
         public String status { get; set; }
-        public string taskname { get; set; }
+        public string taskName { get; set; }
         public string startDate { get; set; }
     }
 
