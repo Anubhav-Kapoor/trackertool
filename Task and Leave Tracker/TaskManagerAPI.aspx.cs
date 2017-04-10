@@ -524,8 +524,8 @@ namespace Task_and_Leave_Tracker
                 }
                 else
                 {
-                    resultObject.Response.Status = "Failure";
-                    resultObject.Response.Reason = "Data Not Retreived!!!";
+                    resultObject.Response.Status = "Success";
+                    resultObject.Response.Reason = "No Tasks Found!!!";
                 }
             }
             else
