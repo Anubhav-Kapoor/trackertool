@@ -62,7 +62,7 @@ namespace ProjectTracker.DEL
         }
 
         //ViewFunction[User Details]
-        public DataTable ViewUserDetailsDEL(String Ntid)
+        public DataTable ViewUserDetailsByNtidDEL(String Ntid)
         {
             DataTable dt = new DataTable();
             try
@@ -92,7 +92,7 @@ namespace ProjectTracker.DEL
         }
 
         //ViewIdFunction[User Details]
-        public DataTable ViewIdDEL()
+        public DataTable GetDetailsForTMDEL()
         {
             DataTable dt = new DataTable();
             try
@@ -145,7 +145,7 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
-        //UpdateFunction[User Details]
+        //Update Function[User Details]
         public int UpdateUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
             int result = 0;
@@ -180,8 +180,8 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-        //CheckUserExistFunction[User Details]
-        public Boolean ViewUserExistDetailsDEL(String Ntid)
+        //Check User Exist Function[User Details]
+        public Boolean CheckUserExistDetailsDEL(String Ntid)
         {
             DataTable dt = new DataTable();
             try
@@ -216,7 +216,7 @@ namespace ProjectTracker.DEL
         }
 
 
-        //InsertFunction[Task Details]
+        //Insert Function[Task Details]
         public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             int result = 0;
@@ -257,8 +257,8 @@ namespace ProjectTracker.DEL
             return result;
         }
 
-        //View Method For PM Function[Task Details]
-        public DataTable ViewByPMDEL(String createdBy)
+        //View Tasks Created By PM[Task Details]
+        public DataTable ViewTaskDetailsByPMDEL(String createdBy)
         {
             DataTable dt = new DataTable();
             try
@@ -286,8 +286,8 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //View Method For TM Function[Task Details]
-        public DataTable ViewByTMDEL(String assignedTo)
+        //View Tasks Assigned To TM [Task Details]
+        public DataTable ViewTaskDetailsByTMDEL(String assignedTo)
         {
             DataTable dt = new DataTable();
             try
@@ -315,8 +315,8 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        // View By Id[Task Details]
-        public DataTable ViewByIdDEL(int taskId)
+        // View All Details By Id[Task Details]
+        public DataTable ViewAllTaskDetailsByIdDEL(int taskId)
         {
             DataTable dt = new DataTable();
             try
@@ -344,7 +344,7 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //DeleteFunction[Task Details]
+        //Delete Function[Task Details]
         public int DeleteTaskDetailsDEL(int TaskId)
         {
             int result = 0;
@@ -436,18 +436,16 @@ namespace ProjectTracker.DEL
         }
 
         //Insert Function[Leave Details]
-        public int InsertLeaveDetailsDEL(String leaveDesc, DateTime fromDate, String toDate, String appliedBy, String leaveType, String status)
+        public int InsertLeaveDetailsDEL(String leaveDesc, String fromDate, String toDate, String appliedBy, String leaveType, String status)
         {
             int result = 0;
             try
             {
-
-
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "Insert");
-                cmd.Parameters.AddWithValue("@LeaveDesc ", leaveDesc);
+                cmd.Parameters.AddWithValue("@Leavedesc ", leaveDesc);
                 cmd.Parameters.AddWithValue("@FromDate ", fromDate);
                 cmd.Parameters.AddWithValue("@ToDate ", toDate);
                 cmd.Parameters.AddWithValue("@AppliedBy", appliedBy);
@@ -468,6 +466,66 @@ namespace ProjectTracker.DEL
                 con.Close();
             }
             return result;
+        }
+
+        //Update Status [Leave Details]
+        public int UpdateLeaveStatusDEL(int leaveId, String status)
+        {
+            int result = 0;
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "Update S");
+                cmd.Parameters.AddWithValue("@Status ", status);
+                cmd.Parameters.AddWithValue("@LeaveId", leaveId);
+                result = cmd.ExecuteNonQuery();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+
+            }
+            finally
+            {
+                con.Close();
+
+            }
+            return result;
+        }
+        // View Leaves Applied By TM [Leave Details]
+        public DataTable ViewLeaveDetailsByTMDEL(String appliedBy)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View A");
+                cmd.Parameters.AddWithValue("@AppliedBy", appliedBy);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
         }
 
     }

@@ -20,45 +20,45 @@ namespace ProjectTracker.BLL
         {
             try
             {
-                 result = userDEL.InsertUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
-                
-            }
-            catch(Exception ex)
-            {
+                result = userDEL.InsertUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
 
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
-            
-            return result;
-        }
-
-        //ViewFunction[User Details]
-        public DataTable ViewUserDetailsBLL(String Ntid)
-        {
-            DataTable dt = null;
-            try
-            {
-                 dt = userDEL.ViewUserDetailsDEL(Ntid);
-                
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine(ex.Message);
                 throw;
-            } 
-            return dt;
+            }
 
+
+            return result;
         }
-        //ViewIdFunction[User Details]
-        public DataTable ViewIdBLL()
+
+        //ViewFunction[User Details]
+        public DataTable ViewUserDetailsByNtidBLL(String Ntid)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewIdDEL();
+                dt = userDEL.ViewUserDetailsByNtidDEL(Ntid);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return dt;
+
+        }
+        //ViewIdFunction[User Details]
+        public DataTable GetDetailsForTMBLL()
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.GetDetailsForTMDEL();
 
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace ProjectTracker.BLL
             try
             {
                 result = userDEL.DeleteUserDetailsDEL(Ntid);
-                
+
             }
             catch (Exception ex)
             {
@@ -88,16 +88,16 @@ namespace ProjectTracker.BLL
 
             return result;
 
-           
+
         }
         //UpdateFunction[User Details]
         public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
-         {
+        {
             try
             {
 
-                 result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password, userGuid);
-                
+                result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password, userGuid);
+
             }
 
             catch (Exception ex)
@@ -110,15 +110,15 @@ namespace ProjectTracker.BLL
 
             return result;
 
-          
+
         }
         //CheckUserExistFunction[User Details]
-        public Boolean ViewUserExistDetailsBLL(String Ntid)
+        public Boolean CheckUserExistDetailsBLL(String Ntid)
         {
             Boolean value = false;
             try
             {
-                value = userDEL.ViewUserExistDetailsDEL(Ntid);
+                value = userDEL.CheckUserExistDetailsDEL(Ntid);
 
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ namespace ProjectTracker.BLL
             return value;
         }
 
-         //InsertFunction[Task Details]
+        //InsertFunction[Task Details]
         public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             try
@@ -152,12 +152,12 @@ namespace ProjectTracker.BLL
 
 
         //View Method For TM Function[Task Details]
-        public DataTable ViewByTMBLL(String assignedTo)
+        public DataTable ViewTaskDetailsByTMBLL(String assignedTo)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewByTMDEL(assignedTo);
+                dt = userDEL.ViewTaskDetailsByTMDEL(assignedTo);
 
             }
             catch (Exception ex)
@@ -171,12 +171,12 @@ namespace ProjectTracker.BLL
 
 
         //View Method For PM Function[Task Details]
-        public DataTable ViewByPMBLL(String createdBy)
+        public DataTable ViewTaskDetailsByPMBLL(String createdBy)
         {
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewByPMDEL(createdBy);
+                dt = userDEL.ViewTaskDetailsByPMDEL(createdBy);
 
             }
             catch (Exception ex)
@@ -187,14 +187,14 @@ namespace ProjectTracker.BLL
             }
             return dt;
         }
-         // View By Id[Task Details]
+        // View By Id[Task Details]
         public DataTable ViewByIdBLL(int taskId)
         {
 
             DataTable dt = null;
             try
             {
-                dt = userDEL.ViewByIdDEL(taskId);
+                dt = userDEL.ViewAllTaskDetailsByIdDEL(taskId);
 
             }
             catch (Exception ex)
@@ -206,7 +206,7 @@ namespace ProjectTracker.BLL
             return dt;
         }
 
-         //DeleteFunction[Task Details]
+        //DeleteFunction[Task Details]
         public int DeleteTaskDetailsBLL(int TaskId)
         {
             try
@@ -224,7 +224,7 @@ namespace ProjectTracker.BLL
 
             return result;
         }
-        
+
         //UpdateFunction[Task Details]
         public int UpdateTaskDetailsBLL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
@@ -252,7 +252,7 @@ namespace ProjectTracker.BLL
             try
             {
 
-                result = userDEL.UpdateTaskStatusDEL(taskId,status);
+                result = userDEL.UpdateTaskStatusDEL(taskId, status);
 
             }
 
@@ -265,6 +265,65 @@ namespace ProjectTracker.BLL
 
 
             return result;
+        }
+
+        //Insert Function[Leave Details]
+        public int InsertLeaveDetailsBLL(String leaveDesc, String fromDate, String toDate, String appliedBy, String leaveType, String status)
+        {
+            try
+            {
+                result = userDEL.InsertLeaveDetailsDEL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+
+
+            return result;
+        }
+
+
+        //Update Status [Leave Details]
+        public int UpdateLeaveStatusBLL(int leaveId, String status)
+        {
+            try
+            {
+
+                result = userDEL.UpdateTaskStatusDEL(leaveId, status);
+
+            }
+
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+
+
+            return result;
+        }
+
+         // View Leaves Applied By TM [Leave Details]
+        public DataTable ViewLeaveDetailsByTMBLL(String appliedBy)
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewLeaveDetailsByTMDEL(appliedBy);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return dt;
         }
 
     }
