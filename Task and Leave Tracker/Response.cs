@@ -13,6 +13,7 @@ namespace Task_and_Leave_Tracker
         public string responseObject { get; set; }
         public string userObject { get; set; }
         public string taskObject { get; set; }
+        public string leaveObject { get; set; }
     }
 
     public class RootObjectResponse
@@ -20,7 +21,17 @@ namespace Task_and_Leave_Tracker
         public Response Response { get; set; }
     }
 
-    
+    public class Leave
+    {
+        public int leaveId { get; set; }
+        public string leaveDesc { get; set; }
+        public string fromDate { get; set; }
+        public string toDate { get; set; }
+        public string appliedBy { get; set; }
+        public String leaveType { get; set; }
+        public string status { get; set; }
+
+    }
     public class Task
     {
         public int taskId { get; set; }
@@ -45,6 +56,6 @@ namespace Task_and_Leave_Tracker
         public string emailId { get; set; }
         public String password { get; set; }
         public string userguid { get; set; }
-        
+
     }
 }

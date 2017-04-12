@@ -64,7 +64,7 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-            Boolean value = userBll.ViewUserExistDetailsBLL(ntid);
+            Boolean value = userBll.CheckUserExistDetailsBLL(ntid);
             try
             {
                 if (!value)
@@ -156,7 +156,7 @@ namespace Task_and_Leave_Tracker
             {
                 if (ntid != "" && password != "")
                 {
-                    DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+                    DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid);
                     if (dt.Rows.Count > 0)
                     {
 
@@ -212,7 +212,7 @@ namespace Task_and_Leave_Tracker
             {
                 if (ntid != "")
                 {
-                    DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+                    DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid);
                     String FirstName = dt.Rows[0]["FirstName"].ToString();
                     String LastName = dt.Rows[0]["LastName"].ToString();
                     String RoleId = dt.Rows[0]["RoleId"].ToString();
@@ -268,7 +268,7 @@ namespace Task_and_Leave_Tracker
             {
                 if (ntid != "" && currentPassword != "" && newPassword != "")
                 {
-                    DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+                    DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid);
 
                     String OldPassword = dt.Rows[0]["Password"].ToString();
                     String UserGuid = dt.Rows[0]["UserGuid"].ToString();
@@ -292,7 +292,7 @@ namespace Task_and_Leave_Tracker
                         {
                             String from = "bhawneet.singh@owenscorning.com";
                             String subject = "Tracker Tool -  Password Changed";
-                            String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your New Password for TrackerTool has been Changed!!" + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                            String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Password for TrackerTool has been Changed!!" + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
 
                             SendingMail(EmailId, from, subject, body);
                             resultObject.Response.Status = "Success";
@@ -353,7 +353,7 @@ namespace Task_and_Leave_Tracker
                         if (result > 0)
                         {
                             List<Task> taskList = new List<Task>();
-                            DataTable dt = userBll.ViewByPMBLL(createdBy);
+                            DataTable dt = userBll.ViewTaskDetailsByPMBLL(createdBy);
 
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
@@ -415,7 +415,7 @@ namespace Task_and_Leave_Tracker
 
             try
             {
-                DataTable dt = userBll.ViewIdBLL();
+                DataTable dt = userBll.GetDetailsForTMBLL();
 
                 if (dt.Rows.Count > 0)
                 {
@@ -461,7 +461,7 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-            DataTable dt = userBll.ViewUserDetailsBLL(ntid);
+            DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User List
             if (dt.Rows.Count > 0)
             {
                 List<User> userList = new List<User>();
@@ -473,21 +473,19 @@ namespace Task_and_Leave_Tracker
                 u.phoneNo = dt.Rows[0]["PhoneNo"].ToString();
                 u.emailId = dt.Rows[0]["EmailId"].ToString();
 
-
                 userList.Add(u);
                 resultObject.Response.userObject = oSerializer.Serialize(userList);
 
-                DataTable dt1 = null;
+                DataTable dt1 = new DataTable();
                 List<Task> taskList = new List<Task>();
-                if (u.roleId == "201")
+                if (u.roleId == "201")                                   //For PM
                 {
-                    dt1 = userBll.ViewByPMBLL(u.ntid);
+                    dt1 = userBll.ViewTaskDetailsByPMBLL(u.ntid);        //Retrieving Task List Created By PM
                 }
 
-                else if (u.roleId == "200")
+                else if (u.roleId == "200")                              //For TM
                 {
-
-                    dt1 = userBll.ViewByTMBLL(u.ntid);
+                    dt1 = userBll.ViewTaskDetailsByTMBLL(u.ntid);        //Retrieving Task List Assigned By PM to TM
                 }
 
                 if (dt1.Rows.Count > 0)
@@ -504,11 +502,9 @@ namespace Task_and_Leave_Tracker
                         t.status = dt1.Rows[i]["Status"].ToString();
                         t.taskName = dt1.Rows[i]["TaskName"].ToString();
                         t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
-
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
-
                     resultObject.Response.Status = "Success";
                     resultObject.Response.Reason = "Data Retreived!!!";
 
@@ -516,7 +512,38 @@ namespace Task_and_Leave_Tracker
                 else
                 {
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "No Tasks Found!!!";
+                    resultObject.Response.Reason = "No Task Found!!!";
+                }
+
+                DataTable dt2 = new DataTable();
+                List<Leave> leaveList = new List<Leave>();
+                if (u.roleId == "200")
+                {
+                    dt2 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
+                }
+                if (dt2.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt2.Rows.Count; i++)
+                    {
+                        Leave l = new Leave();
+                        l.leaveId = Convert.ToInt32(dt2.Rows[i]["LeaveId"]);
+                        l.leaveDesc = dt2.Rows[i]["Leavedesc"].ToString();
+                        l.fromDate = Convert.ToString(dt2.Rows[i]["ToDate"]);
+                        l.toDate = Convert.ToDateTime(dt2.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                        l.appliedBy = dt2.Rows[i]["AppliedBy"].ToString();
+                        l.leaveType = dt2.Rows[i]["LeaveType"].ToString();
+                        l.status = dt2.Rows[i]["Status"].ToString();
+
+                        leaveList.Add(l);
+                    }
+                    resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);
+                    resultObject.Response.Status = "Success";
+                    resultObject.Response.Reason = "Data Retreived!!!";
+                }
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "No Data Retrieved!!";
                 }
             }
             else
@@ -529,65 +556,98 @@ namespace Task_and_Leave_Tracker
         }
         #endregion
 
+
         #region Update Task
         [System.Web.Services.WebMethod]
-        public static String UpdateTask(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName, String status)
+        public static String UpdateTask(String ntid, int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName, String status)
         {
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
             try
             {
-                if (taskId != 0 && taskDesc != null && taskName != null && expiryDate != null && assignedTo != null && taskName != null)
+                int result = 0;
+                if (ntid != null)
                 {
-                    int result = userBll.UpdateTaskDetailsBLL(taskId, taskDesc, expiryDate, assignedTo, taskName);
+                    if (taskId != 0 && taskDesc != null && taskName != null && expiryDate != null && assignedTo != null && taskName != null)
+                    {
+                        result = userBll.UpdateTaskDetailsBLL(taskId, taskDesc, expiryDate, assignedTo, taskName); //Updating Task List
+                    }
+
+                    else if (status != null)
+                    {
+                        result = userBll.UpdateTaskStatusBLL(taskId, status); //Updating Task List Based on Status
+                    }
+
                     if (result > 0)
                     {
-                        DataTable dt = userBll.ViewByIdBLL(taskId);
+
+                        DataTable dt1 = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
+                        User u = null;
+                        if (dt1.Rows.Count > 0)
+                        {
+                            List<User> userList = new List<User>();
+                            u = new User();
+                            u.ntid = dt1.Rows[0]["Ntid"].ToString();
+                            userList.Add(u);
+                            resultObject.Response.userObject = oSerializer.Serialize(userList);
+                        }
+
+                        DataTable dt = null;
+
+                        if (u.roleId == "201")                                   //For PM
+                        {
+                            dt = userBll.ViewTaskDetailsByPMBLL(u.ntid);        //Retrieving Updated Task List Created By PM
+                        }
+
+                        else if (u.roleId == "200")                               //For TM
+                        {
+
+                            dt = userBll.ViewTaskDetailsByTMBLL(u.ntid);        //Retrieving Updated Task List Assigned By PM to TM
+                        }
+                        List<Task> taskList = new List<Task>();
                         if (dt.Rows.Count > 0)
                         {
+
                             Task t = new Task();
-                            t.taskId = Convert.ToInt32(dt.Rows[0]["TaskId"]);
-                            t.taskDesc = dt.Rows[0]["Taskdesc"].ToString();
-                            t.createdDate = Convert.ToString(dt.Rows[0]["Created_Date"]);
-                            t.expiryDate = Convert.ToString(dt.Rows[0]["Expiry_Date"]);
-                            t.createdBy = dt.Rows[0]["CreatedBy"].ToString();
-                            t.assignedTo = dt.Rows[0]["AssignedTo"].ToString();
-                            t.status = dt.Rows[0]["Status"].ToString();
-                            t.taskName = dt.Rows[0]["TaskName"].ToString();
-                            t.startDate = Convert.ToString(dt.Rows[0]["Start_Date"]);
-                            resultObject.Response.taskObject = oSerializer.Serialize(t);
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
+                                t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
+                                t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
+                                t.expiryDate = Convert.ToString(dt.Rows[i]["Expiry_Date"]);
+                                t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
+                                t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
+                                t.status = dt.Rows[i]["Status"].ToString();
+                                t.taskName = dt.Rows[i]["TaskName"].ToString();
+                                t.startDate = Convert.ToString(dt.Rows[i]["Start_Date"]);
+                                taskList.Add(t);
+                            }
+
+
+                            resultObject.Response.taskObject = oSerializer.Serialize(taskList);
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "Task Details Has Been Retrieved!!";
                         }
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Task Details Has Been Updated!!";                    
+
+                        else
+                        {
+                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Reason = "Task Details Are Not Retrieved!!";
+                        }
                     }
                     else
                     {
                         resultObject.Response.Status = "Failure";
-                        resultObject.Response.Reason = "Cannot Update Task Details";
-                    }
-                }
-                else if (status != null)
-                {
-                    int res = userBll.UpdateTaskStatusBLL(taskId, status);
-                    if (res > 0)
-                    {
-
-
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Status Has Been Updated!!";
-                    }
-                    else
-                    {
-                        resultObject.Response.Status = "Failure";
-                        resultObject.Response.Reason = "Status Is Not Updated!!";
+                        resultObject.Response.Reason = "Task Details Are Not Updated!!";
                     }
                 }
                 else
                 {
                     resultObject.Response.Status = "Failure";
-                    resultObject.Response.Reason = "Enter All The Details!!";
+                    resultObject.Response.Reason = "Enter All the Details!!";
                 }
+
             }
             catch (Exception ex)
             {
@@ -599,5 +659,88 @@ namespace Task_and_Leave_Tracker
         #endregion
 
 
+        #region Update Leave Details
+        [System.Web.Services.WebMethod]
+        public static String UpdateLeaveDetails(String ntid, int leaveId, String status)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            int result = 0;
+            if (!(string.IsNullOrWhiteSpace(ntid)))
+            {
+                if (!(string.IsNullOrWhiteSpace(status)) && leaveId!=0)
+                {
+                    result = userBll.UpdateLeaveStatusBLL(leaveId, status); //Updating Leave List Based on Status
+
+                }
+                if (result > 0)
+                {
+
+                    DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
+                    User u = null;
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<User> userList = new List<User>();
+                        u = new User();
+                        u.ntid = dt.Rows[0]["Ntid"].ToString();
+                        userList.Add(u);
+                        resultObject.Response.userObject = oSerializer.Serialize(userList);
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "No Data Retrieved!!";
+                    }
+
+                    DataTable dt1 = new DataTable();
+                    List<Leave> leaveList = new List<Leave>();
+                    if (u.roleId == "200")
+                    {
+                        dt1 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
+                    }
+                    if (dt1.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt1.Rows.Count; i++)
+                        {
+                            Leave l = new Leave();
+                            l.leaveId = Convert.ToInt32(dt1.Rows[i]["LeaveId"]);
+                            l.leaveDesc = dt1.Rows[i]["Leavedesc"].ToString();
+                            l.fromDate = Convert.ToString(dt1.Rows[i]["ToDate"]);
+                            l.toDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                            l.appliedBy = dt1.Rows[i]["AppliedBy"].ToString();
+                            l.leaveType = dt1.Rows[i]["LeaveType"].ToString();
+                            l.status = dt1.Rows[i]["Status"].ToString();
+
+                            leaveList.Add(l);
+                        }
+                        resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Data Retreived!!!";
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "No Data Retrieved!!";
+                    }
+                }
+
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "No Data Retrieved!!";
+                }
+
+
+            }
+            else
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = "User Does'nt Exist!!";
+            }
+
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
     }
 }
