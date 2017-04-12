@@ -526,13 +526,13 @@ namespace Task_and_Leave_Tracker
                     for (int i = 0; i < dt2.Rows.Count; i++)
                     {
                         Leave l = new Leave();
-                        l.leaveId = Convert.ToInt32(dt1.Rows[i]["LeaveId"]);
-                        l.leaveDesc = dt1.Rows[i]["Leavedesc"].ToString();
-                        l.fromDate = Convert.ToString(dt1.Rows[i]["ToDate"]);
-                        l.toDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
-                        l.appliedBy = dt1.Rows[i]["AppliedBy"].ToString();
-                        l.leaveType = dt1.Rows[i]["LeaveType"].ToString();
-                        l.status = dt1.Rows[i]["Status"].ToString();
+                        l.leaveId = Convert.ToInt32(dt2.Rows[i]["LeaveId"]);
+                        l.leaveDesc = dt2.Rows[i]["Leavedesc"].ToString();
+                        l.fromDate = Convert.ToString(dt2.Rows[i]["ToDate"]);
+                        l.toDate = Convert.ToDateTime(dt2.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                        l.appliedBy = dt2.Rows[i]["AppliedBy"].ToString();
+                        l.leaveType = dt2.Rows[i]["LeaveType"].ToString();
+                        l.status = dt2.Rows[i]["Status"].ToString();
 
                         leaveList.Add(l);
                     }
@@ -555,6 +555,7 @@ namespace Task_and_Leave_Tracker
 
         }
         #endregion
+
 
         #region Update Task
         [System.Web.Services.WebMethod]
@@ -594,12 +595,12 @@ namespace Task_and_Leave_Tracker
 
                         DataTable dt = null;
 
-                        if (u.roleId == "201")                        //For PM
+                        if (u.roleId == "201")                                   //For PM
                         {
                             dt = userBll.ViewTaskDetailsByPMBLL(u.ntid);        //Retrieving Updated Task List Created By PM
                         }
 
-                        else if (u.roleId == "200")                   //For TM
+                        else if (u.roleId == "200")                               //For TM
                         {
 
                             dt = userBll.ViewTaskDetailsByTMBLL(u.ntid);        //Retrieving Updated Task List Assigned By PM to TM
@@ -658,5 +659,88 @@ namespace Task_and_Leave_Tracker
         #endregion
 
 
+        #region Update Leave Details
+        [System.Web.Services.WebMethod]
+        public static String UpdateLeaveDetails(String ntid, int leaveId, String status)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            int result = 0;
+            if (!(string.IsNullOrWhiteSpace(ntid)))
+            {
+                if (!(string.IsNullOrWhiteSpace(status)) && leaveId!=0)
+                {
+                    result = userBll.UpdateLeaveStatusBLL(leaveId, status); //Updating Leave List Based on Status
+
+                }
+                if (result > 0)
+                {
+
+                    DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
+                    User u = null;
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<User> userList = new List<User>();
+                        u = new User();
+                        u.ntid = dt.Rows[0]["Ntid"].ToString();
+                        userList.Add(u);
+                        resultObject.Response.userObject = oSerializer.Serialize(userList);
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "No Data Retrieved!!";
+                    }
+
+                    DataTable dt1 = new DataTable();
+                    List<Leave> leaveList = new List<Leave>();
+                    if (u.roleId == "200")
+                    {
+                        dt1 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
+                    }
+                    if (dt1.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt1.Rows.Count; i++)
+                        {
+                            Leave l = new Leave();
+                            l.leaveId = Convert.ToInt32(dt1.Rows[i]["LeaveId"]);
+                            l.leaveDesc = dt1.Rows[i]["Leavedesc"].ToString();
+                            l.fromDate = Convert.ToString(dt1.Rows[i]["ToDate"]);
+                            l.toDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                            l.appliedBy = dt1.Rows[i]["AppliedBy"].ToString();
+                            l.leaveType = dt1.Rows[i]["LeaveType"].ToString();
+                            l.status = dt1.Rows[i]["Status"].ToString();
+
+                            leaveList.Add(l);
+                        }
+                        resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Data Retreived!!!";
+                    }
+                    else
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "No Data Retrieved!!";
+                    }
+                }
+
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "No Data Retrieved!!";
+                }
+
+
+            }
+            else
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = "User Does'nt Exist!!";
+            }
+
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
     }
 }

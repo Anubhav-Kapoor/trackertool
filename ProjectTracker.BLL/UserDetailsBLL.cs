@@ -293,7 +293,7 @@ namespace ProjectTracker.BLL
             try
             {
 
-                result = userDEL.UpdateTaskStatusDEL(leaveId, status);
+                result = userDEL.UpdateLeaveStatusDEL(leaveId, status);
 
             }
 
