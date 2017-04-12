@@ -101,10 +101,12 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         /******************************** HOME PAGE CODE *********************************/
 
+        $scope.loadTaskTable = function (taskTableData) {
 
-        $scope.loadTable = function (tableData) {
-            $scope.taskTable = $('#myTable').DataTable({
-                data: tableData,
+            $scope.taskTable = $('#taskTable').DataTable({
+                "lengthChange": false,
+                "searching": false,
+                data: taskTableData,
                 columns: [
                     { data: "taskId", title: "Task ID", width: "10%" },
                     { data: "taskName", title: "Task Name", width: "10%" },
@@ -124,47 +126,127 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     var isTaskInProgress = (aData.status == "In Progress") ? true : false;
                     var isTaskCompleted = (aData.status == "Complete") ? true : false;
                     var isTaskApproved = (aData.status == "Approved") ? true : false;
-                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager &&  isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
+                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
             });
 
-            $('#myTable tbody').on('click', "#view", function () {
+            $('#taskTable tbody').on('click', "#view", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
                 $scope.currentTask = getTaskDetailByTaskId(data.taskId, $scope.taskList);
                 $('#taskDetailModal').modal("show");
             });
 
-            $('#myTable tbody').on('click', "#edit", function () {
+            $('#taskTable tbody').on('click', "#edit", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
 
                 $scope.editTaskPopup(getTaskDetailByTaskId(data.taskId, $scope.taskList));
                 //alert('Hi Edit');
             });
-            $('#myTable tbody').on('click', "#cancel", function () {
+            $('#taskTable tbody').on('click', "#cancel", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
 
                 $scope.updateTaskStatus(data.taskId, "Cancelled");
 
-              //  alert('Hi Cancel');
+                //  alert('Hi Cancel');
             });
-            $('#myTable tbody').on('click', "#done", function () {
+            $('#taskTable tbody').on('click', "#done", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-              //  $('button#done').confirmation("toggle");
-               
-                $scope.updateTaskStatus(data.taskId,"Complete");
+                //  $('button#done').confirmation("toggle");
 
-               // alert('Hi Done');
+                $scope.updateTaskStatus(data.taskId, "Complete");
+
+                // alert('Hi Done');
             });
-            $('#myTable tbody').on('click', "#approve", function () {
+            $('#taskTable tbody').on('click', "#approve", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
                 $scope.updateTaskStatus(data.taskId, "Approved");
-               // alert('Hi Approve');
+                // alert('Hi Approve');
             });
-            $('#myTable tbody').on('click', "#reject", function () {
+            $('#taskTable tbody').on('click', "#reject", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
                 $scope.updateTaskStatus(data.taskId, "In Progress");
-               // alert('Hi Reject');
+                // alert('Hi Reject');
             });
+
+
+        }
+
+        $scope.loadLeaveTable = function (leaveTableData) {
+
+            $scope.leaveTable = $('#leaveTable').DataTable({
+                "lengthChange": false,
+                "searching": false,
+                data: leaveTableData,
+                columns: [
+                    { data: "taskId", title: "Task ID", width: "10%" },
+                    { data: "taskName", title: "Task Name", width: "10%" },
+                    { data: "assignedTo", title: "Assigned To", width: "10%" },
+                    { data: "startDate", title: "Start Date", width: "10%" },
+                    { data: "expiryDate", title: "End Date", width: "10%" },
+                    { data: "status", title: "Status", width: "10%" },
+                    { data: "actions", title: "Actions", width: "35%" }
+
+                ],
+                "columnDefs": [{
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": ""
+                }],
+                "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                    var isTaskInProgress = (aData.status == "In Progress") ? true : false;
+                    var isTaskCompleted = (aData.status == "Complete") ? true : false;
+                    var isTaskApproved = (aData.status == "Approved") ? true : false;
+                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
+                }
+            });
+
+            $('#leaveTable tbody').on('click', "#view", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                $scope.currentTask = getTaskDetailByTaskId(data.taskId, $scope.taskList);
+                $('#taskDetailModal').modal("show");
+            });
+
+            $('#leaveTable tbody').on('click', "#edit", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+
+                $scope.editTaskPopup(getTaskDetailByTaskId(data.taskId, $scope.taskList));
+                //alert('Hi Edit');
+            });
+            $('#leaveTable tbody').on('click', "#cancel", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+
+                $scope.updateTaskStatus(data.taskId, "Cancelled");
+
+                //  alert('Hi Cancel');
+            });
+            $('#leaveTable tbody').on('click', "#done", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                //  $('button#done').confirmation("toggle");
+
+                $scope.updateTaskStatus(data.taskId, "Complete");
+
+                // alert('Hi Done');
+            });
+            $('#leaveTable tbody').on('click', "#approve", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                $scope.updateTaskStatus(data.taskId, "Approved");
+                // alert('Hi Approve');
+            });
+            $('#leaveTable tbody').on('click', "#reject", function () {
+                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                $scope.updateTaskStatus(data.taskId, "In Progress");
+                // alert('Hi Reject');
+            });
+
+
+        }
+
+
+        $scope.loadTable = function (taskTableData) {
+            
+            $scope.loadTaskTable(taskTableData);
+            $scope.loadLeaveTable(taskTableData);
+
 
         }
 
@@ -193,7 +275,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                     if ($scope.status == "Success") {
 
-                        $scope.user = JSON.parse(responseJSON.Response.userObject)[0];
+                        $scope.user = JSON.parse(responseJSON.Response.userObject);
                         if ($scope.user.roleId == "201")
                             $scope.isProjectManager = true;
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
@@ -456,7 +538,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
 
                 var postData = {
-
+                    
                     taskDesc: $scope.task.taskDesc,
                     expiryDate: $scope.task.taskEndDate,
                     createdBy: sessionStorage.getItem("username"),
@@ -571,6 +653,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
 
                 var postData = {
+                    ntid: sessionStorage.getItem('username'),
                     taskId: $scope.task.taskId,
                     taskDesc: $scope.task.taskDesc,
                     expiryDate: $scope.task.taskEndDate,
@@ -601,11 +684,12 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                     if ($scope.status == "Success") {
 
-                        $scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
-                        $scope.refreshTable($scope.taskList);
+                        //$scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
+                        //$scope.refreshTable($scope.taskList);
 
-                        //var taskJSON = JSON.parse(responseJSON.Response.taskObject);
-                        //$scope.refreshTable(parseTaskList(taskJSON));
+                        var taskJSON = JSON.parse(responseJSON.Response.taskObject);
+                        $scope.refreshTable(taskJSON);
+
                         $scope.task = {};
                         $('#statusModal').modal('show');
 
@@ -646,6 +730,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         $scope.updateTaskStatus = function (taskId,status) {
 
             var postData = {
+                ntid: sessionStorage.getItem('username'),
                 taskId: taskId,
                 taskDesc: null,
                 expiryDate: null,

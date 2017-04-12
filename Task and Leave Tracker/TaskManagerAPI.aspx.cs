@@ -464,7 +464,7 @@ namespace Task_and_Leave_Tracker
             DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User List
             if (dt.Rows.Count > 0)
             {
-                List<User> userList = new List<User>();
+              
                 User u = new User();
                 u.ntid = dt.Rows[0]["Ntid"].ToString();
                 u.firstName = dt.Rows[0]["FirstName"].ToString();
@@ -472,9 +472,8 @@ namespace Task_and_Leave_Tracker
                 u.roleId = dt.Rows[0]["RoleId"].ToString();
                 u.phoneNo = dt.Rows[0]["PhoneNo"].ToString();
                 u.emailId = dt.Rows[0]["EmailId"].ToString();
-
-                userList.Add(u);
-                resultObject.Response.userObject = oSerializer.Serialize(userList);
+              
+                resultObject.Response.userObject = oSerializer.Serialize(u);
 
                 DataTable dt1 = new DataTable();
                 List<Task> taskList = new List<Task>();
@@ -506,13 +505,13 @@ namespace Task_and_Leave_Tracker
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "Data Retreived!!!";
+                    //resultObject.Response.Reason = "Data Retreived!!!";
 
                 }
                 else
                 {
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "No Task Found!!!";
+                    //resultObject.Response.Reason = "No Task Found!!!";
                 }
 
                 DataTable dt2 = new DataTable();
@@ -538,12 +537,12 @@ namespace Task_and_Leave_Tracker
                     }
                     resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "Data Retreived!!!";
+                    //resultObject.Response.Reason = "Data Retreived!!!";
                 }
                 else
                 {
-                    resultObject.Response.Status = "Failure";
-                    resultObject.Response.Reason = "No Data Retrieved!!";
+                    resultObject.Response.Status = "Success";
+                    //resultObject.Response.Reason = "No Data Retrieved!!";
                 }
             }
             else
@@ -586,11 +585,12 @@ namespace Task_and_Leave_Tracker
                         User u = null;
                         if (dt1.Rows.Count > 0)
                         {
-                            List<User> userList = new List<User>();
+             
                             u = new User();
                             u.ntid = dt1.Rows[0]["Ntid"].ToString();
-                            userList.Add(u);
-                            resultObject.Response.userObject = oSerializer.Serialize(userList);
+                            u.roleId = dt1.Rows[0]["roleId"].ToString();
+                            
+                            resultObject.Response.userObject = oSerializer.Serialize(u);
                         }
 
                         DataTable dt = null;
@@ -627,13 +627,13 @@ namespace Task_and_Leave_Tracker
 
                             resultObject.Response.taskObject = oSerializer.Serialize(taskList);
                             resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "Task Details Has Been Retrieved!!";
+                            //resultObject.Response.Reason = "Task Details Has Been Retrieved!!";
                         }
 
                         else
                         {
-                            resultObject.Response.Status = "Failure";
-                            resultObject.Response.Reason = "Task Details Are Not Retrieved!!";
+                            resultObject.Response.Status = "Success";
+                            //resultObject.Response.Reason = "Task Details Are Not Retrieved!!";
                         }
                     }
                     else
@@ -681,11 +681,11 @@ namespace Task_and_Leave_Tracker
                     User u = null;
                     if (dt.Rows.Count > 0)
                     {
-                        List<User> userList = new List<User>();
+                     
                         u = new User();
                         u.ntid = dt.Rows[0]["Ntid"].ToString();
-                        userList.Add(u);
-                        resultObject.Response.userObject = oSerializer.Serialize(userList);
+                        u.roleId = dt.Rows[0]["roleId"].ToString();
+                        resultObject.Response.userObject = oSerializer.Serialize(u);
                     }
                     else
                     {

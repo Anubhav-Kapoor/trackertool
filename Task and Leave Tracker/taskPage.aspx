@@ -36,14 +36,36 @@
 
             <div class="col-10">
 
-                <table id="myTable" style="margin: 0">
-                    <thead>
-                        <tr>
-                            <!--Defined in code-->
+                 <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tasks">Tasks</a></li>
+                    <li><a data-toggle="tab" href="#leaves">Leaves</a></li>
+                </ul>
+                 <div class="tab-content">
+                    <div id="tasks" class="tab-pane fade in active">
+                        <table id="taskTable" style="margin: 0;width:100%">
+                            <thead>
+                                <tr>
+                                    <!--Defined in code-->
 
-                        </tr>
-                    </thead>
-                </table>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="leaves" class="tab-pane fade">
+                        <table id="leaveTable" style="margin: 0;width:100%">
+                            <thead>
+                                <tr>
+                                    <!--Defined in code-->
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+    
+                </div>
+
+
+                
             </div>
             <div class="col-1"></div>
 
