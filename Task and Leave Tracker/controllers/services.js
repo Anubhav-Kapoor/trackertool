@@ -1,4 +1,24 @@
 ﻿var app = angular.module('myApp', ['ngCookies']);
+
+// Routing 
+
+//app.config(function ($routeProvider) {
+//    $routeProvider
+//    .when("/", {
+//        templateUrl: "SignIn.aspx"
+//    })
+//    .when("/signin", {
+//        templateUrl: "SignIn.aspx"
+//    })
+//    .when("/signup", {
+//        templateUrl: "SignUp.aspx"
+//    })
+//    .when("/home", {
+//        templateUrl: "taskPage.aspx"
+//    });
+//});
+
+
 // HTTP Factory Service
 app.factory('httpService', function ($http) {
 
@@ -650,8 +670,8 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                 if ($scope.status == "Success") {
 
-                    //$scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
-                    //$scope.refreshTable($scope.taskList);
+                    $scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
+                    $scope.refreshTable($scope.taskList);
 
                     //var taskJSON = JSON.parse(responseJSON.Response.taskObject);
                     //$scope.refreshTable(parseTaskList(taskJSON));
@@ -765,9 +785,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     } else if ($scope.status == "Failure") {
 
                     }
-
-
                     $('#changePwdModal').modal("hide");
+
+                 
                     $('#statusModal').modal("show");
 
                 }, function myError(response) {

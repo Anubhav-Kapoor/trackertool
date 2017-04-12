@@ -61,8 +61,9 @@
                 </div>
                 <form id="forgot_form" class="form-horizontal">
                     <div class="modal-body">
-                        <div class="form-group" >                     
-                            <div class="col-md-4 inputGroupContainer" style="width: 70%">
+                        <div class="form-group" >      
+                             <label class="col-md-4 control-label"  >NTID</label>               
+                            <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
                                     <input id="forgot_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="forgot_ntid" />

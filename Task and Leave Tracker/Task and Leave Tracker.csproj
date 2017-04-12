@@ -89,6 +89,7 @@
     <Content Include="bin\Task and Leave Tracker.dll.config" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\formValidation.min.css" />
+    <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\bootstrap-confirmation.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\formValidation.bootstrap.min.js" />
@@ -211,6 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="templates\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -80,9 +80,9 @@ namespace Task_and_Leave_Tracker
                             String from = "bhawneet.singh@owenscorning.com";
                             String subject = "Welcome to Tracker Tool";
                             String body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-                           
-                            SendingMail(email, from, subject, body);  
-                            
+
+                            SendingMail(email, from, subject, body);
+
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "You are successfully registered.";
 
@@ -224,11 +224,11 @@ namespace Task_and_Leave_Tracker
                     int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedPwd, UserGuid);
                     if (result > 0)
                     {
-                        String from="bhawneet.singh@owenscorning.com";
+                        String from = "bhawneet.singh@owenscorning.com";
                         String subject = "Tracker Tool - Password Reset";
-                        String body="Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                        String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
 
-                        SendingMail(EmailId,from,subject,body);
+                        SendingMail(EmailId, from, subject, body);
 
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "Your Password Has Been Reset";
@@ -497,15 +497,6 @@ namespace Task_and_Leave_Tracker
                         Task t = new Task();
                         t.taskId = Convert.ToInt32(dt1.Rows[i]["TaskId"]);
                         t.taskDesc = dt1.Rows[i]["Taskdesc"].ToString();
-<<<<<<< HEAD
-                        t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
-                        t.expiryDate = Convert.ToDateTime(dt.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
-                        t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
-                        t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
-                        t.status = dt.Rows[i]["Status"].ToString();
-                        t.taskname = dt.Rows[i]["TaskName"].ToString();
-                        t.startDate = Convert.ToDateTime(dt.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
-=======
                         t.createdDate = Convert.ToString(dt1.Rows[i]["Created_Date"]);
                         t.expiryDate = Convert.ToDateTime(dt1.Rows[i]["Expiry_Date"]).ToString("dd/MMM/yyyy");
                         t.createdBy = dt1.Rows[i]["CreatedBy"].ToString();
@@ -513,7 +504,7 @@ namespace Task_and_Leave_Tracker
                         t.status = dt1.Rows[i]["Status"].ToString();
                         t.taskName = dt1.Rows[i]["TaskName"].ToString();
                         t.startDate = Convert.ToDateTime(dt1.Rows[i]["Start_Date"]).ToString("dd/MMM/yyyy");
->>>>>>> 1c109cba72c5de98002469cb6d7a61274e97f6f9
+
                         taskList.Add(t);
                     }
                     resultObject.Response.taskObject = oSerializer.Serialize(taskList);
@@ -552,56 +543,37 @@ namespace Task_and_Leave_Tracker
                     int result = userBll.UpdateTaskDetailsBLL(taskId, taskDesc, expiryDate, assignedTo, taskName);
                     if (result > 0)
                     {
+                        DataTable dt = userBll.ViewByIdBLL(taskId);
+                        if (dt.Rows.Count > 0)
+                        {
+                            Task t = new Task();
+                            t.taskId = Convert.ToInt32(dt.Rows[0]["TaskId"]);
+                            t.taskDesc = dt.Rows[0]["Taskdesc"].ToString();
+                            t.createdDate = Convert.ToString(dt.Rows[0]["Created_Date"]);
+                            t.expiryDate = Convert.ToString(dt.Rows[0]["Expiry_Date"]);
+                            t.createdBy = dt.Rows[0]["CreatedBy"].ToString();
+                            t.assignedTo = dt.Rows[0]["AssignedTo"].ToString();
+                            t.status = dt.Rows[0]["Status"].ToString();
+                            t.taskName = dt.Rows[0]["TaskName"].ToString();
+                            t.startDate = Convert.ToString(dt.Rows[0]["Start_Date"]);
+                            resultObject.Response.taskObject = oSerializer.Serialize(t);
+                        }
                         resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Task Details Has Been Updated!!";
+                        resultObject.Response.Reason = "Task Details Has Been Updated!!";                    
                     }
                     else
                     {
                         resultObject.Response.Status = "Failure";
-                        resultObject.Response.Reason = "Task Details Are Not Updated!!";
+                        resultObject.Response.Reason = "Cannot Update Task Details";
                     }
-<<<<<<< HEAD
-
-                    DataTable dt = userBll.ViewByIdBLL(taskId);
-                    if (dt.Rows.Count > 0)
-                    {
-                        List<Task> taskList = new List<Task>();
-                        Task t = new Task();
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-
-
-                            t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
-                            t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
-                            t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);
-                            t.expiryDate = Convert.ToString(dt.Rows[i]["Expiry_Date"]);
-                            t.createdBy = dt.Rows[i]["CreatedBy"].ToString();
-                            t.assignedTo = dt.Rows[i]["AssignedTo"].ToString();
-                            t.status = dt.Rows[i]["Status"].ToString();
-                            t.taskname = dt.Rows[i]["TaskName"].ToString();
-                            t.startDate = Convert.ToString(dt.Rows[i]["Start_Date"]);
-                            taskList.Add(t);
-                        }
-
-
-                        resultObject.Response.userObject = oSerializer.Serialize(taskList);
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Data Has Been Retrieved!!";
-
-                    }
-                    else
-                    {
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Data is Not Retrieved!!";
-                    }
-=======
->>>>>>> 1c109cba72c5de98002469cb6d7a61274e97f6f9
                 }
                 else if (status != null)
                 {
                     int res = userBll.UpdateTaskStatusBLL(taskId, status);
                     if (res > 0)
                     {
+
+
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "Status Has Been Updated!!";
                     }

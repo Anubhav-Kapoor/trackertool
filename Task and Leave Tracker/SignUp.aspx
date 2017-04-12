@@ -126,8 +126,8 @@
 
 
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
-                                <a class="btn btn-default button" style="padding-top:16px">Cancel<span class="glyphicon glyphicon-remove"></span></a>
-                                <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="location.reload();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
+                                <button  class="button" style="" onclick="window.location.href='signin'">Cancel<span class="glyphicon glyphicon-remove"></span></button>
+                                <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="$('#register_form').data('formValidation').resetForm();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
                                 
 
                             </div>
