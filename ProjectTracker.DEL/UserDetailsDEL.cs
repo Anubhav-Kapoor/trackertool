@@ -528,6 +528,38 @@ namespace ProjectTracker.DEL
             return dt;
         }
 
+        // View Leaves For PM [Leave Details]
+        public DataTable ViewLeaveDetailsByPMDEL()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View C");               
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
     }
-}
+
+    }
+
+
 

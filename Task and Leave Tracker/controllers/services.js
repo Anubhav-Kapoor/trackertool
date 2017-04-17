@@ -14,7 +14,7 @@
 //        templateUrl: "SignUp.aspx"
 //    })
 //    .when("/home", {
-//        templateUrl: "taskPage.aspx"
+//        templateUrl: "home.aspx"
 //    });
 //});
 
@@ -97,7 +97,10 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             contentType: 'html',
             loopCount: false,
             resetCallback: function () { newTyped(); }
+
         });
+
+        $scope.leaveTypes = ["Casual Leave", "Earned Leave", "Sick Leave", "Flexi Holiday", "Leave Without Pay"];
 
         /******************************** HOME PAGE CODE *********************************/
 
@@ -132,8 +135,21 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             $('#taskTable tbody').on('click', "#view", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                $scope.currentTask = getTaskDetailByTaskId(data.taskId, $scope.taskList);
-                $('#taskDetailModal').modal("show");
+                           
+                $scope.viewTaskDetail(getTaskDetailByTaskId(data.taskId, $scope.taskList));
+
+                //$scope.currentTask = {
+                //    taskId: currentTask.taskId,
+                //    taskName: currentTask.taskName,
+                //    taskDesc: currentTask.taskDesc,
+                //    startDate: currentTask.startDate,
+                //    expiryDate: currentTask.expiryDate,
+                //    createdDate: currentTask.createdDate,
+                //    createdBy: currentTask.createdBy,
+                //    status: currentTask.status,
+                //    assignedTo: cur
+                //}
+             
             });
 
             $('#taskTable tbody').on('click', "#edit", function () {
@@ -178,11 +194,10 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 "searching": false,
                 data: leaveTableData,
                 columns: [
-                    { data: "taskId", title: "Task ID", width: "10%" },
-                    { data: "taskName", title: "Task Name", width: "10%" },
-                    { data: "assignedTo", title: "Assigned To", width: "10%" },
-                    { data: "startDate", title: "Start Date", width: "10%" },
-                    { data: "expiryDate", title: "End Date", width: "10%" },
+                    { data: "leaveId", title: "Leave ID", width: "10%" },
+                    { data: "fromDate", title: "Start Date", width: "10%" },
+                    { data: "toDate", title: "End Date", width: "10%" },
+                    { data: "leaveType", title: "Leave Type", width: "10%" },
                     { data: "status", title: "Status", width: "10%" },
                     { data: "actions", title: "Actions", width: "35%" }
 
@@ -193,48 +208,36 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     "defaultContent": ""
                 }],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
-                    var isTaskInProgress = (aData.status == "In Progress") ? true : false;
-                    var isTaskCompleted = (aData.status == "Complete") ? true : false;
-                    var isTaskApproved = (aData.status == "Approved") ? true : false;
-                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
+                    var isLeaveApprovalPending = (aData.status == "Approval Pending") ? true : false;
+                    var isLeaveCancelled = (aData.status == "Cancelled") ? true : false;
+                    var isLeaveApproved = (aData.status == "Approved") ? true : false;
+                    $('td:eq(5)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + (!$scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
             });
 
             $('#leaveTable tbody').on('click', "#view", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
-                $scope.currentTask = getTaskDetailByTaskId(data.taskId, $scope.taskList);
-                $('#taskDetailModal').modal("show");
+                var data = $scope.leaveTable.row($(this).parents('tr')).data();
+                $scope.currentLeave = getLeaveDetailByLeaveId(data.leaveId, $scope.leaveList);
+                $('#leaveDetailModal').modal("show");
+             //   alert('Hi View');
             });
 
-            $('#leaveTable tbody').on('click', "#edit", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
-
-                $scope.editTaskPopup(getTaskDetailByTaskId(data.taskId, $scope.taskList));
-                //alert('Hi Edit');
-            });
             $('#leaveTable tbody').on('click', "#cancel", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
+                var data = $scope.leaveTable.row($(this).parents('tr')).data();
 
-                $scope.updateTaskStatus(data.taskId, "Cancelled");
+                $scope.updateLeaveStatus(data.leaveId, "Cancelled");
 
                 //  alert('Hi Cancel');
             });
-            $('#leaveTable tbody').on('click', "#done", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
-                //  $('button#done').confirmation("toggle");
-
-                $scope.updateTaskStatus(data.taskId, "Complete");
-
-                // alert('Hi Done');
-            });
+           
             $('#leaveTable tbody').on('click', "#approve", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
-                $scope.updateTaskStatus(data.taskId, "Approved");
+                var data = $scope.leaveTable.row($(this).parents('tr')).data();
+                $scope.updateLeaveStatus(data.leaveId, "Approved");
                 // alert('Hi Approve');
             });
             $('#leaveTable tbody').on('click', "#reject", function () {
-                var data = $scope.taskTable.row($(this).parents('tr')).data();
-                $scope.updateTaskStatus(data.taskId, "In Progress");
+                var data = $scope.leaveTable.row($(this).parents('tr')).data();
+                $scope.updateLeaveStatus(data.leaveId, "Cancelled");
                 // alert('Hi Reject');
             });
 
@@ -250,6 +253,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         }
 
+        // Function - Home Page Initialization
         $scope.homeInit = function () {
 
             var ntid = sessionStorage.getItem("username");
@@ -279,11 +283,10 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         if ($scope.user.roleId == "201")
                             $scope.isProjectManager = true;
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
+                        $scope.leaveList = JSON.parse(responseJSON.Response.leaveObject);
 
-                        //Table initialization
-                        // $scope.tasks = parseTaskList($scope.taskList);
-
-                        $scope.loadTable($scope.taskList);
+                        $scope.loadTaskTable($scope.taskList);
+                        $scope.loadLeaveTable($scope.leaveList);
 
                         $('button#done').confirmation({
                             rootSelector: 'button#done',
@@ -351,13 +354,23 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 
 
-        $scope.refreshTable = function (tableData) {
+        $scope.refreshTaskTable = function (tableData) {
             if ($scope.taskTable != null || $scope.taskTable != undefined) {
                 $scope.taskTable.clear();
                 $scope.taskTable.rows.add(tableData);
                 $scope.taskTable.draw();
             } else {
-                $scope.loadTable(tableData);
+                $scope.loadTaskTable(tableData);
+            }
+        }
+
+        $scope.refreshLeaveTable = function (tableData) {
+            if ($scope.leaveTable != null || $scope.leaveTable != undefined) {
+                $scope.leaveTable.clear();
+                $scope.leaveTable.rows.add(tableData);
+                $scope.leaveTable.draw();
+            } else {
+                $scope.loadLeaveTable(tableData);
             }
         }
 
@@ -572,7 +585,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     if ($scope.status == "Success") {
 
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
-                        $scope.refreshTable($scope.taskList);
+                        $scope.refreshTaskTable($scope.taskList);
 
                         $('#statusModal').modal('show');
 
@@ -688,7 +701,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         //$scope.refreshTable($scope.taskList);
 
                         var taskJSON = JSON.parse(responseJSON.Response.taskObject);
-                        $scope.refreshTable(taskJSON);
+                        $scope.refreshTaskTable(taskJSON);
 
                         $scope.task = {};
                         $('#statusModal').modal('show');
@@ -714,18 +727,17 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         /******************************** VIEW TASK DETAIL CODE *********************************/
 
-        $scope.viewTaskDetail = function () {
+        $scope.viewTaskDetail = function (taskDetailData) {
 
+            $scope.currentTask = taskDetailData;
 
+            $('#taskDetailModal').modal("show");
 
 
         }
 
 
-        /******************************** Cancel TASK CODE *********************************/
-
-
-        /******************************** MARK COMPLETE TASK CODE *********************************/
+        /******************************** UPDATE TASK STATUS CODE *********************************/
 
         $scope.updateTaskStatus = function (taskId,status) {
 
@@ -755,11 +767,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                 if ($scope.status == "Success") {
 
-                    $scope.taskList = updateTaskDetails($scope.task, $scope.taskList);
-                    $scope.refreshTable($scope.taskList);
+                    $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
+                    $scope.refreshTaskTable($scope.taskList);
 
-                    //var taskJSON = JSON.parse(responseJSON.Response.taskObject);
-                    //$scope.refreshTable(parseTaskList(taskJSON));
                     $('#statusModal').modal('show');
 
                 }
@@ -775,6 +785,222 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
          
 
         }
+
+
+        /******************************** APPLY LEAVE CODE *********************************/
+
+        // Function - Display Leave Popup
+        $scope.applyLeavePopup = function () {
+
+            $scope.leaveModalTitle = "Apply Leave";
+            $scope.leave = {};
+
+            leaveMinStartDate = moment().format('MM/DD/YYYY');
+
+            $('#leaveModal').modal("show");
+          
+            $timeout(function () {
+                $('#leaveForm').data('formValidation').resetForm();
+            }, 200);
+
+        }
+
+        // Form Validation - Leave Form 
+        $('#leaveForm').formValidation({
+            // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                leaveDesc: {
+                    validators: {
+                        stringLength: {
+                            min: 5,
+                            max: 150
+                        },
+                        notEmpty: {
+                            message: 'Please enter detailed reason for leave'
+                        }
+                    }
+                },
+                leaveStartDate: {
+                    validators: {
+                        stringLength: {
+                            min: 10,
+                            max: 10,
+                        },
+                        date: {
+
+                            format: 'MM/DD/YYYY',
+                            message: 'The value is not a valid date'
+
+                        },
+                        callback: {
+                            message: 'The date is not in the range',
+                            callback: function (value, validator) {
+                                var m = new moment(value, 'MM/DD/YYYY', true);
+                                if (!m.isValid()) {
+                                    return false;
+                                }
+                                $scope.leave.leaveStartDate = value;
+                                return m.isSameOrAfter(moment(leaveMinStartDate));
+                            }
+                        },
+                        notEmpty: {
+                            message: 'Please select start date'
+                        }
+                    }
+                },
+                leaveEndDate: {
+                    validators: {
+                        stringLength: {
+                            min: 10,
+                            max: 10,
+                        },
+                        date: {
+
+                            format: 'MM/DD/YYYY',
+                            message: 'The value is not a valid date'
+
+                        },
+                        callback: {
+                            message: 'The date is not in the range',
+                            callback: function (value, validator) {
+                                var m = new moment(value, 'MM/DD/YYYY', true);
+                                if (!m.isValid()) {
+                                    return false;
+                                }
+                                $scope.leave.leaveEndDate = value;
+                                return m.isSameOrAfter(moment($scope.leave.leaveStartDate));
+                            }
+                        },
+
+                        notEmpty: {
+                            message: 'Please select end date'
+                        }
+                    }
+                },
+                leaveType: {
+                    stringLength: {
+                        min: 5,
+
+                    },
+                    validators: {
+                        notEmpty: {
+                            message: 'Please select leave type'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function - Apply Leave
+        $scope.applyLeave = function () {
+
+
+            $('#leaveForm').data('formValidation').validate();
+
+            if ($('#leaveForm').data('formValidation').isValid() != null && $('#leaveForm').data('formValidation').isValid()) {
+
+                var postData = {
+
+                    fromDate: $scope.leave.leaveStartDate,
+                    toDate: $scope.leave.leaveEndDate,
+                    leaveType: $scope.leave.leaveType,
+                    appliedBy: sessionStorage.getItem("username"),
+                    leaveDesc: $scope.leave.leaveDesc,
+                    status: "Approval Pending"
+                  
+                }
+
+                //Ajax method 
+
+                $http({
+                    method: "POST",
+                    url: "/TaskManagerAPI.aspx/ApplyLeave",
+                    data: JSON.stringify(postData),
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true
+                }).then(function mySuccess(response) {
+
+                    $scope.leave = {};
+
+                    $('#leaveModal').modal("hide");
+
+                    var responseJSON = JSON.parse(response.data.d);
+                    $scope.status = responseJSON.Response.Status;
+                    $scope.reason = responseJSON.Response.Reason;
+
+                    if ($scope.status == "Success") {
+
+                        $scope.leaveList = JSON.parse(responseJSON.Response.leaveObject);
+                        $scope.refreshLeaveTable($scope.leaveList);
+
+                        $('#statusModal').modal('show');
+
+                    }
+                    else if ($scope.status == "Failure")
+                        $('#statusModal').modal('show');
+
+                }, function myError(response) {
+
+                    console.log(response);
+
+                });
+            }
+
+        }
+        /******************************** UPDATE LEAVE STATUS CODE *********************************/
+
+        // Function - Update Leave Status
+
+        $scope.updateLeaveStatus = function (leaveId, status) {
+
+            var postData = {
+                ntid: sessionStorage.getItem('username'),
+                leaveId: leaveId,
+                status: status
+            }
+
+            $http({
+                method: "POST",
+                url: "/TaskManagerAPI.aspx/UpdateLeaveDetails",
+                data: JSON.stringify(postData),
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true
+            }).then(function mySuccess(response) {
+
+                var responseJSON = JSON.parse(response.data.d);
+                $scope.status = responseJSON.Response.Status;
+                $scope.reason = responseJSON.Response.Reason;
+
+                if ($scope.status == "Success") {
+
+                    $scope.leaveList = JSON.parse(responseJSON.Response.leaveObject);
+                    $scope.refreshLeaveTable($scope.leaveList);
+                    $('#statusModal').modal('show');
+
+                }
+                else if ($scope.status == "Failure")
+                    $('#statusModal').modal('show');
+
+            }, function myError(response) {
+
+                console.log(response);
+
+            });
+
+
+
+        }
+
+        
 
 
 
@@ -897,7 +1123,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
         //Check weather user has already logged 
         $scope.pageLoad = function () {
             if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
-                goToURL('taskPage.aspx');
+                goToURL('home.aspx');
             }
         }
         $scope.pageLoad();
@@ -982,7 +1208,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     if ($scope.status == "Success") {
                         //Save NTID in session storage
                         sessionStorage.setItem('username', $scope.ntid);
-                        window.location.href = "taskPage.aspx";
+                        window.location.href = "home.aspx";
 
                     }
                     else if ($scope.status == "Failure") {
@@ -1317,6 +1543,21 @@ function getTaskDetailByTaskId(taskId, taskList) {
     }
     return taskDetail;
 }
+
+// Function - Get Leave Detail By Leave Id
+function getLeaveDetailByLeaveId(leaveId, leaveList) {
+
+    var leaveDetail = {};
+
+    for (i = 0; i < leaveList.length; i++) {
+        if (leaveList[i].leaveId == leaveId) {
+            leaveDetail = leaveList[i];
+            break;
+        }
+    }
+    return leaveDetail;
+}
+
 
 function User(userData) {
     this.firstName = userData.firstName;

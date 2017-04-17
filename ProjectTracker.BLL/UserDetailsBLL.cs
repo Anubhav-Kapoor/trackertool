@@ -326,5 +326,23 @@ namespace ProjectTracker.BLL
             return dt;
         }
 
+          // View Leaves For PM [Leave Details]
+        public DataTable ViewLeaveDetailsByPMBLL()
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewLeaveDetailsByPMDEL();
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return dt;
+        }
+
     }
 }

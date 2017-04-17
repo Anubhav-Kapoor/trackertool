@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="taskPage.aspx.cs" Inherits="Task_and_Leave_Tracker.Index" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="home.aspx.cs" Inherits="Task_and_Leave_Tracker.Index" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,6 +18,7 @@
             <div class="col-6">
                 <i class="fa fa-plus-circle"></i>
                 <button ng-show="isProjectManager" style="display: inline" type="button" class="button" ng-click="createTaskPopup()">Create Task</button>
+                <button ng-show="!isProjectManager" style="display: inline" type="button" class="button" ng-click="applyLeavePopup()">Apply Leave</button>
                 <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="logout()">Logout</button>
                 <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="changePwdPopUp()">Change Password</button>
 
@@ -181,7 +182,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task Start Date</label>
                             <div class="col-md-6 inputGroupContainer">
-                                <div class="input-group date" id="startDateField">
+                                <div class="input-group date" id="taskStartDateField">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                     <input id="taskStartDate" name="taskStartDate" class="form-control" placeholder="Select Start Date" type="text" ng-model="task.taskStartDate"  />
                                 </div>
@@ -189,7 +190,7 @@
                         </div>
                         <script type="text/javascript">
                             $(function () {
-                                $('#startDateField').datetimepicker({
+                                $('#taskStartDateField').datetimepicker({
                                     format: 'MM/DD/YYYY',
                                     viewMode: 'days',
                                     showTodayButton: true
@@ -200,7 +201,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Task End Date</label>
                             <div class="col-md-6 inputGroupContainer">
-                                <div class="input-group date" id="endDateField">
+                                <div class="input-group date" id="taskEndDateField">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                     <input id="taskEndDate" name="taskEndDate" class="form-control" placeholder="Select End Date" type="text" ng-model="task.taskEndDate"  />
                                 </div>
@@ -208,19 +209,19 @@
                         </div>
                         <script type="text/javascript">
                             $(function () {
-                                $('#endDateField').datetimepicker({
+                                $('#taskEndDateField').datetimepicker({
                                     useCurrent: false,
                                     format: 'MM/DD/YYYY',
                                     viewMode: 'days',
                                     showTodayButton: true
                                 });
 
-                                $("#startDateField").on("dp.change", function (e) {
-                                    $('#endDateField').data("DateTimePicker").minDate(e.date);
+                                $("#taskStartDateField").on("dp.change", function (e) {
+                                    $('#taskEndDateField').data("DateTimePicker").minDate(e.date);
                                     $('#taskForm').formValidation('revalidateField', 'taskStartDate');
                                 });
-                                $("#endDateField").on("dp.change", function (e) {
-                                    $('#startDateField').data("DateTimePicker").maxDate(e.date);
+                                $("#taskEndDateField").on("dp.change", function (e) {
+                                    $('#taskStartDateField').data("DateTimePicker").maxDate(e.date);
                                     $('#taskForm').formValidation('revalidateField', 'taskEndDate');
                                 });
                             });
@@ -252,7 +253,7 @@
 
 
     <!-- View Task Detail Modal -->
-    <div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog"  aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -372,6 +373,215 @@
         </div>
     </div>
 
+    <!-- Apply Leave Modal -->
+    <div class="modal fade" id="leaveModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 style="text-align: center" class="modal-title" ng-bind="leaveModalTitle"></h4>
+                </div>
+                <form id="leaveForm" class="form-horizontal">
+                    <div class="modal-body">
+
+                        <!-- Leave Start Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Start Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group date" id="leaveStartDateField">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="leaveStartDate" name="leaveStartDate" class="form-control" placeholder="Select Start Date" type="text" ng-model="leave.leaveStartDate"  />
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#leaveStartDateField').datetimepicker({
+                                    format: 'MM/DD/YYYY',
+                                    viewMode: 'days',
+                                    showTodayButton: true
+                                });
+                            });
+                        </script>
+                        <!-- Leave End Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave End Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group date" id="leaveEndDateField">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="leaveEndDate" name="leaveEndDate" class="form-control" placeholder="Select End Date" type="text" ng-model="leave.leaveEndDate"  />
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#leaveEndDateField').datetimepicker({
+                                    useCurrent: false,
+                                    format: 'MM/DD/YYYY',
+                                    viewMode: 'days',
+                                    showTodayButton: true
+                                });
+
+                                $("#leaveStartDateField").on("dp.change", function (e) {
+                                    $('#leaveEndDateField').data("DateTimePicker").minDate(e.date);
+                                    $('#leaveForm').formValidation('revalidateField', 'leaveStartDate');
+                                });
+                                $("#leaveEndDateField").on("dp.change", function (e) {
+                                    $('#leaveStartDateField').data("DateTimePicker").maxDate(e.date);
+                                    $('#leaveForm').formValidation('revalidateField', 'leaveEndDate');
+                                });
+                            });
+                        </script>
+
+                         <!-- Leave Type -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Type</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <select id="leaveType" name="leaveType" class="form-control" ng-model="leave.leaveType">
+                                        <option value="">Select Leave Type</option>
+                                        <option ng-repeat="lv in leaveTypes track by $index" value="{{lv}}">{{lv}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                     <%--   <!--Task Name-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Task Name</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="taskName" name="taskName" placeholder="Enter Task Name" class="form-control" type="text" ng-model="leave.taskName" />
+                                </div>
+                            </div>
+                        </div>--%>
+
+                        <!-- Leave Description-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Description</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <textarea id="leaveDesc" name="leaveDesc" rows="2" cols="40" placeholder="Enter Detailed Reason" class="form-control" ng-model="leave.leaveDesc"> </textarea>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button" ng-click="applyLeave()">Apply</button>
+                        <button class="button" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Leave Detail Modal -->
+    <div class="modal fade" id="leaveDetailModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 style="text-align: center" class="modal-title" ">Leave Detail</h4>
+                </div>
+               
+                    <div class="modal-body">
+                         <form id="leaveDetailForm" class="form-horizontal">
+                         <!--Leave ID-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave ID</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailLeaveId" name="leaveId" class="form-control" type="text" ng-model="currentLeave.leaveId" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                        <!-- Leave Description-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Description</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <textarea id="detailLeaveDesc" name="leaveDesc" class="form-control" rows="2" cols="40" ng-model="currentLeave.leaveDesc" readonly="readonly"> </textarea>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leave Type -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Type</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailLeaveType" type="text" name="leaveType" class="form-control" ng-model="currentLeave.leaveType" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leave Start Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave Start Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="detailLeaveFromDate" name="leaveFromDate" class="form-control" type="text" ng-model="currentLeave.fromDate" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leave End Date-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Leave End Date</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="detailLeaveToDate" name="leaveToDate" class="form-control" type="text" ng-model="currentLeave.toDate" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <!-- Applied By-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Applied By</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="detailAppliedBy" type="text" name="appliedBy" class="form-control" ng-model="currentLeave.appliedBy" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Leave Status-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Status</label>
+                            <div class="col-md-6 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+                                    <input id="ldetailStatus" type="text" name="status" class="form-control" ng-model="currentLeave.status" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+                       
+                     </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button" data-dismiss="modal">Close</button>
+
+                    </div>
+          
+            </div>
+        </div>
+    </div>
 
     <!-- Status Notification Modal -->
     <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">

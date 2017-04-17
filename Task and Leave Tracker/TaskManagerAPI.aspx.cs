@@ -520,6 +520,10 @@ namespace Task_and_Leave_Tracker
                 {
                     dt2 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
                 }
+                else if (u.roleId == "201")
+                {
+                    dt2 = userBll.ViewLeaveDetailsByPMBLL();         // Retrieving Pending Leaves for PM
+                }
                 if (dt2.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt2.Rows.Count; i++)
@@ -527,8 +531,8 @@ namespace Task_and_Leave_Tracker
                         Leave l = new Leave();
                         l.leaveId = Convert.ToInt32(dt2.Rows[i]["LeaveId"]);
                         l.leaveDesc = dt2.Rows[i]["Leavedesc"].ToString();
-                        l.fromDate = Convert.ToString(dt2.Rows[i]["ToDate"]);
-                        l.toDate = Convert.ToDateTime(dt2.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                        l.fromDate = Convert.ToDateTime(dt2.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                        l.toDate = Convert.ToDateTime(dt2.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
                         l.appliedBy = dt2.Rows[i]["AppliedBy"].ToString();
                         l.leaveType = dt2.Rows[i]["LeaveType"].ToString();
                         l.status = dt2.Rows[i]["Status"].ToString();
@@ -699,6 +703,10 @@ namespace Task_and_Leave_Tracker
                     {
                         dt1 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
                     }
+                    else if (u.roleId == "201")
+                    {
+                        dt1 = userBll.ViewLeaveDetailsByPMBLL();         // Retrieving Pending Leaves for PM
+                    }
                     if (dt1.Rows.Count > 0)
                     {
                         for (int i = 0; i < dt1.Rows.Count; i++)
@@ -706,8 +714,8 @@ namespace Task_and_Leave_Tracker
                             Leave l = new Leave();
                             l.leaveId = Convert.ToInt32(dt1.Rows[i]["LeaveId"]);
                             l.leaveDesc = dt1.Rows[i]["Leavedesc"].ToString();
-                            l.fromDate = Convert.ToString(dt1.Rows[i]["ToDate"]);
-                            l.toDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                            l.fromDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                            l.toDate = Convert.ToDateTime(dt1.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
                             l.appliedBy = dt1.Rows[i]["AppliedBy"].ToString();
                             l.leaveType = dt1.Rows[i]["LeaveType"].ToString();
                             l.status = dt1.Rows[i]["Status"].ToString();
@@ -720,8 +728,8 @@ namespace Task_and_Leave_Tracker
                     }
                     else
                     {
-                        resultObject.Response.Status = "Failure";
-                        resultObject.Response.Reason = "No Data Retrieved!!";
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "No Pending Leaves Found!!";
                     }
                 }
 
@@ -742,5 +750,80 @@ namespace Task_and_Leave_Tracker
             return oSerializer.Serialize(resultObject);
         }
         #endregion
+
+        #region Apply Leave 
+        [System.Web.Services.WebMethod]
+        public static String ApplyLeave(String fromDate, String toDate, String leaveType, String appliedBy, String leaveDesc, String status)
+        {
+            JavaScriptSerializer oSerializer = new JavaScriptSerializer();
+            RootObjectResponse resultObject = new RootObjectResponse();
+            resultObject.Response = new Response();
+            int result = 0;
+
+            try
+            {
+                DateTime createdDate = DateTime.Now;
+
+                if (fromDate != "" && createdDate != null && toDate != "" && appliedBy != "" && status != "" && leaveDesc != "")
+                {
+                    try
+                    {
+
+                        result = userBll.InsertLeaveDetailsBLL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
+
+                        if (result > 0)
+                        {
+                            List<Leave> leaveList = new List<Leave>();
+                            DataTable dt = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
+
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                Leave l = new Leave();
+                                l.leaveId = Convert.ToInt32(dt.Rows[i]["LeaveId"]);
+                                l.leaveDesc = dt.Rows[i]["Leavedesc"].ToString();                              
+                                l.fromDate = Convert.ToDateTime(dt.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                                l.toDate = Convert.ToDateTime(dt.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
+                                l.appliedBy = dt.Rows[i]["AppliedBy"].ToString();
+                                l.leaveType = dt.Rows[i]["LeaveType"].ToString();
+                                l.status = dt.Rows[i]["Status"].ToString();
+                            
+                              
+                                leaveList.Add(l);
+                            }
+                            resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "Leave Applied Successfully!!!";
+                        }
+                        else
+                        {
+                            resultObject.Response.Status = "Failure";
+                            resultObject.Response.Reason = "Unable to apply Leave. Please Try again!!!";
+                        }
+
+                    }
+
+                    catch (Exception ex)
+                    {
+                        resultObject.Response.Status = "Failure";
+                        resultObject.Response.Reason = "Error :  " + ex.Message;
+                    }
+                }
+                else
+                {
+                    resultObject.Response.Status = "Failure";
+                    resultObject.Response.Reason = "Fill All The Details";
+                }
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.Message;
+            }
+
+            return oSerializer.Serialize(resultObject);
+        }
+        #endregion
+
     }
+
 }
