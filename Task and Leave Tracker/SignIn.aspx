@@ -6,7 +6,7 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool-Sign in Page</title>
 </head>
-<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageLoad()" style="background-image: url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageInit()" style="background-image: url(images/background_pattern.jpg);">
     <div class="container container-resize" style="background-color: #f5f5f5;">
         <div header></div>
 
@@ -57,7 +57,7 @@
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <h4 class="modal-title" id="myModalLabel">Forgot Password</h4>
+                    <h4 class="modal-title" id="myModalLabel" style="text-align: center">Forgot Password</h4>
                 </div>
                 <form id="forgot_form" class="form-horizontal">
                     <div class="modal-body">

@@ -60,7 +60,6 @@ namespace Task_and_Leave_Tracker
         [System.Web.Services.WebMethod]
         public static String CreateAccount(String ntid, String firstName, String lastName, String roleId, String phone, String email, String password)
         {
-
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
@@ -84,13 +83,13 @@ namespace Task_and_Leave_Tracker
                             SendingMail(email, from, subject, body);
 
                             resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "You are successfully registered.";
+                            resultObject.Response.Reason = "You are successfully registered with Tracker Tool.";
 
                         }
                         else
                         {
                             resultObject.Response.Status = "Failure";
-                            resultObject.Response.Reason = "Your Account Is Not Created!!";
+                            resultObject.Response.Reason = "Unable to create account!!!";
                         }
                     }
                     else
@@ -236,9 +235,8 @@ namespace Task_and_Leave_Tracker
                     else
                     {
                         resultObject.Response.Status = "Failure";
-                        resultObject.Response.Reason = " User Details Are Not Updated!!";
+                        resultObject.Response.Reason = "User Details Are Not Updated!!";
                     }
-
                 }
 
                 else
@@ -371,12 +369,12 @@ namespace Task_and_Leave_Tracker
                             }
                             resultObject.Response.taskObject = oSerializer.Serialize(taskList);
                             resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "New Task Is Created!!";
+                            resultObject.Response.Reason = "Task Created Successfully!!!";
                         }
                         else
                         {
                             resultObject.Response.Status = "Failure";
-                            resultObject.Response.Reason = "Task is Not Created. Try again!!";
+                            resultObject.Response.Reason = "Unable to Create Task!!!";
                         }
 
                     }
@@ -584,6 +582,9 @@ namespace Task_and_Leave_Tracker
 
                     if (result > 0)
                     {
+
+                        resultObject.Response.Reason = "Task Status Updated!!!";
+
 
                         DataTable dt1 = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
                         User u = null;
