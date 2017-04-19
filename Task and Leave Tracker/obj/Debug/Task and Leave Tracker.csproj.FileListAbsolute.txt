@@ -78,3 +78,25 @@ C:\Projects\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.pdb
 C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
 C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
 C:\Projects\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll.config
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Task and Leave Tracker.pdb
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.BLL.pdb
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\EntityFramework.SqlServer.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\Newtonsoft.Json.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Net.Http.Formatting.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\System.Web.Http.WebHost.xml
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\bin\ProjectTracker.DEL.pdb
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.csprojResolveAssemblyReference.cache
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.dll
+C:\trackerToolRepository\trackertool\Task and Leave Tracker\obj\Debug\Task and Leave Tracker.pdb

@@ -169,7 +169,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
                 //  $('button#done').confirmation("toggle");
 
-                $scope.updateTaskStatus(data.taskId, "Complete");
+                $scope.updateTaskStatus(data.taskId, "Completed");
 
                 // alert('Hi Done');
             });
@@ -343,7 +343,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 });
 
             } else {
-                window.location.href = "signin";
+                window.location.href = "]";
             }
 
         }
