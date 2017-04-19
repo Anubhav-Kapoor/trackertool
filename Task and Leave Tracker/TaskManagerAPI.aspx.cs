@@ -45,7 +45,7 @@ namespace Task_and_Leave_Tracker
                     smtpClient.Send(mailMessage);
 
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "Email has been sent!!";
+                    //resultObject.Response.Reason = "Email has been sent!!";
                     value = true;
                 }
 
@@ -95,7 +95,7 @@ namespace Task_and_Leave_Tracker
                             if (val)
                             {
                                 resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "You are successfully registered.";
+                                resultObject.Response.Reason = "You have successfully registered with Tracker Tool.";
                             }
                             else
                             {
@@ -655,6 +655,8 @@ namespace Task_and_Leave_Tracker
 
                     if (result > 0)
                     {
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Task "+status+"!!";
 
                         DataTable dt1 = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
                         User u = null;
@@ -684,9 +686,10 @@ namespace Task_and_Leave_Tracker
                         if (dt.Rows.Count > 0)
                         {
 
-                            Task t = new Task();                                 // Initializing Task Instance
+                            Task t = null;                              // Declaring Task Instance 
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
+                                t = new Task(); // Initializing Task Instance
                                 t.taskId = Convert.ToInt32(dt.Rows[i]["TaskId"]);
                                 t.taskDesc = dt.Rows[i]["Taskdesc"].ToString();
                                 t.createdDate = Convert.ToString(dt.Rows[i]["Created_Date"]);

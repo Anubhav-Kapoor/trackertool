@@ -68,15 +68,14 @@ jQuery.fn.extend({
 
 app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies, $timeout) {
 
-    $(function () {
-
-        //Check weather user has already logged 
-        $scope.pageLoad = function () {
-            if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
-                goToURL('SignIn.aspx');
-            }
+    //Check weather user has already logged 
+    $scope.pageInit = function () {
+        if (sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined) {
+            goToURL('signin');
         }
-        $scope.pageLoad();
+    }
+
+    $(function () {
 
         var dateObject = new Date();
 
@@ -127,7 +126,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 }],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
                     var isTaskInProgress = (aData.status == "In Progress") ? true : false;
-                    var isTaskCompleted = (aData.status == "Complete") ? true : false;
+                    var isTaskCompleted = (aData.status == "Completed") ? true : false;
                     var isTaskApproved = (aData.status == "Approved") ? true : false;
                     $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
@@ -195,6 +194,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 data: leaveTableData,
                 columns: [
                     { data: "leaveId", title: "Leave ID", width: "10%" },
+                    { data: "appliedBy", title: "Applied By", width: "10%" },
                     { data: "fromDate", title: "Start Date", width: "10%" },
                     { data: "toDate", title: "End Date", width: "10%" },
                     { data: "leaveType", title: "Leave Type", width: "10%" },
@@ -211,7 +211,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     var isLeaveApprovalPending = (aData.status == "Approval Pending") ? true : false;
                     var isLeaveCancelled = (aData.status == "Cancelled") ? true : false;
                     var isLeaveApproved = (aData.status == "Approved") ? true : false;
-                    $('td:eq(5)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + (!$scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
+                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + (!$scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
             });
 
@@ -288,54 +288,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         $scope.loadTaskTable($scope.taskList);
                         $scope.loadLeaveTable($scope.leaveList);
 
-                        $('button#done').confirmation({
-                            rootSelector: 'button#done',
-                            // other options
-                            onConfirm: function () {
-
-                            },
-                            onCancel: function () {
-                               
-                            }
-                          
-                        });
-
-                        $('button#cancel').confirmation({
-                            rootSelector: 'button#cancel',
-                            // other options
-                            onConfirm: function () {
-
-                            },
-                            onCancel: function () {
-
-                            }
-
-                        });
-
-                        $('button#approve').confirmation({
-                            rootSelector: 'button#approve',
-                            // other options
-                            onConfirm: function () {
-
-                            },
-                            onCancel: function () {
-
-                            }
-
-                        });
-                       
-                        $('button#reject').confirmation({
-                            rootSelector: 'button#reject',
-                            // other options
-                            onConfirm: function () {
-
-                            },
-                            onCancel: function () {
-
-                            }
-
-                        });
-
+                        $scope.initializeConfirmationDialog();
 
                     }
                 }, function myError(response) {
@@ -362,6 +315,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             } else {
                 $scope.loadTaskTable(tableData);
             }
+            $scope.initializeConfirmationDialog();
         }
 
         $scope.refreshLeaveTable = function (tableData) {
@@ -372,7 +326,31 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             } else {
                 $scope.loadLeaveTable(tableData);
             }
+            $scope.initializeConfirmationDialog();
         }
+
+
+
+        /******************************** TABLE BUTTONS CODE *********************************/
+
+        // Fuction - To initialize confirmation dialog on Table Action Buttons
+
+        $scope.initializeConfirmationDialog = function () {
+
+            var tableButtonArray = ["done", "cancel", "approve", "reject"];
+
+            for (var but in tableButtonArray) {
+                $('button#' + tableButtonArray[but]).confirmation({
+                    rootSelector: 'button#' + tableButtonArray[but],
+                    // other options
+                    onConfirm: function () {
+                    },
+                    onCancel: function () {
+                    }
+                });
+            }
+        }
+
 
 
         /******************************** LOGOUT CODE *********************************/
@@ -398,8 +376,6 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         // Display Popup - Create Task
         $scope.createTaskPopup = function () {
-
-
 
             //Ajax method 
             $http({
@@ -427,7 +403,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     taskMinStartDate = moment().format('MM/DD/YYYY');
 
                     $('#taskModal').modal("show");
-                    $scope.task = {};
+                
                     $timeout(function () {
                         $('#taskForm').data('formValidation').resetForm();
                     }, 200);
@@ -583,6 +559,8 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     $scope.reason = responseJSON.Response.Reason;
 
                     if ($scope.status == "Success") {
+
+                        //$scope.statusModalTitle = "Task ";
 
                         $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
                         $scope.refreshTaskTable($scope.taskList);
@@ -1117,16 +1095,15 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
 
+    //Check weather user has already logged 
+    $scope.pageInit = function () {
+        if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
+            goToURL('home');
+        }
+    }
+
 
     $(function () {
-
-        //Check weather user has already logged 
-        $scope.pageLoad = function () {
-            if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
-                goToURL('home.aspx');
-            }
-        }
-        $scope.pageLoad();
 
         //Sub-Title Typing Plugin Initialization
         $("#typed").typed({
@@ -1334,7 +1311,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     validators: {
 
                         notEmpty: {
-                            message: 'Please supply your role id'
+                            message: 'Please supply your role'
                         }
                     }
                 },
@@ -1354,7 +1331,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please supply your password(min 5 characters)'
+                            message: 'Please supply your password (min 5 characters)'
                         }
                     }
                 },
@@ -1364,11 +1341,11 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please supply your confirm pasword(same as password above)'
+                            message: 'Please supply your password once more'
                         },
                         identical: {
                             field: 'password',
-                            message: 'The password and its confirm are not the same'
+                            message: 'Passwords do not match. Please check!!!'
                         }
                     }
                 },
@@ -1439,12 +1416,12 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                     var options = {
                         "backdrop": "static"
                     }
-                    $('#basicModal').modal(options);
+                    $('#statusModal').modal(options);
 
                     //Redirect to Sign In page after a specific time interval 
-                    setTimeout(function () {
-                        window.location.href = "SignIn.aspx";
-                    }, 5000);
+                    //setTimeout(function () {
+                    //    window.location.href = "SignIn.aspx";
+                    //}, 5000);
                 }), function myError(response) {
                     console.log(response);
                 }

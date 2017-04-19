@@ -7,7 +7,7 @@
     <link rel="import" href="header.html" />
     <title>Sign Up Team Member Page</title>
 </head>
-<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageLoad()" style="background-image: url(images/background_pattern.jpg);">
+<body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageInit()" style="background-image: url(images/background_pattern.jpg);">
   <form class="well form-horizontal" id="register_form">
         <div class="container" style="background-color: #f5f5f5;">
             <div header=""></div>
@@ -26,7 +26,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                                    <input id="txt_ntid" name="ntid_name" placeholder="Network ID" class="form-control" type="text" ng-model="ntid"/>
+                                    <input id="txt_ntid" name="ntid_name" placeholder="Enter Network ID" class="form-control" type="text" ng-model="ntid"/>
                                    
                                 </div>
                             </div>
@@ -39,7 +39,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_fname" name="first_name" placeholder="First Name" class="form-control" type="text"    ng-model="firstName" />
+                                    <input id="txt_fname" name="first_name" placeholder="John" class="form-control" type="text"    ng-model="firstName" />
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="txt_lname" name="last_name" placeholder="Last Name" class="form-control" type="text"    ng-model="lastName"/>
+                                    <input id="txt_lname" name="last_name" placeholder="Doe" class="form-control" type="text"    ng-model="lastName"/>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input id="txt_email" name="email" placeholder="E-Mail Address" class="form-control" type="text"  ng-model="emailId"/>
+                                    <input id="txt_email" name="email" placeholder="example@domain.com" class="form-control" type="text"  ng-model="emailId"/>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="txt_password" name="password" placeholder="**********" class="form-control" type="password"   ng-model="password" />
+                                    <input id="txt_password" name="password" placeholder="Enter Password" class="form-control" type="password"   ng-model="password" />
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="txt_confpassword" name="confpassword" placeholder="**********" class="form-control" type="password" ng-model="confPassword" />
+                                    <input id="txt_confpassword" name="confpassword" placeholder="Re-enter Password" class="form-control" type="password" ng-model="confPassword" />
                                 </div>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
 
 
                                 <button class="button" style="width: 180px"  id="btnCreateAccount"  ng-click="createAccount()">Create Account <span class="glyphicon glyphicon-send"></span></button>
-                                <button  class="button" style="" onclick="window.location.href='signin'">Cancel<span class="glyphicon glyphicon-remove"></span></button>
+                                <button class="button" style="" onclick="window.location.href='signin'">Cancel<span class="glyphicon glyphicon-remove"></span></button>
                                 <button type="reset" class="button" style="margin-left: 10px; width: 180px" onclick="$('#register_form').data('formValidation').resetForm();"  >Reset Form <span class="glyphicon glyphicon-refresh"></span></button>
                                 
 
@@ -156,19 +156,19 @@
         </div>
 
 
-      <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+      <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
             
-            <h4 class="modal-title" id="myModalLabel">Message</h4>
+            <h4 class="modal-title" id="myModalLabel" style="text-align: center">Notification</h4>
             </div>
             <div class="modal-body">
-                <h3>{{message}}</h3>
+                <h3 style="text-align: center" ng-bind="message"></h3>
             </div>
             <div class="modal-footer">
-                 <a href="/SignIn.aspx" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-show="isSuccess" ng-click="GoToURL('SignIn.aspx')">Sign in</a>
-                <a href="#" class="btn btn-default button" style="padding-top:16px" data-dismiss="modal" ng-hide ="isSuccess">Close</a>
+                 <button class="button" style="" ng-show="isSuccess" onclick="goToURL('signin')">Sign in</button>
+                <button class="button" style="" data-dismiss="modal" ng-hide ="isSuccess">Close</button>
                 
         </div>
     </div>

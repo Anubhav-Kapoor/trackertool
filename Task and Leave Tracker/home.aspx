@@ -7,7 +7,7 @@
     <link rel="import" href="header.html">
     <title>Task & Leave Tracker Tool</title>
 </head>
-<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="homeInit()">
+<body ng-app="myApp" ng-controller="homeCtrl" style="background-image: url(images/background_pattern.jpg);" ng-init="pageInit()">
 
     <div class="container type-wrap" style="height: auto">
 
@@ -92,7 +92,7 @@
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                    <h4 class="modal-title" id="myModalLabel" style="text-align: center">Change Password</h4>
                 </div>
                 <form id="change_form" class="form-horizontal">
                     <div class="modal-body">
@@ -578,7 +578,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalTitle" style="text-align: center">Create Task - <span ng-bind="status"></span></h4>
+                    <h4 class="modal-title" id="statusModalTitle" style="text-align: center" >Notification</h4>
                 </div>
                 <div class="modal-body">
                     <h3 style="text-align: center" ng-bind="reason"></h3>
