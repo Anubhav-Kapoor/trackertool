@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="import" href="header.html">
+    <link rel="import" href="header.html" />
     <title>Task & Leave Tracker Tool-Sign in Page</title>
 </head>
 <body ng-app="myApp" ng-controller="loginCtrl" ng-init="pageInit()" style="background-image: url(images/background_pattern.jpg);">

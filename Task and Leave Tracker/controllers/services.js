@@ -126,7 +126,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 }],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
                     var isTaskInProgress = (aData.status == "In Progress") ? true : false;
-                    var isTaskCompleted = (aData.status == "Complete") ? true : false;
+                    var isTaskCompleted = (aData.status == "Completed") ? true : false;
                     var isTaskApproved = (aData.status == "Approved") ? true : false;
                     $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='edit' style='border-radius: 5px;'>Edit</button><button class='button" + ($scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + (!$scope.isProjectManager && isTaskInProgress ? "" : " ng-hide") + "' id='done' style='border-radius: 5px;' >Done</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isTaskCompleted ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
@@ -194,6 +194,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 data: leaveTableData,
                 columns: [
                     { data: "leaveId", title: "Leave ID", width: "10%" },
+                    { data: "appliedBy", title: "Applied By", width: "10%" },
                     { data: "fromDate", title: "Start Date", width: "10%" },
                     { data: "toDate", title: "End Date", width: "10%" },
                     { data: "leaveType", title: "Leave Type", width: "10%" },
@@ -210,7 +211,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     var isLeaveApprovalPending = (aData.status == "Approval Pending") ? true : false;
                     var isLeaveCancelled = (aData.status == "Cancelled") ? true : false;
                     var isLeaveApproved = (aData.status == "Approved") ? true : false;
-                    $('td:eq(5)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + (!$scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
+                    $('td:eq(6)', nRow).append("<button class='button' id='view' style='border-radius: 5px;'>View</button><button class='button" + (!$scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='cancel' style='border-radius: 5px;'>Cancel</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='approve' style='border-radius: 5px;'>Approve</button><button class='button" + ($scope.isProjectManager && isLeaveApprovalPending ? "" : " ng-hide") + "' id='reject' style='border-radius: 5px;'>Reject</button>");
                 }
             });
 
