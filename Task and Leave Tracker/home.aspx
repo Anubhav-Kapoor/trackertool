@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="home.aspx.cs" Inherits="Task_and_Leave_Tracker.Index" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="Task_and_Leave_Tracker.Index" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +18,7 @@
             <div class="col-6">
                 <i class="fa fa-plus-circle"></i>
                 <button ng-show="isProjectManager" style="display: inline" type="button" class="button" ng-click="createTaskPopup()">Create Task</button>
-                <button ng-show="!isProjectManager" style="display: inline" type="button" class="button" ng-click="applyLeavePopup()">Apply Leave</button>
+                <button ng-show="!(isProjectManager)" style="display: inline" type="button" class="button" ng-click="applyLeavePopup()">Apply Leave</button>
                 <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="logout()">Logout</button>
                 <button style="float: right; display: inline; margin-right: 20px" type="button" class="button" ng-click="changePwdPopUp()">Change Password</button>
 
@@ -446,17 +446,6 @@
                                 </div>
                             </div>
                         </div>
-
-                     <%--   <!--Task Name-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Task Name</label>
-                            <div class="col-md-6 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
-                                    <input id="taskName" name="taskName" placeholder="Enter Task Name" class="form-control" type="text" ng-model="leave.taskName" />
-                                </div>
-                            </div>
-                        </div>--%>
 
                         <!-- Leave Description-->
                         <div class="form-group">

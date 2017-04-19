@@ -12,10 +12,10 @@ namespace ProjectTracker.BLL
     public class UserDetailsBLL
     {
 
-        UserDetailsDEL userDEL = new UserDetailsDEL();
+        UserDetailsDEL userDEL = new UserDetailsDEL();//Initializing UserDetailsDEL Instance
         int result = 0;
 
-        //InsertFunction[User Details]
+        #region BLL Method -[Invoking DEL Method] Insert User Details
         public int InsertUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             try
@@ -33,8 +33,10 @@ namespace ProjectTracker.BLL
 
             return result;
         }
+        #endregion
 
-        //ViewFunction[User Details]
+
+        #region BLL Method -[Invoking DEL Method] View All Users Through Ntid
         public DataTable ViewUserDetailsByNtidBLL(String Ntid)
         {
             DataTable dt = null;
@@ -52,7 +54,10 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
-        //ViewIdFunction[User Details]
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] View Users Through RoleId
         public DataTable GetDetailsForTMBLL()
         {
             DataTable dt = null;
@@ -70,7 +75,10 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
-        //DeleteFunction[User Details]
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] Delete All Users
         public int DeleteUserDetailsBLL(String Ntid)
         {
             try
@@ -87,10 +95,11 @@ namespace ProjectTracker.BLL
 
 
             return result;
-
-
         }
-        //UpdateFunction[User Details]
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] Update All User Details
         public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
             try
@@ -109,10 +118,11 @@ namespace ProjectTracker.BLL
 
 
             return result;
-
-
         }
-        //CheckUserExistFunction[User Details]
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] Check User Exist or Not
         public Boolean CheckUserExistDetailsBLL(String Ntid)
         {
             Boolean value = false;
@@ -130,8 +140,10 @@ namespace ProjectTracker.BLL
 
             return value;
         }
+        #endregion
 
-        //InsertFunction[Task Details]
+
+        #region BLL Method -[Invoking DEL Method] Insert Task Details
         public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             try
@@ -145,13 +157,12 @@ namespace ProjectTracker.BLL
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
-
             return result;
         }
+        #endregion
 
 
-        //View Method For TM Function[Task Details]
+        #region BLL Method -[Invoking DEL Method] View All Tasks Created By PM
         public DataTable ViewTaskDetailsByTMBLL(String assignedTo)
         {
             DataTable dt = null;
@@ -168,9 +179,10 @@ namespace ProjectTracker.BLL
             }
             return dt;
         }
+        #endregion
 
 
-        //View Method For PM Function[Task Details]
+        #region BLL Method -[Invoking DEL Method] View All Tasks Assigned To TM
         public DataTable ViewTaskDetailsByPMBLL(String createdBy)
         {
             DataTable dt = null;
@@ -187,7 +199,10 @@ namespace ProjectTracker.BLL
             }
             return dt;
         }
-        // View By Id[Task Details]
+        #endregion
+
+
+        #region  BLL Method -[Invoking DEL Method] View All Tasks Through TaskId
         public DataTable ViewByIdBLL(int taskId)
         {
 
@@ -205,8 +220,10 @@ namespace ProjectTracker.BLL
             }
             return dt;
         }
+        #endregion
 
-        //DeleteFunction[Task Details]
+
+        #region BLL Method -[Invoking DEL Method] Delete All Tasks
         public int DeleteTaskDetailsBLL(int TaskId)
         {
             try
@@ -220,12 +237,12 @@ namespace ProjectTracker.BLL
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
-
             return result;
         }
+        #endregion
 
-        //UpdateFunction[Task Details]
+
+        #region BLL Method -[Invoking DEL Method] Update Task Details
         public int UpdateTaskDetailsBLL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
             try
@@ -241,12 +258,12 @@ namespace ProjectTracker.BLL
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
-
             return result;
         }
+        #endregion
 
-        //UpdateFunction[Task Details]
+
+        #region BLL Method -[Invoking DEL Method] Update Task Details Based on Status
         public int UpdateTaskStatusBLL(int taskId, String status)
         {
             try
@@ -262,12 +279,12 @@ namespace ProjectTracker.BLL
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
-
             return result;
         }
+        #endregion
 
-        //Insert Function[Leave Details]
+
+        #region BLL Method -[Invoking DEL Method] Insert Leave Details
         public int InsertLeaveDetailsBLL(String leaveDesc, String fromDate, String toDate, String appliedBy, String leaveType, String status)
         {
             try
@@ -281,68 +298,62 @@ namespace ProjectTracker.BLL
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
-
             return result;
         }
+        #endregion
 
 
-        //Update Status [Leave Details]
+        #region BLL Method -[Invoking DEL Method] Update Leave Details Based on Status
         public int UpdateLeaveStatusBLL(int leaveId, String status)
         {
             try
             {
-
                 result = userDEL.UpdateLeaveStatusDEL(leaveId, status);
-
-            }
-
+            }                
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-            }
-
-
+            }            
             return result;
         }
+        #endregion
 
-         // View Leaves Applied By TM [Leave Details]
+
+        #region BLL Method -[Invoking DEL Method] View Leaves Applied By TM
         public DataTable ViewLeaveDetailsByTMBLL(String appliedBy)
         {
             DataTable dt = null;
             try
             {
                 dt = userDEL.ViewLeaveDetailsByTMDEL(appliedBy);
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
             return dt;
         }
+        #endregion
 
-          // View Leaves For PM [Leave Details]
+
+        #region BLL Method -[Invoking DEL Method] View Pending Leaves For PM
         public DataTable ViewLeaveDetailsByPMBLL()
         {
             DataTable dt = null;
             try
             {
                 dt = userDEL.ViewLeaveDetailsByPMDEL();
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
             return dt;
         }
+        #endregion
 
     }
 }

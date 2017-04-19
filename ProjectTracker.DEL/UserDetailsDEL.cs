@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using Task_and_Leave_Tracker;
 
 namespace ProjectTracker.DEL
 {
@@ -13,10 +14,10 @@ namespace ProjectTracker.DEL
     {
 
 
-
+        //Initializing Connection String
         SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\TLT.mdf;Integrated Security=True");
 
-        //InsertFunction[User Details]
+        #region DEL Method - Insert User Details
         public int InsertUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
             Guid userGuid = System.Guid.NewGuid();
@@ -42,26 +43,26 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 result = cmd.ExecuteNonQuery();
 
-
-
+                if(result>0)
+                {
+                    Console.WriteLine("Record Inserted Successfully");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.InsertionError("Record Not Inserted Successfully");
+                }
             }
-
-
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-
-            }
+            
             finally
             {
                 con.Close();
             }
             return result;
         }
+        #endregion
 
-        //ViewFunction[User Details]
+
+        #region DEL Method - View All Users Through Ntid
         public DataTable ViewUserDetailsByNtidDEL(String Ntid)
         {
             DataTable dt = new DataTable();
@@ -75,23 +76,30 @@ namespace ProjectTracker.DEL
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
 
-
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("User Details Retreived Successfully");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("User Details Not Retreived Successfully");
+                }
             }
-            catch (Exception ex)
+            catch (RetreivalError ex)
             {
-
-                Console.WriteLine(ex.Message);
-                throw;
-
+                Console.WriteLine(ex.Message);                
             }
+
             finally
             {
                 con.Close();
             }
             return dt;
         }
+        #endregion
 
-        //ViewIdFunction[User Details]
+
+        #region DEL Method - View Users Through RoleId
         public DataTable GetDetailsForTMDEL()
         {
             DataTable dt = new DataTable();
@@ -118,7 +126,10 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //DeleteFunction[User Details]
+        #endregion
+
+
+        #region DEL Method - Delete All Users
         public int DeleteUserDetailsDEL(String Ntid)
         {
             int result = 0;
@@ -130,12 +141,9 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "Delete");
                 cmd.Parameters.AddWithValue("@Ntid", Ntid);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
@@ -145,7 +153,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
-        //Update Function[User Details]
+        #endregion
+
+
+        #region DEL Method - Update All User Details
         public int UpdateUserDetailsDEL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
             int result = 0;
@@ -164,23 +175,23 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 cmd.Parameters.AddWithValue("@Ntid", Ntid);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
+
             finally
             {
                 con.Close();
             }
             return result;
         }
+        #endregion
 
-        //Check User Exist Function[User Details]
+
+        #region DEL Method - Check User Exist or Not
         public Boolean CheckUserExistDetailsDEL(String Ntid)
         {
             DataTable dt = new DataTable();
@@ -199,31 +210,26 @@ namespace ProjectTracker.DEL
                 }
                 else
                     return false;
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
                 con.Close();
             }
-
         }
+        #endregion
 
 
-        //Insert Function[Task Details]
+        #region DEL Method - Insert Task Details
         public int InsertTaskDetailsDEL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
             int result = 0;
             try
             {
-
-
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -237,18 +243,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
                 cmd.Parameters.AddWithValue("@Start_Date", startDate);
                 result = cmd.ExecuteNonQuery();
-
-
-
             }
-
-
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -256,8 +255,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
+        #endregion
 
-        //View Tasks Created By PM[Task Details]
+
+        #region DEL Method - View All Tasks Created By PM
         public DataTable ViewTaskDetailsByPMDEL(String createdBy)
         {
             DataTable dt = new DataTable();
@@ -270,15 +271,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -286,7 +283,10 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //View Tasks Assigned To TM [Task Details]
+        #endregion
+
+
+        #region DEL Method - View All Tasks Assigned To TM 
         public DataTable ViewTaskDetailsByTMDEL(String assignedTo)
         {
             DataTable dt = new DataTable();
@@ -299,15 +299,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
             }
             catch (Exception ex)
-            {
-
+            {                
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -315,7 +311,10 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        // View All Details By Id[Task Details]
+        #endregion
+
+
+        #region DEL Method -  View All Tasks Through TaskId
         public DataTable ViewAllTaskDetailsByIdDEL(int taskId)
         {
             DataTable dt = new DataTable();
@@ -328,15 +327,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -344,7 +339,10 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        //Delete Function[Task Details]
+        #endregion
+
+
+        #region DEL Method - Delete All Tasks
         public int DeleteTaskDetailsDEL(int TaskId)
         {
             int result = 0;
@@ -356,12 +354,9 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "Delete");
                 cmd.Parameters.AddWithValue("@TaskId", TaskId);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
@@ -371,8 +366,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
+        #endregion
 
-        //UpdateFunction[Task Details]
+
+        #region DEL Method - Update Task Details
         public int UpdateTaskDetailsDEL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
             int result = 0;
@@ -388,12 +385,9 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
             }
@@ -403,8 +397,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
+        #endregion
 
-        //Update Status [Task Details]
+
+        #region DEL Method - Update Task Details Based on Status 
         public int UpdateTaskStatusDEL(int taskId, String status)
         {
             int result = 0;
@@ -417,15 +413,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Status ", status);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -434,8 +426,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
+        #endregion
 
-        //Insert Function[Leave Details]
+
+        #region DEL Method - Insert Leave Details
         public int InsertLeaveDetailsDEL(String leaveDesc, String fromDate, String toDate, String appliedBy, String leaveType, String status)
         {
             int result = 0;
@@ -452,10 +446,7 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@LeaveType", leaveType);
                 cmd.Parameters.AddWithValue("@Status", status);
                 result = cmd.ExecuteNonQuery();
-
             }
-
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -467,8 +458,10 @@ namespace ProjectTracker.DEL
             }
             return result;
         }
+        #endregion
 
-        //Update Status [Leave Details]
+
+        #region DEL Method - Update Leave Details Based on Status 
         public int UpdateLeaveStatusDEL(int leaveId, String status)
         {
             int result = 0;
@@ -481,24 +474,22 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Status ", status);
                 cmd.Parameters.AddWithValue("@LeaveId", leaveId);
                 result = cmd.ExecuteNonQuery();
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
                 con.Close();
-
             }
             return result;
         }
-        // View Leaves Applied By TM [Leave Details]
+        #endregion
+
+
+        #region DEL Method - View Leaves Applied By TM
         public DataTable ViewLeaveDetailsByTMDEL(String appliedBy)
         {
             DataTable dt = new DataTable();
@@ -511,15 +502,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@AppliedBy", appliedBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -527,8 +514,10 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
+        #endregion
 
-        // View Leaves For PM [Leave Details]
+
+        #region DEL Method - View Pending Leaves For PM
         public DataTable ViewLeaveDetailsByPMDEL()
         {
             DataTable dt = new DataTable();
@@ -540,15 +529,11 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "View C");               
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
                 throw;
-
             }
             finally
             {
@@ -556,6 +541,7 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
+        #endregion
 
     }
 
