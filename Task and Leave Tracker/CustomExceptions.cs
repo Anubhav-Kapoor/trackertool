@@ -9,7 +9,12 @@ namespace Task_and_Leave_Tracker
 
     public class CustomExceptionsError : Exception
     {
-        private String msg;
+        public  String msg;
+        public CustomExceptionsError()
+        {
+            this.msg = "";
+
+        }
 
         public CustomExceptionsError(String msg)
         {
@@ -20,7 +25,7 @@ namespace Task_and_Leave_Tracker
 
     public class UserNotFoundError : Exception
     {
-        private String msg;
+        public String msg;
 
         public UserNotFoundError(String msg)
         {
@@ -30,7 +35,7 @@ namespace Task_and_Leave_Tracker
 
     public class EmailNotSentError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public EmailNotSentError(String msg)
         {
@@ -41,7 +46,7 @@ namespace Task_and_Leave_Tracker
     public class InsertionError : Exception
     {
 
-        private String msg;
+        public  String msg;
 
         public InsertionError(String msg)
         {
@@ -52,7 +57,7 @@ namespace Task_and_Leave_Tracker
 
     public class RetreivalError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public RetreivalError(String msg)
         {
@@ -62,7 +67,7 @@ namespace Task_and_Leave_Tracker
 
     public class UpdationError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public UpdationError(String msg)
         {
@@ -72,7 +77,7 @@ namespace Task_and_Leave_Tracker
 
     public class DataNotFoundError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public DataNotFoundError(String msg)
         {
@@ -82,7 +87,7 @@ namespace Task_and_Leave_Tracker
 
     public class UserAlreadyExistsError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public UserAlreadyExistsError(String msg)
         {
@@ -92,7 +97,7 @@ namespace Task_and_Leave_Tracker
 
     public class AuthenticationError : Exception
     {
-        private String msg;
+        public  String msg;
 
         public AuthenticationError(String msg)
         {

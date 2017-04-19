@@ -33,7 +33,7 @@ namespace Task_and_Leave_Tracker
             Boolean value = false;
             try
             {
-                if (!(String.IsNullOrWhiteSpace(mailId)) && !(String.IsNullOrWhiteSpace(from)) && (String.IsNullOrWhiteSpace(subject)) && (String.IsNullOrWhiteSpace(body)))
+                if (!(String.IsNullOrWhiteSpace(mailId)) && !(String.IsNullOrWhiteSpace(from)) && !(String.IsNullOrWhiteSpace(subject)) && !(String.IsNullOrWhiteSpace(body)))
                 {
                     MailMessage mailMessage = new MailMessage();
                     mailMessage.To.Add(mailId);
@@ -41,7 +41,7 @@ namespace Task_and_Leave_Tracker
                     mailMessage.Subject = subject;
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Body = body;
-                    SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
+                    SmtpClient smtpClient = new SmtpClient("mailin2.owenscorning.com");
                     smtpClient.Send(mailMessage);
 
                     resultObject.Response.Status = "Success";
@@ -51,14 +51,14 @@ namespace Task_and_Leave_Tracker
 
                 else
                 {
-                    throw new EmailNotSentError(Convert.ToString(resultObject.Response.Reason));
+                    resultObject.Response.Reason = "Could not sent the email";
+                    throw new EmailNotSentError(resultObject.Response.Reason);
                 }
             }
-            catch (EmailNotSentError)
+            catch (EmailNotSentError ex)
             {
                 resultObject.Response.Status = "Failure";
-                resultObject.Response.Reason = "Could not sent the email";
-
+                resultObject.Response.Reason = ex.msg;
             }
             return value;
         }
@@ -99,24 +99,24 @@ namespace Task_and_Leave_Tracker
                             }
                             else
                             {
-                                throw new EmailNotSentError(Convert.ToString(resultObject.Response.Reason));
+                                throw new EmailNotSentError(resultObject.Response.Reason);
                             }
 
                         }
                         else
                         {
-                            throw new InsertionError(Convert.ToString(resultObject.Response.Reason));
+                            throw new InsertionError(resultObject.Response.Reason);
                         }
                     }
                     else
                     {
-                        throw new DataNotFoundError(Convert.ToString(resultObject.Response.Reason));
+                        throw new DataNotFoundError(resultObject.Response.Reason);
                     }
                 }
 
                 else
                 {
-                    throw new UserAlreadyExistsError(Convert.ToString(resultObject.Response.Reason));
+                    throw new UserAlreadyExistsError(resultObject.Response.Reason);
                 }
 
             }
@@ -205,24 +205,25 @@ namespace Task_and_Leave_Tracker
                         }
                         else
                         {
-                            throw new AuthenticationError(Convert.ToString(resultObject.Response.Reason));
+                            throw new AuthenticationError(resultObject.Response.Reason);
                         }
 
                     }
                     else
                     {
-                        throw new UserNotFoundError(Convert.ToString(resultObject.Response.Reason));
+                        resultObject.Response.Reason = "User does not exist!!!";
+                        throw new UserNotFoundError(resultObject.Response.Reason);
                     }
                 }
                 else
                 {
-                    throw new DataNotFoundError(Convert.ToString(resultObject.Response.Reason));
+                    throw new DataNotFoundError(resultObject.Response.Reason);
                 }
             }
-            catch (UserNotFoundError)
+            catch (UserNotFoundError ex)
             {
                 resultObject.Response.Status = "Failure";
-                resultObject.Response.Reason = "User does not exist!!!";
+                resultObject.Response.Reason = ex.msg;
 
             }
             catch (AuthenticationError)
