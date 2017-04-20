@@ -12,24 +12,21 @@ namespace ProjectTracker.BLL
     public class UserDetailsBLL
     {
 
-        UserDetailsDEL userDEL = new UserDetailsDEL();//Initializing UserDetailsDEL Instance
+        UserDetailsDEL userDEL = new UserDetailsDEL(); //Initializing UserDetailsDEL Instance
         int result = 0;
 
         #region BLL Method -[Invoking DEL Method] Insert User Details
         public int InsertUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password)
         {
-            try
+            result = userDEL.InsertUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
+            if (result > 0)
             {
-                result = userDEL.InsertUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password);
-
+                Console.WriteLine("User Details are added");
             }
-            catch (Exception ex)
+            else
             {
-
-                Console.WriteLine(ex.Message);
-                throw;
+                throw new Task_and_Leave_Tracker.InsertionError("User Details are not added");
             }
-
 
             return result;
         }
@@ -40,17 +37,17 @@ namespace ProjectTracker.BLL
         public DataTable ViewUserDetailsByNtidBLL(String Ntid)
         {
             DataTable dt = null;
-            try
-            {
-                dt = userDEL.ViewUserDetailsByNtidDEL(Ntid);
+            dt = userDEL.ViewUserDetailsByNtidDEL(Ntid);
 
-            }
-            catch (Exception ex)
+            if (dt.Rows.Count > 0)
             {
-
-                Console.WriteLine(ex.Message);
-                throw;
+                Console.WriteLine("User Details are retreived");
             }
+            else
+            {
+                throw new Task_and_Leave_Tracker.RetreivalError("User Details are not added");
+            }
+
             return dt;
 
         }
@@ -61,61 +58,59 @@ namespace ProjectTracker.BLL
         public DataTable GetDetailsForTMBLL()
         {
             DataTable dt = null;
-            try
-            {
+            
                 dt = userDEL.GetDetailsForTMDEL();
 
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("User Details are retreived");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("User Details are not added");
+                }
+            
             return dt;
 
         }
         #endregion
 
 
-        #region BLL Method -[Invoking DEL Method] Delete All Users
-        public int DeleteUserDetailsBLL(String Ntid)
-        {
-            try
-            {
-                result = userDEL.DeleteUserDetailsDEL(Ntid);
+        //#region BLL Method -[Invoking DEL Method] Delete All Users
+        //public int DeleteUserDetailsBLL(String Ntid)
+        //{
+            
+        //        result = userDEL.DeleteUserDetailsDEL(Ntid);
 
-            }
-            catch (Exception ex)
-            {
+        //        if (result > 0)
+        //        {
+        //            Console.WriteLine("User Details are deleted");
+        //        }
+        //        else
+        //        {
+        //            throw new Task_and_Leave_Tracker.DeletionError("User Details are not deleted");
+        //        }
 
-                Console.WriteLine(ex.Message);
-                throw;
-            }
 
-
-            return result;
-        }
-        #endregion
+        //    return result;
+        //}
+        //#endregion
 
 
         #region BLL Method -[Invoking DEL Method] Update All User Details
         public int UpdateUserDetailsBLL(String Ntid, String FirstName, String LastName, String RoleId, String PhoneNo, String EmailId, String Password, String userGuid)
         {
-            try
-            {
-
+           
                 result = userDEL.UpdateUserDetailsDEL(Ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, Password, userGuid);
 
-            }
-
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
+                if (result > 0)
+                {
+                    Console.WriteLine("User Details are updated");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("User Details are not updated");
+                }
 
             return result;
         }
@@ -126,37 +121,36 @@ namespace ProjectTracker.BLL
         public Boolean CheckUserExistDetailsBLL(String Ntid)
         {
             Boolean value = false;
-            try
-            {
+           
                 value = userDEL.CheckUserExistDetailsDEL(Ntid);
 
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (value)
+                {
+                    Console.WriteLine("User exists !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UserNotFoundError("User does'nt exist !! ");
+                }
 
             return value;
         }
         #endregion
-
+         
 
         #region BLL Method -[Invoking DEL Method] Insert Task Details
         public int InsertTaskDetailsBLL(String taskDesc, DateTime createdDate, String expiryDate, String createdBy, String assignedTo, String status, String taskName, String startDate)
         {
-            try
-            {
+           
                 result = userDEL.InsertTaskDetailsDEL(taskDesc, createdDate, expiryDate, createdBy, assignedTo, status, taskName, startDate);
-
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (result > 0)
+                {
+                    Console.WriteLine("Task is created !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.InsertionError("No task is created !!");
+                }
             return result;
         }
         #endregion
@@ -166,17 +160,16 @@ namespace ProjectTracker.BLL
         public DataTable ViewTaskDetailsByTMBLL(String assignedTo)
         {
             DataTable dt = null;
-            try
-            {
+           
                 dt = userDEL.ViewTaskDetailsByTMDEL(assignedTo);
-
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Task Details created by PM are retreived !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Task Details created by PM are not retreived !!");
+                }
             return dt;
         }
         #endregion
@@ -186,17 +179,17 @@ namespace ProjectTracker.BLL
         public DataTable ViewTaskDetailsByPMBLL(String createdBy)
         {
             DataTable dt = null;
-            try
-            {
+            
                 dt = userDEL.ViewTaskDetailsByPMDEL(createdBy);
 
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Task Details assigned to TM are retreived !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Task Details assigned to TM are not retreived !!");
+                }
             return dt;
         }
         #endregion
@@ -207,57 +200,54 @@ namespace ProjectTracker.BLL
         {
 
             DataTable dt = null;
-            try
-            {
+           
                 dt = userDEL.ViewAllTaskDetailsByIdDEL(taskId);
-
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Task Details are retreived !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Task Details are not retreived !!");
+                }
             return dt;
         }
         #endregion
 
 
-        #region BLL Method -[Invoking DEL Method] Delete All Tasks
-        public int DeleteTaskDetailsBLL(int TaskId)
-        {
-            try
-            {
-                result = userDEL.DeleteTaskDetailsDEL(TaskId);
+        //#region BLL Method -[Invoking DEL Method] Delete All Tasks
+        //public int DeleteTaskDetailsBLL(int TaskId)
+        //{
+            
+        //        result = userDEL.DeleteTaskDetailsDEL(TaskId);
 
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            return result;
-        }
-        #endregion
+        //        if (result > 0)
+        //        {
+        //            Console.WriteLine("Assigned Tasks are deleted !!");
+        //        }
+        //        else
+        //        {
+        //            throw new Task_and_Leave_Tracker.d("Assigned Tasks are not deleted !!");
+        //        }
+        //    return result;
+        //}
+        //#endregion
 
 
         #region BLL Method -[Invoking DEL Method] Update Task Details
         public int UpdateTaskDetailsBLL(int taskId, String taskDesc, String expiryDate, String assignedTo, String taskName)
         {
-            try
-            {
-
+            
                 result = userDEL.UpdateTaskDetailsDEL(taskId, taskDesc, expiryDate, assignedTo, taskName);
 
-            }
-
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (result > 0)
+                {
+                    Console.WriteLine("Task details are updated !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("Task details are not updated !!");
+                }
             return result;
         }
         #endregion
@@ -266,19 +256,17 @@ namespace ProjectTracker.BLL
         #region BLL Method -[Invoking DEL Method] Update Task Details Based on Status
         public int UpdateTaskStatusBLL(int taskId, String status)
         {
-            try
-            {
-
+            
                 result = userDEL.UpdateTaskStatusDEL(taskId, status);
 
-            }
-
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+                if (result > 0)
+                {
+                    Console.WriteLine("Task details based on status are updated !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("Task details are not updated !!");
+                }
             return result;
         }
         #endregion
@@ -287,17 +275,16 @@ namespace ProjectTracker.BLL
         #region BLL Method -[Invoking DEL Method] Insert Leave Details
         public int InsertLeaveDetailsBLL(String leaveDesc, String fromDate, String toDate, String appliedBy, String leaveType, String status)
         {
-            try
-            {
-                result = userDEL.InsertLeaveDetailsDEL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
+              result = userDEL.InsertLeaveDetailsDEL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
 
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+              if (result > 0)
+              {
+                  Console.WriteLine("Leaves Are Applied Successfully !!");
+              }
+              else
+              {
+                  throw new Task_and_Leave_Tracker.InsertionError("Leaves Are Not Applied !!");
+              }
             return result;
         }
         #endregion
@@ -306,15 +293,16 @@ namespace ProjectTracker.BLL
         #region BLL Method -[Invoking DEL Method] Update Leave Details Based on Status
         public int UpdateLeaveStatusBLL(int leaveId, String status)
         {
-            try
-            {
+            
                 result = userDEL.UpdateLeaveStatusDEL(leaveId, status);
-            }                
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }            
+                if (result > 0)
+                {
+                    Console.WriteLine(" Applied Leaves Are Updated !!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError(" Applied Leaves Are Not Updated !!");
+                }
             return result;
         }
         #endregion
@@ -324,15 +312,18 @@ namespace ProjectTracker.BLL
         public DataTable ViewLeaveDetailsByTMBLL(String appliedBy)
         {
             DataTable dt = null;
-            try
-            {
+           
                 dt = userDEL.ViewLeaveDetailsByTMDEL(appliedBy);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Leave Details for TM are retreived");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Leave Details for TM are not retreived");
+                }
+           
             return dt;
         }
         #endregion
@@ -342,15 +333,17 @@ namespace ProjectTracker.BLL
         public DataTable ViewLeaveDetailsByPMBLL()
         {
             DataTable dt = null;
-            try
-            {
+           
                 dt = userDEL.ViewLeaveDetailsByPMDEL();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Pending Leaves are retreived!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Pending Leaves are not retreived!!");
+                }
             return dt;
         }
         #endregion

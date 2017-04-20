@@ -43,13 +43,13 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 result = cmd.ExecuteNonQuery();
 
-                if(result>0)
+                if (result > 0)
                 {
-                    Console.WriteLine("Record Inserted Successfully");
+                    Console.WriteLine("Users Are Inserted Successfully!!");
                 }
                 else
                 {
-                    throw new Task_and_Leave_Tracker.InsertionError("Record Not Inserted Successfully");
+                    throw new Task_and_Leave_Tracker.InsertionError("Users Are Not Inserted !!");
                 }
             }
             
@@ -78,18 +78,14 @@ namespace ProjectTracker.DEL
 
                 if (dt.Rows.Count > 0)
                 {
-                    Console.WriteLine("User Details Retreived Successfully");
+                    Console.WriteLine("User Details Are Retreived Successfully");
                 }
                 else
                 {
-                    throw new Task_and_Leave_Tracker.RetreivalError("User Details Not Retreived Successfully");
+                    throw new Task_and_Leave_Tracker.RetreivalError("User Details Are Not Retreived Successfully");
                 }
             }
-            catch (RetreivalError ex)
-            {
-                Console.WriteLine(ex.Message);                
-            }
-
+           
             finally
             {
                 con.Close();
@@ -110,16 +106,16 @@ namespace ProjectTracker.DEL
                 cmd.CommandType = CommandType.Text;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
-
-
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("User Details Are Retreived Successfully");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("User details are not retreived successfully");
+                }
             }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                throw;
-
-            }
+          
             finally
             {
                 con.Close();
@@ -129,31 +125,36 @@ namespace ProjectTracker.DEL
         #endregion
 
 
-        #region DEL Method - Delete All Users
-        public int DeleteUserDetailsDEL(String Ntid)
-        {
-            int result = 0;
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "Delete");
-                cmd.Parameters.AddWithValue("@Ntid", Ntid);
-                result = cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            finally
-            {
-                con.Close();
-            }
-            return result;
-        }
-        #endregion
+        //#region DEL Method - Delete All Users
+        //public int DeleteUserDetailsDEL(String Ntid)
+        //{
+        //    int result = 0;
+        //    try
+        //    {
+        //        con.Open();
+        //        SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@Action", "Delete");
+        //        cmd.Parameters.AddWithValue("@Ntid", Ntid);
+        //        result = cmd.ExecuteNonQuery();
+        //        if (result > 0)
+        //        {
+        //            Console.WriteLine("Users Are Deleted Successfully!!");
+        //        }
+        //        else
+        //        {
+        //            throw new Task_and_Leave_Tracker.DeletionError("Users Are Not Deleted Inserted !!");
+        //        }
+               
+        //    }
+           
+        //    finally
+        //    {
+        //        con.Close();
+        //    }
+        //    return result;
+        //}
+        //#endregion
 
 
         #region DEL Method - Update All User Details
@@ -175,13 +176,15 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@UserGuid", userGuid);
                 cmd.Parameters.AddWithValue("@Ntid", Ntid);
                 result = cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
+                if (result > 0)
+                {
+                    Console.WriteLine("Users Are Updated Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("Users Are Not Updated !!");
+                }
+            }            
             finally
             {
                 con.Close();
@@ -206,16 +209,17 @@ namespace ProjectTracker.DEL
                 da.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    return true;
+                    Console.WriteLine("User exists!!");
+                    return true;                   
                 }
                 else
+                {
                     return false;
+                    throw new Task_and_Leave_Tracker.UserNotFoundError("Users Are Not Updated !!");
+                   
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -243,12 +247,17 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
                 cmd.Parameters.AddWithValue("@Start_Date", startDate);
                 result = cmd.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    Console.WriteLine("New Task Is Added Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.InsertionError("New Task Is Not Added!!");
+                }
+
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -271,12 +280,17 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("All Tasks are Retreived Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Tasks Are Not Retreived!!");
+                }
+
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -299,12 +313,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@AssignedTo", assignedTo);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("All Tasks Assigned To TM are Retreived Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("All Tasks Assigned To TM Are Not Retreived!!");
+                }
             }
-            catch (Exception ex)
-            {                
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+           
             finally
             {
                 con.Close();
@@ -327,12 +345,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine(" Tasks are Retreived Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Tasks Are Not Retreived!!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -342,31 +364,31 @@ namespace ProjectTracker.DEL
         #endregion
 
 
-        #region DEL Method - Delete All Tasks
-        public int DeleteTaskDetailsDEL(int TaskId)
-        {
-            int result = 0;
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "Delete");
-                cmd.Parameters.AddWithValue("@TaskId", TaskId);
-                result = cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            finally
-            {
-                con.Close();
-            }
-            return result;
-        }
-        #endregion
+        //#region DEL Method - Delete All Tasks
+        //public int DeleteTaskDetailsDEL(int TaskId)
+        //{
+        //    int result = 0;
+        //    try
+        //    {
+        //        con.Open();
+        //        SqlCommand cmd = new SqlCommand("sp_all_tbl_task_details", con);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@Action", "Delete");
+        //        cmd.Parameters.AddWithValue("@TaskId", TaskId);
+        //        result = cmd.ExecuteNonQuery();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        con.Close();
+        //    }
+        //    return result;
+        //}
+        //#endregion
 
 
         #region DEL Method - Update Task Details
@@ -385,12 +407,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@TaskName", taskName);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
+                if (result> 0)
+                {
+                    Console.WriteLine("All Tasks are Updated Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("All Tasks Are Not Updated!!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -413,12 +439,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Status ", status);
                 cmd.Parameters.AddWithValue("@TaskId", taskId);
                 result = cmd.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    Console.WriteLine("All Tasks are Updated Successfully Based On Status!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("All Tasks Are Not Updated!!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();
@@ -446,12 +476,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@LeaveType", leaveType);
                 cmd.Parameters.AddWithValue("@Status", status);
                 result = cmd.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    Console.WriteLine("All Leaves are Applied Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.InsertionError("Leaves are not applied !!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+           
             finally
             {
                 con.Close();
@@ -474,12 +508,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Status ", status);
                 cmd.Parameters.AddWithValue("@LeaveId", leaveId);
                 result = cmd.ExecuteNonQuery();
+                if (result > 0)
+                {
+                    Console.WriteLine("Applied Leaves Are Updated Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.UpdationError("Applied Leaves Are Not Updated!!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+          
             finally
             {
                 con.Close();
@@ -502,12 +540,17 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@AppliedBy", appliedBy);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine("Leave Details For TM are Retreived Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Tasks Are Not Retreived!!");
+                }
+
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+           
             finally
             {
                 con.Close();
@@ -529,12 +572,16 @@ namespace ProjectTracker.DEL
                 cmd.Parameters.AddWithValue("@Action", "View C");               
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    Console.WriteLine(" Pending Leaves For PM are Retreived Successfully!!");
+                }
+                else
+                {
+                    throw new Task_and_Leave_Tracker.RetreivalError("Pending Leaves  Are Not Retreived!!");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            
             finally
             {
                 con.Close();

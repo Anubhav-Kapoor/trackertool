@@ -9,7 +9,12 @@ namespace Task_and_Leave_Tracker
 
     public class CustomExceptionsError : Exception
     {
-        private String msg;
+        public  String msg;
+        public CustomExceptionsError()
+        {
+            this.msg = "";
+
+        }
 
         public CustomExceptionsError(String msg)
         {
@@ -20,8 +25,13 @@ namespace Task_and_Leave_Tracker
 
     public class UserNotFoundError : Exception
     {
-        private String msg;
+        public String msg;
 
+
+        public UserNotFoundError()
+        {
+            this.msg = "";
+        }
         public UserNotFoundError(String msg)
         {
             this.msg = msg;
@@ -30,7 +40,11 @@ namespace Task_and_Leave_Tracker
 
     public class EmailNotSentError : Exception
     {
-        private String msg;
+        public  String msg;
+        public EmailNotSentError()
+        {
+            this.msg = "";
+        }
 
         public EmailNotSentError(String msg)
         {
@@ -41,20 +55,42 @@ namespace Task_and_Leave_Tracker
     public class InsertionError : Exception
     {
 
-        private String msg;
+        public  String msg;
+        public InsertionError()
+        {
+            this.msg = "";
+            
+        }
 
         public InsertionError(String msg)
         {
             this.msg = msg;
-            Console.WriteLine(msg);
+            
         }
     }
 
     public class RetreivalError : Exception
     {
-        private String msg;
+        public  String msg;
 
+        public RetreivalError()
+        {
+            this.msg = "";
+        }
         public RetreivalError(String msg)
+        {
+            this.msg = msg;
+        }
+    }
+
+    public class DeletionError : Exception
+    {
+        public String msg;
+        public DeletionError()
+        {
+            this.msg = "";
+        }
+        public DeletionError(String msg)
         {
             this.msg = msg;
         }
@@ -62,18 +98,28 @@ namespace Task_and_Leave_Tracker
 
     public class UpdationError : Exception
     {
-        private String msg;
+        public  String msg;
 
+        public UpdationError()
+        {
+            this.msg = "";
+        }
         public UpdationError(String msg)
         {
             this.msg = msg;
         }
     }
 
+   
+
     public class DataNotFoundError : Exception
     {
-        private String msg;
+        public  String msg;
 
+        public DataNotFoundError()
+        {
+            this.msg = "";
+        }
         public DataNotFoundError(String msg)
         {
             this.msg = msg;
@@ -82,8 +128,12 @@ namespace Task_and_Leave_Tracker
 
     public class UserAlreadyExistsError : Exception
     {
-        private String msg;
+        public  String msg;
 
+        public UserAlreadyExistsError()
+        {
+            this.msg = "";
+        }
         public UserAlreadyExistsError(String msg)
         {
             this.msg = msg;
@@ -92,8 +142,12 @@ namespace Task_and_Leave_Tracker
 
     public class AuthenticationError : Exception
     {
-        private String msg;
+        public  String msg;
 
+        public AuthenticationError()
+        {
+            this.msg = "";
+        }
         public AuthenticationError(String msg)
         {
             this.msg = msg;
