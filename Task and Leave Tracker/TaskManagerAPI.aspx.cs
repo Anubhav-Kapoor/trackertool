@@ -24,7 +24,7 @@ namespace Task_and_Leave_Tracker
 
         #region API Method -  Mail Method
         [System.Web.Services.WebMethod]
-        public static Boolean SendingMail(String mailId, String from, String subject, String body)
+        public static Boolean SendingMail(String[] mailId, String from, String subject, String body)
         {
 
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
@@ -33,25 +33,29 @@ namespace Task_and_Leave_Tracker
             Boolean value = false;
             try
             {
-                if (!(String.IsNullOrWhiteSpace(mailId)) && !(String.IsNullOrWhiteSpace(from)) && !(String.IsNullOrWhiteSpace(subject)) && !(String.IsNullOrWhiteSpace(body)))
+                if (mailId != null && (mailId.Length) > 0 && !(String.IsNullOrWhiteSpace(from)) && !(String.IsNullOrWhiteSpace(subject)) && !(String.IsNullOrWhiteSpace(body)))
                 {
                     MailMessage mailMessage = new MailMessage();
-                    mailMessage.To.Add(mailId);
+                    foreach (String m in mailId)
+                    {
+                        mailMessage.To.Add(m);
+                    }
+
                     mailMessage.From = new MailAddress(from);
                     mailMessage.Subject = subject;
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Body = body;
-                    SmtpClient smtpClient = new SmtpClient("mailin2.owenscorning.com");
+                    SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
                     smtpClient.Send(mailMessage);
 
                     resultObject.Response.Status = "Success";
-                    resultObject.Response.Reason = "Email has been sent!!";
+                    resultObject.Response.Reason = "Welcome To Tracker Tool!!";
                     value = true;
                 }
                 else
                 {
-                    resultObject.Response.Reason = "Could not sent the email";
-                    throw new EmailNotSentError(resultObject.Response.Reason);
+                   
+                    throw new EmailNotSentError( "Could not sent the email");
                 }
             }
             catch (EmailNotSentError ex)
@@ -73,7 +77,6 @@ namespace Task_and_Leave_Tracker
         [System.Web.Services.WebMethod]
         public static String CreateAccount(String ntid, String firstName, String lastName, String roleId, String phone, String email, String password)
         {
-
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
@@ -82,51 +85,25 @@ namespace Task_and_Leave_Tracker
             {
                 if (!value)
                 {
-
                     if (!(String.IsNullOrWhiteSpace(ntid)) && !(String.IsNullOrWhiteSpace(firstName)) && !(String.IsNullOrWhiteSpace(lastName)) && !(String.IsNullOrWhiteSpace(roleId)) && !(String.IsNullOrWhiteSpace(phone)) && !(String.IsNullOrWhiteSpace(email)) && !(String.IsNullOrWhiteSpace(password)))
                     {
                         int result = userBll.InsertUserDetailsBLL(ntid, firstName, lastName, roleId, phone, email, password); // Inserting User Details
 
                         if (result > 0)
                         {
-
                             String from = "bhawneet.singh@owenscorning.com";
                             String subject = "Welcome to Tracker Tool";
                             String body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-
-                            Boolean val = SendingMail(email, from, subject, body); // Sending Mail To User
-
-                            if (val)
-                            {
-                                resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "You have successfully registered with Tracker Tool.";
-                            }
-                            else
-                            {
-                                resultObject.Response.Reason = "Could not sent the email!!";
-                                throw new EmailNotSentError(resultObject.Response.Reason);
-                            }
-
-                        }
-                        else
-                        {
-                            resultObject.Response.Reason = "Your Account Is Not Created!!";
-                            throw new InsertionError(resultObject.Response.Reason);
-                        }
+                            String[] to = { email };
+                            Boolean val = SendingMail(to, from, subject, body); // Sending Mail To User                           
+                        }                        
                     }
                     else
-                    {
-                        resultObject.Response.Reason = "Input data is invalid.";
-                        throw new DataNotFoundError(resultObject.Response.Reason);
+                    {                       
+                        throw new DataNotFoundError("Input data is invalid.");
                     }
                 }
-
-                else
-                {
-                    resultObject.Response.Reason = "User exists already. Try with different ntid!!";
-                    throw new UserAlreadyExistsError(resultObject.Response.Reason);
-                }
-
+                
             }
             catch (InsertionError ex)
             {
@@ -162,17 +139,12 @@ namespace Task_and_Leave_Tracker
         [System.Web.Services.WebMethod]
         public static String GetUserDetails()
         {
-
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-
             try
             {
-
                 string name = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-
-
             }
             catch (Exception ex)
             {
@@ -189,7 +161,6 @@ namespace Task_and_Leave_Tracker
         [System.Web.Services.WebMethod]
         public static String Login(String ntid, String password)
         {
-
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
@@ -200,41 +171,30 @@ namespace Task_and_Leave_Tracker
                     DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); // Retreiving User Details Through Ntid
                     if (dt.Rows.Count > 0)
                     {
-
                         String Password = dt.Rows[0]["Password"].ToString();
                         String UserGuid = dt.Rows[0]["UserGuid"].ToString();
                         string hashedPassword = Security.HashSHA1(password + UserGuid);
 
                         if (Password == hashedPassword)
                         {
-
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "User Authentication Success";
                         }
                         else
-                        {
-                            resultObject.Response.Reason = "Username Or Password is Incorrect!!!";
-                            throw new AuthenticationError(resultObject.Response.Reason);
+                        {                            
+                            throw new AuthenticationError("Username Or Password is Incorrect!!");
                         }
-
-                    }
-                    else
-                    {
-                        resultObject.Response.Reason = "User does not exist!!!";
-                        throw new UserNotFoundError(resultObject.Response.Reason);
-                    }
+                    }                   
                 }
                 else
-                {
-                    resultObject.Response.Reason = "Username or Password cannot be empty!!!";
-                    throw new DataNotFoundError(resultObject.Response.Reason);
+                {                    
+                    throw new DataNotFoundError("Username or Password cannot be empty!!");
                 }
             }
             catch (UserNotFoundError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
-
             }
             catch (AuthenticationError ex)
             {
@@ -246,6 +206,11 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
             }
+            catch (RetreivalError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            } 
             catch (Exception ex)
             {
                 resultObject.Response.Status = "Failure";
@@ -268,66 +233,58 @@ namespace Task_and_Leave_Tracker
                 if (!(String.IsNullOrWhiteSpace(ntid)))
                 {
                     DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); // Retreiving User Details Through Ntid
-                    String FirstName = dt.Rows[0]["FirstName"].ToString();
-                    String LastName = dt.Rows[0]["LastName"].ToString();
-                    String RoleId = dt.Rows[0]["RoleId"].ToString();
-                    String PhoneNo = dt.Rows[0]["PhoneNo"].ToString();
-                    String EmailId = dt.Rows[0]["EmailId"].ToString();
-                    String UserGuid = dt.Rows[0]["UserGuid"].ToString();
-                    String Password = Membership.GeneratePassword(12, 9);
-                    String hashedPwd = Security.HashSHA1(Password + UserGuid);
-                    int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedPwd, UserGuid); // Updating User Details
-                    if (result > 0)
+                    if (dt.Rows.Count > 0)
                     {
-                        String from = "bhawneet.singh@owenscorning.com";
-                        String subject = "Tracker Tool - Password Reset";
-                        String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
-
-                        Boolean val = SendingMail(EmailId, from, subject, body); // Sending Mail To User
-
-                        if (val)
+                        String FirstName = dt.Rows[0]["FirstName"].ToString();
+                        String LastName = dt.Rows[0]["LastName"].ToString();
+                        String RoleId = dt.Rows[0]["RoleId"].ToString();
+                        String PhoneNo = dt.Rows[0]["PhoneNo"].ToString();
+                        String EmailId = dt.Rows[0]["EmailId"].ToString();
+                        String UserGuid = dt.Rows[0]["UserGuid"].ToString();
+                        String Password = Membership.GeneratePassword(12, 9);
+                        String hashedPwd = Security.HashSHA1(Password + UserGuid);
+                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedPwd, UserGuid); // Updating User Details
+                        if (result > 0)
                         {
-                            resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "You are successfully registered.";
-                        }
-                        else
-                        {
-                            resultObject.Response.Reason = "Could not sent the email!!!";
-                            throw new EmailNotSentError(resultObject.Response.Reason);
+                            String from = "bhawneet.singh@owenscorning.com";
+                            String subject = "Tracker Tool - Password Reset";
+                            String body = "Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Temporary Password for TrackerTool is : " + Password + "<br />Please change your password after login. " + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                            String[] to = { EmailId };
+                            Boolean val = SendingMail(to, from, subject, body); // Sending Mail To User                        
                         }
                     }
-                    else
-                    {
-                        resultObject.Response.Reason = " User Details Are Not Updated!!";
-                        throw new UpdationError(resultObject.Response.Reason);
-                    }
-
                 }
                 else
-                {
-                    resultObject.Response.Reason = "Enter Your Correct Ntid !!";
-                    throw new DataNotFoundError(resultObject.Response.Reason);
+                {                    
+                    throw new DataNotFoundError("Enter Your Correct Ntid !!");
                 }
             }
             catch (EmailNotSentError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
-
             }
             catch (UpdationError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
-
             }
             catch (DataNotFoundError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
-
             }
-            catch (CustomExceptionsError ex)
+            catch (UserNotFoundError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (RetreivalError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.Message;
+            }
+            catch (Exception ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.Message;
@@ -349,60 +306,41 @@ namespace Task_and_Leave_Tracker
                 if (!(String.IsNullOrWhiteSpace(ntid)) && !(String.IsNullOrWhiteSpace(currentPassword)) && !(String.IsNullOrWhiteSpace(newPassword)))
                 {
                     DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid);  // Retreiving User Details Through Ntid
-
-                    String OldPassword = dt.Rows[0]["Password"].ToString();
-                    String UserGuid = dt.Rows[0]["UserGuid"].ToString();
-                    String hashedPwd = Security.HashSHA1(currentPassword + UserGuid);
-
-                    String FirstName = dt.Rows[0]["FirstName"].ToString();
-                    String LastName = dt.Rows[0]["LastName"].ToString();
-                    String RoleId = dt.Rows[0]["RoleId"].ToString();
-                    String PhoneNo = dt.Rows[0]["PhoneNo"].ToString();
-                    String EmailId = dt.Rows[0]["EmailId"].ToString();
-
-                    if (OldPassword == hashedPwd)
+                    if (dt.Rows.Count > 0)
                     {
-                        Guid userGuid = System.Guid.NewGuid();
-
-                        // Hash the newPassword together with our unique userGuid
-                        String hashedNewPassword = Security.HashSHA1(newPassword + userGuid.ToString());
-                        int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword, userGuid.ToString());  // Updating User Details
-
-                        if (result > 0)
+                        String OldPassword = dt.Rows[0]["Password"].ToString();
+                        String UserGuid = dt.Rows[0]["UserGuid"].ToString();
+                        String hashedPwd = Security.HashSHA1(currentPassword + UserGuid);
+                        String FirstName = dt.Rows[0]["FirstName"].ToString();
+                        String LastName = dt.Rows[0]["LastName"].ToString();
+                        String RoleId = dt.Rows[0]["RoleId"].ToString();
+                        String PhoneNo = dt.Rows[0]["PhoneNo"].ToString();
+                        String EmailId = dt.Rows[0]["EmailId"].ToString();
+                        if (OldPassword == hashedPwd)
                         {
-                            String from = "bhawneet.singh@owenscorning.com";
-                            String subject = " Tracker Tool -  Password Changed ";
-                            String body = " Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Password for TrackerTool has been Changed!!" + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                            Guid userGuid = System.Guid.NewGuid();
+                            // Hash the newPassword together with our unique userGuid
+                            String hashedNewPassword = Security.HashSHA1(newPassword + userGuid.ToString());
+                            int result = userBll.UpdateUserDetailsBLL(ntid, FirstName, LastName, RoleId, PhoneNo, EmailId, hashedNewPassword, userGuid.ToString());  // Updating User Details
 
-                            Boolean val = SendingMail(EmailId, from, subject, body); // Sending Mail To User
-
-                            if (val)
+                            if (result > 0)
                             {
-                                resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "You are successfully registered.";
-                            }
-                            else
-                            {
-                                resultObject.Response.Reason = "Could not sent the email !!";
-                                throw new EmailNotSentError(resultObject.Response.Reason);
-                            }
+                                String from = "bhawneet.singh@owenscorning.com";
+                                String subject = " Tracker Tool -  Password Changed ";
+                                String body = " Dear " + FirstName + " " + LastName + ",<br /><br />" + "Your Password for TrackerTool has been Changed!!" + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                                String[] to = { EmailId };
+                                Boolean val = SendingMail(to, from, subject, body); // Sending Mail To User
+                            }                            
                         }
                         else
-                        {
-                            resultObject.Response.Reason = " Your Password Is Not Changed";
-                            throw new UpdationError(resultObject.Response.Reason);
+                        {                           
+                            throw new DataNotFoundError("Passwords Do Not Match!!");
                         }
-                    }
-                    else
-                    {
-                        resultObject.Response.Reason = "Passwords Do Not Match!!";
-                        throw new DataNotFoundError(resultObject.Response.Reason);
-                    }
+                    }                    
                 }
                 else
                 {
-                    resultObject.Response.Reason = "Enter All The details!!";
-                    throw new DataNotFoundError(resultObject.Response.Reason);
+                    throw new DataNotFoundError("Enter All The details!!");
                 }
             }
             catch (EmailNotSentError ex)
@@ -416,6 +354,11 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Reason = ex.msg;
             }
             catch (DataNotFoundError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (UserNotFoundError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
@@ -465,24 +408,44 @@ namespace Task_and_Leave_Tracker
                             taskList.Add(t);                                        // Adding Task Instance To TaskList
                         }
                         resultObject.Response.taskObject = oSerializer.Serialize(taskList); // Assigning TaskList to Response Class Instance[taskObject]
+                        
+                        DataTable dt3 = userBll.ViewUserDetailsByNtidBLL(assignedTo);
+                        User u1 = null;
+                        if (dt3.Rows.Count > 0)
+                        {
+                           u1= new User();
+                            u1.emailId = dt3.Rows[0]["EmailId"].ToString();
+                        }
+
+                        DataTable dt4 = userBll.ViewUserDetailsByNtidBLL(createdBy);
+                        User u2 = null;
+                        if (dt4.Rows.Count > 0)
+                        {
+                            u2= new User();
+                            u2.emailId = dt4.Rows[0]["EmailId"].ToString();
+                        }
+
+                        String from = "bhawneet.singh@owenscorning.com";
+                        String subject = "Welcome to Tracker Tool";
+                        String body = "Dear " + assignedTo + ",<br/>" + " <br />Your Task is : " + taskDesc + " <br /> Assigned By :-" + createdBy + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                        String[] to = { u1.emailId, u2.emailId};
+                        Boolean val = SendingMail(to, from, subject, body); // Sending Mail To User
+
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "New Task Is Created!!";
-                    }
-                    else
-                    {
-                        resultObject.Response.Reason = "Task is Not Created. Try again!!";
-                        throw new InsertionError(resultObject.Response.Reason);
-                    }
-
+                    }                   
                 }
                 else
-                {
-                    resultObject.Response.Reason = "Input data is invalid!!";
-                    throw new DataNotFoundError(resultObject.Response.Reason);
+                {                    
+                    throw new DataNotFoundError("Input data is invalid!!");
                 }
             }
-
             catch (InsertionError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (RetreivalError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
@@ -509,7 +472,6 @@ namespace Task_and_Leave_Tracker
             JavaScriptSerializer oSerializer = new JavaScriptSerializer();
             RootObjectResponse resultObject = new RootObjectResponse();
             resultObject.Response = new Response();
-
             try
             {
                 DataTable dt = userBll.GetDetailsForTMBLL(); // Retreiving Details For TM
@@ -517,7 +479,6 @@ namespace Task_and_Leave_Tracker
                 if (dt.Rows.Count > 0)
                 {
                     List<User> userList = new List<User>(); // Initializing UserList Instance
-
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         User t = new User();            // Initializing User Instance
@@ -530,12 +491,7 @@ namespace Task_and_Leave_Tracker
                     resultObject.Response.userObject = oSerializer.Serialize(userList);// Assigning UserList to Response Class Instance[userObject]
                     resultObject.Response.Status = "Success";
                     resultObject.Response.Reason = "Users are added!!";
-                }
-                else
-                {
-                    resultObject.Response.Reason = "Users are not added!!";
-                    throw new RetreivalError(resultObject.Response.Reason);
-                }
+                }            
 
             }
             catch (RetreivalError ex)
@@ -551,7 +507,6 @@ namespace Task_and_Leave_Tracker
             }
 
             return oSerializer.Serialize(resultObject);
-
         }
         #endregion
 
@@ -611,7 +566,7 @@ namespace Task_and_Leave_Tracker
                     {
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "No Task Found!!!";
-                    }                    
+                    }
                     DataTable dt2 = new DataTable();
                     List<Leave> leaveList = new List<Leave>();                   // Initializing LeaveList Instance               
                     if (u.roleId == "200")
@@ -645,14 +600,14 @@ namespace Task_and_Leave_Tracker
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "No Data Retrieved!!";
                     }
-                }
-                else
-                {
-                    resultObject.Response.Reason = "User Does'nt Exist!!!";
-                    throw new UserNotFoundError(resultObject.Response.Reason);
-                }
+                }               
             }
             catch (UserNotFoundError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (RetreivalError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
@@ -663,12 +618,8 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
-
         }
         #endregion
-
-
-        
 
 
         #region API Method - Update Leave Details
@@ -697,11 +648,6 @@ namespace Task_and_Leave_Tracker
                             u.ntid = dt.Rows[0]["Ntid"].ToString();
                             u.roleId = dt.Rows[0]["roleId"].ToString();
                             resultObject.Response.userObject = oSerializer.Serialize(u);
-                        }
-                        else
-                        {
-                            resultObject.Response.Reason = "No Data Retrieved!!";
-                            throw new RetreivalError(resultObject.Response.Reason);
                         }
                         DataTable dt1 = new DataTable();
                         List<Leave> leaveList = new List<Leave>();              // Initializing LeaveList Instance
@@ -736,18 +682,8 @@ namespace Task_and_Leave_Tracker
                             resultObject.Response.Status = "Success";
                             resultObject.Response.Reason = "No Pending Leaves Found!!";
                         }
-                    }
-                    else
-                    {
-                        resultObject.Response.Reason = "No Data Retrieved!!";
-                        throw new RetreivalError(resultObject.Response.Reason);
-                    }
-                }
-                else
-                {
-                    resultObject.Response.Reason = "User Does'nt Exist!!";
-                    throw new UserNotFoundError(resultObject.Response.Reason);
-                }
+                    }                   
+                }                
             }
             catch (RetreivalError ex)
             {
@@ -758,6 +694,16 @@ namespace Task_and_Leave_Tracker
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;
+            }
+            catch (UpdationError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (Exception ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.Message;
             }
             return oSerializer.Serialize(resultObject);
         }
@@ -778,40 +724,34 @@ namespace Task_and_Leave_Tracker
                 DateTime createdDate = DateTime.Now;
 
                 if (!(string.IsNullOrWhiteSpace(fromDate)) && createdDate != null && !(string.IsNullOrWhiteSpace(toDate)) && !(string.IsNullOrWhiteSpace(appliedBy)) && !(string.IsNullOrWhiteSpace(status)) && !(string.IsNullOrWhiteSpace(leaveDesc)))
-                {                  
-                        result = userBll.InsertLeaveDetailsBLL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
+                {
+                    result = userBll.InsertLeaveDetailsBLL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
 
-                        if (result > 0)
+                    if (result > 0)
+                    {
+                        List<Leave> leaveList = new List<Leave>();  //Initializing LeaveList Instance
+                        DataTable dt = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
+
+                        for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            List<Leave> leaveList = new List<Leave>();  //Initializing LeaveList Instance
-                            DataTable dt = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
-
-                            for (int i = 0; i < dt.Rows.Count; i++)
-                            {
-                                Leave l = new Leave();                  //Initializing Leave Instance
-                                l.leaveId = Convert.ToInt32(dt.Rows[i]["LeaveId"]);
-                                l.leaveDesc = dt.Rows[i]["Leavedesc"].ToString();
-                                l.fromDate = Convert.ToDateTime(dt.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
-                                l.toDate = Convert.ToDateTime(dt.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
-                                l.appliedBy = dt.Rows[i]["AppliedBy"].ToString();
-                                l.leaveType = dt.Rows[i]["LeaveType"].ToString();
-                                l.status = dt.Rows[i]["Status"].ToString();
-                                leaveList.Add(l);                       // Adding Leave Instance To LeaveList
-                            }
-                            resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);// Assigning TaskList to Response Class Instance[taskObject]
-                            resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "Leave Applied Successfully!!!";
+                            Leave l = new Leave();                  //Initializing Leave Instance
+                            l.leaveId = Convert.ToInt32(dt.Rows[i]["LeaveId"]);
+                            l.leaveDesc = dt.Rows[i]["Leavedesc"].ToString();
+                            l.fromDate = Convert.ToDateTime(dt.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                            l.toDate = Convert.ToDateTime(dt.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
+                            l.appliedBy = dt.Rows[i]["AppliedBy"].ToString();
+                            l.leaveType = dt.Rows[i]["LeaveType"].ToString();
+                            l.status = dt.Rows[i]["Status"].ToString();
+                            leaveList.Add(l);                       // Adding Leave Instance To LeaveList
                         }
-                        else
-                        {                        
-                            resultObject.Response.Reason = "Unable to apply Leave. Please Try again!!!";
-                            throw new InsertionError(resultObject.Response.Reason);
-                        }                   
+                        resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);// Assigning TaskList to Response Class Instance[taskObject]
+                        resultObject.Response.Status = "Success";
+                        resultObject.Response.Reason = "Leave Applied Successfully!!!";
+                    }                    
                 }
                 else
-                {                   
-                    resultObject.Response.Reason = "Fill All The Details";
-                    throw new DataNotFoundError(resultObject.Response.Reason);
+                {
+                    throw new DataNotFoundError("Fill All The Details");
                 }
             }
             catch (InsertionError ex)
@@ -820,6 +760,11 @@ namespace Task_and_Leave_Tracker
                 resultObject.Response.Reason = ex.msg;
             }
             catch (DataNotFoundError ex)
+            {
+                resultObject.Response.Status = "Failure";
+                resultObject.Response.Reason = ex.msg;
+            }
+            catch (RetreivalError ex)
             {
                 resultObject.Response.Status = "Failure";
                 resultObject.Response.Reason = ex.msg;

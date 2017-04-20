@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TLTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tbl_leave_details">
+    <Key>
+      <PropertyRef Name="LeaveId" />
+    </Key>
+    <Property Name="LeaveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Leavedesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FromDate" Type="DateTime" Precision="0" />
+    <Property Name="ToDate" Type="DateTime" Precision="0" />
+    <Property Name="AppliedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LeaveType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tbl_user_details" Relationship="TLTModel.FK__tbl_leave__Appli__5EBF139D" FromRole="tbl_leave_details" ToRole="tbl_user_details" />
+  </EntityType>
+  <EntityType Name="tbl_task_details">
+    <Key>
+      <PropertyRef Name="TaskId" />
+    </Key>
+    <Property Name="TaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Taskdesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Created_Date" Type="DateTime" Precision="0" />
+    <Property Name="Expiry_Date" Type="DateTime" Precision="0" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AssignedTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tbl_user_details" Relationship="TLTModel.FK__tbl_task___Assig__5DCAEF64" FromRole="tbl_task_details" ToRole="tbl_user_details" />
+    <NavigationProperty Name="tbl_user_details1" Relationship="TLTModel.FK__tbl_task___Creat__5CD6CB2B" FromRole="tbl_task_details" ToRole="tbl_user_details" />
+  </EntityType>
+  <EntityType Name="tbl_user_roles">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RoleDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Rights" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tbl_user_details" Relationship="TLTModel.fk_roleid" FromRole="tbl_user_roles" ToRole="tbl_user_details" />
+  </EntityType>
+  <EntityContainer Name="TLTEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tbl_leave_details" EntityType="Self.tbl_leave_details" />
+    <EntitySet Name="tbl_task_details" EntityType="Self.tbl_task_details" />
+    <EntitySet Name="tbl_user_roles" EntityType="Self.tbl_user_roles" />
+    <FunctionImport Name="sp_all_tbl_leave_details" ReturnType="Collection(TLTModel.sp_all_tbl_leave_details_Result)">
+      <Parameter Name="LeaveId" Mode="In" Type="Int32" />
+      <Parameter Name="Leavedesc" Mode="In" Type="String" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="AppliedBy" Mode="In" Type="String" />
+      <Parameter Name="LeaveType" Mode="In" Type="String" />
+      <Parameter Name="Status" Mode="In" Type="String" />
+      <Parameter Name="Action" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_all_tbl_task_details" ReturnType="Collection(TLTModel.sp_all_tbl_task_details_Result)">
+      <Parameter Name="TaskId" Mode="In" Type="Int32" />
+      <Parameter Name="Taskdesc" Mode="In" Type="String" />
+      <Parameter Name="Created_Date" Mode="In" Type="DateTime" />
+      <Parameter Name="Expiry_Date" Mode="In" Type="DateTime" />
+      <Parameter Name="CreatedBy" Mode="In" Type="String" />
+      <Parameter Name="AssignedTo" Mode="In" Type="String" />
+      <Parameter Name="Status" Mode="In" Type="String" />
+      <Parameter Name="Action" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_all_tbl_user_details" ReturnType="Collection(TLTModel.sp_all_tbl_user_details_Result)">
+      <Parameter Name="Ntid" Mode="In" Type="String" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="RoleId" Mode="In" Type="String" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="EmailId" Mode="In" Type="String" />
+      <Parameter Name="Password" Mode="In" Type="String" />
+      <Parameter Name="Action" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_all_tbl_user_roles" ReturnType="Collection(TLTModel.sp_all_tbl_user_roles_Result)">
+      <Parameter Name="RoleId" Mode="In" Type="String" />
+      <Parameter Name="RoleDesc" Mode="In" Type="String" />
+      <Parameter Name="Rights" Mode="In" Type="String" />
+      <Parameter Name="Action" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="tbl_user_details" EntityType="TLTModel.tbl_user_details" />
+    <AssociationSet Name="FK__tbl_leave__Appli__5EBF139D" Association="TLTModel.FK__tbl_leave__Appli__5EBF139D">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_leave_details" EntitySet="tbl_leave_details" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tbl_task___Assig__5DCAEF64" Association="TLTModel.FK__tbl_task___Assig__5DCAEF64">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_task_details" EntitySet="tbl_task_details" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tbl_task___Creat__5CD6CB2B" Association="TLTModel.FK__tbl_task___Creat__5CD6CB2B">
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+      <End Role="tbl_task_details" EntitySet="tbl_task_details" />
+    </AssociationSet>
+    <AssociationSet Name="fk_roleid" Association="TLTModel.fk_roleid">
+      <End Role="tbl_user_roles" EntitySet="tbl_user_roles" />
+      <End Role="tbl_user_details" EntitySet="tbl_user_details" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="sp_all_tbl_leave_details_Result">
+    <Property Type="Int32" Name="LeaveId" Nullable="false" />
+    <Property Type="String" Name="Leavedesc" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="FromDate" Nullable="true" />
+    <Property Type="DateTime" Name="ToDate" Nullable="true" />
+    <Property Type="String" Name="AppliedBy" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LeaveType" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="sp_all_tbl_task_details_Result">
+    <Property Type="Int32" Name="TaskId" Nullable="false" />
+    <Property Type="String" Name="Taskdesc" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="Created_Date" Nullable="true" />
+    <Property Type="DateTime" Name="Expiry_Date" Nullable="true" />
+    <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="AssignedTo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="sp_all_tbl_user_details_Result">
+    <Property Type="String" Name="Ntid" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="RoleId" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="EmailId" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="20" />
+  </ComplexType>
+  <ComplexType Name="sp_all_tbl_user_roles_Result">
+    <Property Type="String" Name="RoleId" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="RoleDesc" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Rights" Nullable="true" MaxLength="20" />
+  </ComplexType>
+  <EntityType Name="tbl_user_details">
+    <Key>
+      <PropertyRef Name="Ntid" />
+    </Key>
+    <Property Name="Ntid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="EmailId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tbl_leave_details" Relationship="TLTModel.FK__tbl_leave__Appli__5EBF139D" FromRole="tbl_user_details" ToRole="tbl_leave_details" />
+    <NavigationProperty Name="tbl_task_details" Relationship="TLTModel.FK__tbl_task___Assig__5DCAEF64" FromRole="tbl_user_details" ToRole="tbl_task_details" />
+    <NavigationProperty Name="tbl_task_details1" Relationship="TLTModel.FK__tbl_task___Creat__5CD6CB2B" FromRole="tbl_user_details" ToRole="tbl_task_details" />
+    <NavigationProperty Name="tbl_user_roles" Relationship="TLTModel.fk_roleid" FromRole="tbl_user_details" ToRole="tbl_user_roles" />
+  </EntityType>
+  <Association Name="FK__tbl_leave__Appli__5EBF139D">
+    <End Type="TLTModel.tbl_user_details" Role="tbl_user_details" Multiplicity="0..1" />
+    <End Type="TLTModel.tbl_leave_details" Role="tbl_leave_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_leave_details">
+        <PropertyRef Name="AppliedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tbl_task___Assig__5DCAEF64">
+    <End Type="TLTModel.tbl_user_details" Role="tbl_user_details" Multiplicity="0..1" />
+    <End Type="TLTModel.tbl_task_details" Role="tbl_task_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_task_details">
+        <PropertyRef Name="AssignedTo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tbl_task___Creat__5CD6CB2B">
+    <End Type="TLTModel.tbl_user_details" Role="tbl_user_details" Multiplicity="0..1" />
+    <End Type="TLTModel.tbl_task_details" Role="tbl_task_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_details">
+        <PropertyRef Name="Ntid" />
+      </Principal>
+      <Dependent Role="tbl_task_details">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_roleid">
+    <End Type="TLTModel.tbl_user_roles" Role="tbl_user_roles" Multiplicity="1" />
+    <End Type="TLTModel.tbl_user_details" Role="tbl_user_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_user_roles">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="tbl_user_details">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
