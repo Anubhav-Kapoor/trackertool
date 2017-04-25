@@ -9,7 +9,7 @@ namespace Task_and_Leave_Tracker
 
     public class CustomExceptionsError : Exception
     {
-        public  String msg;
+        public String msg;
         public CustomExceptionsError()
         {
             this.msg = "";
@@ -17,9 +17,10 @@ namespace Task_and_Leave_Tracker
         }
 
         public CustomExceptionsError(String msg)
+            : base(msg)
         {
             this.msg = msg;
-                     
+
         }
     }
 
@@ -33,6 +34,7 @@ namespace Task_and_Leave_Tracker
             this.msg = "";
         }
         public UserNotFoundError(String msg)
+            : base(msg)
         {
             this.msg = msg;
         }
@@ -40,13 +42,14 @@ namespace Task_and_Leave_Tracker
 
     public class EmailNotSentError : Exception
     {
-        public  String msg;
+        public String msg;
         public EmailNotSentError()
         {
             this.msg = "";
         }
 
         public EmailNotSentError(String msg)
+            : base(msg)
         {
             this.msg = msg;
         }
@@ -55,30 +58,32 @@ namespace Task_and_Leave_Tracker
     public class InsertionError : Exception
     {
 
-        public  String msg;
+        public String msg;
         public InsertionError()
         {
             this.msg = "";
-            
+
         }
 
         public InsertionError(String msg)
+            : base(msg)
         {
             this.msg = msg;
-            
+
         }
     }
 
 
     public class RetreivalError : Exception
     {
-        public  String msg;
+        public String msg;
 
         public RetreivalError()
         {
             this.msg = "";
         }
         public RetreivalError(String msg)
+            : base(msg)
         {
             this.msg = msg;
         }
@@ -91,7 +96,7 @@ namespace Task_and_Leave_Tracker
         {
             this.msg = "";
         }
-        public DeletionError(String msg)
+        public DeletionError(String msg): base(msg)
         {
             this.msg = msg;
         }
@@ -99,29 +104,29 @@ namespace Task_and_Leave_Tracker
 
     public class UpdationError : Exception
     {
-        public  String msg;
+        public String msg;
 
         public UpdationError()
         {
             this.msg = "";
         }
-        public UpdationError(String msg)
+        public UpdationError(String msg): base(msg)
         {
             this.msg = msg;
         }
     }
 
-   
+
 
     public class DataNotFoundError : Exception
     {
-        public  String msg;
+        public String msg;
 
         public DataNotFoundError()
         {
             this.msg = "";
         }
-        public DataNotFoundError(String msg)
+        public DataNotFoundError(String msg): base(msg)
         {
             this.msg = msg;
         }
@@ -129,13 +134,13 @@ namespace Task_and_Leave_Tracker
 
     public class UserAlreadyExistsError : Exception
     {
-        public  String msg;
+        public String msg;
 
         public UserAlreadyExistsError()
         {
             this.msg = "";
         }
-        public UserAlreadyExistsError(String msg)
+        public UserAlreadyExistsError(String msg): base(msg)
         {
             this.msg = msg;
         }
@@ -143,13 +148,13 @@ namespace Task_and_Leave_Tracker
 
     public class AuthenticationError : Exception
     {
-        public  String msg;
+        public String msg;
 
         public AuthenticationError()
         {
             this.msg = "";
         }
-        public AuthenticationError(String msg)
+        public AuthenticationError(String msg): base(msg)
         {
             this.msg = msg;
         }

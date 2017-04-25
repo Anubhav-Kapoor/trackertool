@@ -35,13 +35,57 @@ namespace ProjectTracker.BLL
         public DataTable ViewUserDetailsByNtidBLL(String Ntid)
         {
             DataTable dt = null;
+
             try
             {
                 dt = userDEL.ViewUserDetailsByNtidDEL(Ntid);
+                
             }
-            catch (Exception ex)
+            catch (Task_and_Leave_Tracker.UserNotFoundError ex)
             {
-                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist!!");
+                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist !!");
+            }
+
+            return dt;
+
+        }
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] View All Users Through LeaveId
+        public DataTable ViewUserDetailsByLeaveIdBLL(int leaveId)
+        {
+            DataTable dt = null;
+
+            try
+            {
+                dt = userDEL.ViewUserDetailsByLeaveIdDEL(leaveId);
+
+            }
+            catch (Task_and_Leave_Tracker.UserNotFoundError ex)
+            {
+                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist !!");
+            }
+
+            return dt;
+
+        }
+        #endregion
+
+
+        #region BLL Method -[Invoking DEL Method] View All Users 
+        public DataTable ViewAllUserDetailsBLL()
+        {
+            DataTable dt = null;
+
+            try
+            {
+                dt = userDEL.ViewAllUserDetailsDEL();
+
+            }
+            catch (Task_and_Leave_Tracker.UserNotFoundError ex)
+            {
+                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist !!");
             }
 
             return dt;
@@ -179,7 +223,7 @@ namespace ProjectTracker.BLL
 
 
         #region  BLL Method -[Invoking DEL Method] View All Tasks Through TaskId
-        public DataTable ViewByIdBLL(int taskId)
+        public DataTable ViewAllTaskDetailsByIdBLL(int taskId)
         {
 
             DataTable dt = null;
@@ -241,7 +285,7 @@ namespace ProjectTracker.BLL
             }
             catch (Exception ex)
             {
-                throw new Task_and_Leave_Tracker.UpdationError("Task data updation failed !!");
+                throw new Task_and_Leave_Tracker.UpdationError("Task status updation failed !!");
             }
             return result;
         }
