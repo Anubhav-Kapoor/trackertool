@@ -49,28 +49,7 @@ namespace ProjectTracker.BLL
             return dt;
 
         }
-        #endregion
-
-
-        #region BLL Method -[Invoking DEL Method] View All Users Through LeaveId
-        public DataTable ViewUserDetailsByLeaveIdBLL(int leaveId)
-        {
-            DataTable dt = null;
-
-            try
-            {
-                dt = userDEL.ViewUserDetailsByLeaveIdDEL(leaveId);
-
-            }
-            catch (Task_and_Leave_Tracker.UserNotFoundError ex)
-            {
-                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist !!");
-            }
-
-            return dt;
-
-        }
-        #endregion
+        #endregion       
 
 
         #region BLL Method -[Invoking DEL Method] View All Users 
@@ -162,7 +141,7 @@ namespace ProjectTracker.BLL
 
             catch (Exception ex)
             {
-                throw new Task_and_Leave_Tracker.UserAlreadyExistsError("User exists already. Try with different ntid!!");
+                throw new Task_and_Leave_Tracker.UserAlreadyExistsError("User exists already.Try with new ntid!!");
             }
 
             return value;
@@ -335,6 +314,23 @@ namespace ProjectTracker.BLL
             catch (Exception ex)
             {
                 throw new Task_and_Leave_Tracker.RetreivalError("Unable to apply the leave!!");
+            }
+            return dt;
+        }
+        #endregion
+
+
+        #region BLL Method - View Leaves Details By LeaveId
+        public DataTable ViewLeaveDetailsByLeaveIdBLL(int leaveId)
+        {
+            DataTable dt = null;
+            try
+            {
+                dt = userDEL.ViewLeaveDetailsByLeaveIdDEL(leaveId);
+            }
+            catch (Exception ex)
+            {
+                throw new Task_and_Leave_Tracker.RetreivalError("Unable to view the leave!!");
             }
             return dt;
         }

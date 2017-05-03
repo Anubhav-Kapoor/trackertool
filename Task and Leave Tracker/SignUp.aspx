@@ -187,6 +187,15 @@
   </div>
 </div>
 
+     <!-- Loader -->
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: auto; z-index: 3500 ; display: none" class="loader la-ball-fussion la-3x">
+        <div style="color: #d8edee;"></div>
+        <div style="color: #ff414d;"></div>
+        <div style="color: #1aa6b7;"></div>
+        <div style="color: #022c42;"></div>
+    </div>
+    <div class="backdrop" style="z-index: 2500; display: none">
+    </div>
 </body>
 
 </html>

@@ -12,7 +12,7 @@
 
         <div class="row" style="margin-top: 20px">
             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                <form role="form" id="login_form">
+                <form role="form" id="login_form" method="post">
                     <fieldset>
                         <h2>Please Sign In</h2>
                         <hr class="colorgraph" />
@@ -38,7 +38,7 @@
                         <hr class="colorgraph" />
                         <div class="row form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <button class="button" ng-click="login()" value="Sign In" >Sign In</button>
+                                <button class="button" ng-click="login()" value="Sign In">Sign In</button>
 
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
@@ -61,8 +61,8 @@
                 </div>
                 <form id="forgot_form" class="form-horizontal">
                     <div class="modal-body">
-                        <div class="form-group" >      
-                             <label class="col-md-4 control-label"  >NTID</label>               
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">NTID</label>
                             <div class="col-md-6 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="button" ng-click="sendPwd()">Send</button>
-                        <button class="button"  data-dismiss="modal">Cancel</button>
+                        <button class="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -96,6 +96,16 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Loader -->
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: auto; z-index: 3500 ; display: none" class="loader la-ball-fussion la-3x">
+        <div style="color: #d8edee;"></div>
+        <div style="color: #ff414d;"></div>
+        <div style="color: #1aa6b7;"></div>
+        <div style="color: #022c42;"></div>
+    </div>
+    <div class="backdrop" style="z-index: 2500; display: none">
     </div>
 
 </body>

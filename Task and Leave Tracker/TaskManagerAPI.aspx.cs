@@ -33,7 +33,7 @@ namespace Task_and_Leave_Tracker
             Boolean value = false;
             try
             {
-                if (mailId != null && (mailId.Length) > 0 && !(String.IsNullOrWhiteSpace(from)) && !(String.IsNullOrWhiteSpace(subject)) && !(String.IsNullOrWhiteSpace(body)) && !(String.IsNullOrWhiteSpace(emailPM)))
+                if (mailId != null && (mailId.Length) > 0 && !(String.IsNullOrWhiteSpace(from)) && !(String.IsNullOrWhiteSpace(subject)) && !(String.IsNullOrWhiteSpace(body)))
                 {
                     MailMessage mailMessage = new MailMessage();
                     foreach (String m in mailId)
@@ -43,7 +43,10 @@ namespace Task_and_Leave_Tracker
 
                     mailMessage.From = new MailAddress(from);
                     mailMessage.Subject = subject;
-                    mailMessage.CC.Add(emailPM);
+                    if (!(String.IsNullOrWhiteSpace(emailPM)))
+                    {
+                        mailMessage.CC.Add(emailPM);
+                    }
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Body = body;
                     SmtpClient smtpClient = new SmtpClient("mailin.owenscorning.com");
@@ -94,7 +97,7 @@ namespace Task_and_Leave_Tracker
                         {
                             String from = "bhawneet.singh@owenscorning.com";
                             String subject = "Welcome to Tracker Tool";
-                            String body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool" + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
+                            String body = "Dear " + firstName + " " + lastName + ",<br/>" + " <br />Thanks for registering with TrackerTool." + "<br />Please note your login details:" + "<br />NTID: " + ntid + "<br /><br />Thanks and Regards" + "<br />Tracker Tool Admin";
                             String[] to = { email };
                             String emailPM = null;
                             Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To User   
@@ -110,7 +113,10 @@ namespace Task_and_Leave_Tracker
                         throw new DataNotFoundError("Input data is invalid.");
                     }
                 }
-
+                else
+                {
+                    throw new UserAlreadyExistsError("User already exists.Try with new ntid!!");
+                }
             }
             catch (InsertionError ex)
             {
@@ -262,7 +268,7 @@ namespace Task_and_Leave_Tracker
                             if (val)
                             {
                                 resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "Your temporary password has been sent!!";
+                                resultObject.Response.Reason = "Please change your password within 24 hrs!!";
                             }
                         }
                     }
@@ -454,7 +460,7 @@ namespace Task_and_Leave_Tracker
                         if (val)
                         {
                             resultObject.Response.Status = "Success";
-                            resultObject.Response.Reason = "New task is created!!";
+                            resultObject.Response.Reason = "New task is created for"+ u1.firstName + " " + u1.lastName;
                         }
                     }
                 }
@@ -667,7 +673,6 @@ namespace Task_and_Leave_Tracker
                         result = userBll.UpdateTaskDetailsBLL(taskId, taskDesc, expiryDate, assignedTo, taskName); //Updating Task List    
                         resultObject.Response.Status = "Success";
                         resultObject.Response.Reason = "Task data updated!!";
-
                     }
 
                     else if (!(String.IsNullOrWhiteSpace(status)))
@@ -686,7 +691,6 @@ namespace Task_and_Leave_Tracker
                             u = new User();                                 // Initializing User Instance
                             u.ntid = dt1.Rows[0]["Ntid"].ToString();
                             u.roleId = dt1.Rows[0]["roleId"].ToString();
-
                             resultObject.Response.userObject = oSerializer.Serialize(u); // Assigning UserList to Response Class Instance[userObject]
                         }
 
@@ -722,7 +726,24 @@ namespace Task_and_Leave_Tracker
 
                             resultObject.Response.taskObject = oSerializer.Serialize(taskList);   // Assigning TaskList to Response Class Instance[taskObject]
 
-                            DataTable dt3 = userBll.ViewUserDetailsByNtidBLL(t.assignedTo);
+
+                            DataTable dt3 = null;
+                            Task t2 = null;
+                            if (!(String.IsNullOrWhiteSpace(status)) && taskId != 0)
+                            {
+                                t2 = new Task();
+                                DataTable dt6 = userBll.ViewAllTaskDetailsByIdBLL(taskId);
+                                if (dt6.Rows.Count > 0)
+                                {
+                                    t2.assignedTo = dt6.Rows[0]["AssignedTo"].ToString();
+                                }
+                                dt3 = userBll.ViewUserDetailsByNtidBLL(t2.assignedTo);
+                            }
+                            else if (status == null)
+                            {
+                                dt3 = userBll.ViewUserDetailsByNtidBLL(assignedTo);
+                                status = "In Progress";
+                            }
                             User u1 = null;
                             if (dt3.Rows.Count > 0)
                             {
@@ -743,10 +764,16 @@ namespace Task_and_Leave_Tracker
                             String from = "bhawneet.singh@owenscorning.com";
                             String subject = "Welcome to Tracker Tool";
                             String body = "Dear " + u1.firstName + " " + u1.lastName + ",<br/>" + "<br/> <table border ='3'> <tr> <th  align='left' > Task Desc </th> &nbsp;&nbsp;  <td> " + t.taskDesc + "</td></tr>  <tr> <th> Task Start Date </th> &nbsp;&nbsp;  <td> " + t.startDate + "</td></tr>  <tr> <th> Task End Date </th> &nbsp;&nbsp;  <td> " + t.expiryDate + "</td></tr>  <tr> <th align='left'> Status </th> &nbsp;&nbsp;  <td> " + status + "</td></tr> </table> " + " <br/> " + "Thanks and Regards" + "<br />Tracker Tool Admin";
-                            String[] to = { u1.emailId, u2.emailId };
-                            String emailPM = null;
-                            Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To Both[Updated Task]
-
+                            String[] to = { u1.emailId, };
+                            if (!String.IsNullOrWhiteSpace(u2.emailId))
+                            {
+                                String emailPM = u2.emailId;
+                                Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To Both[Updated Task]   
+                            }
+                            else
+                            {
+                                throw new DataNotFoundError("PM does'nt exist!!");
+                            }
                         }
                         else
                         {
@@ -759,7 +786,6 @@ namespace Task_and_Leave_Tracker
                 {
                     throw new DataNotFoundError("Enter all the details!!");
                 }
-
             }
             catch (UpdationError ex)
             {
@@ -800,36 +826,35 @@ namespace Task_and_Leave_Tracker
                 {
                     if (!(string.IsNullOrWhiteSpace(status)) && leaveId != 0)
                     {
-                        result = userBll.UpdateLeaveStatusBLL(leaveId, status); //Updating Leave List Based on Status
+                        result = userBll.UpdateLeaveStatusBLL(leaveId, status);                     //Updating Leave List Based on Status
                     }
                     if (result > 0)
                     {
-                        
-                        DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid); //Retrieving User Details
+                        DataTable dt = userBll.ViewUserDetailsByNtidBLL(ntid);                      //Retrieving User Details
                         User u = null;
                         if (dt.Rows.Count > 0)
                         {
-                            u = new User();                                     // Initializing User Instance
+                            u = new User();                                                         // Initializing User Instance
                             u.ntid = dt.Rows[0]["Ntid"].ToString();
                             u.roleId = dt.Rows[0]["roleId"].ToString();
                             resultObject.Response.userObject = oSerializer.Serialize(u);
                         }
                         DataTable dt1 = new DataTable();
-                        List<Leave> leaveList = new List<Leave>();              // Initializing LeaveList Instance
+                        List<Leave> leaveList = new List<Leave>();                                   // Initializing LeaveList Instance
                         if (u.roleId == "200")
                         {
-                            dt1 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);         // Retrieving Leave details For TM
+                            dt1 = userBll.ViewLeaveDetailsByTMBLL(u.ntid);                           // Retrieving Leave details For TM
                         }
                         else if (u.roleId == "201")
                         {
-                            dt1 = userBll.ViewLeaveDetailsByPMBLL();         // Retrieving Pending Leaves for PM
+                            dt1 = userBll.ViewLeaveDetailsByPMBLL();                                // Retrieving Pending Leaves for PM
                         }
                         if (dt1.Rows.Count > 0)
                         {
                             Leave l = null;
                             for (int i = 0; i < dt1.Rows.Count; i++)
                             {
-                                l = new Leave();                          // Initializing Leave Instance
+                                l = new Leave();                                                    // Initializing Leave Instance
                                 l.leaveId = Convert.ToInt32(dt1.Rows[i]["LeaveId"]);
                                 l.leaveDesc = dt1.Rows[i]["Leavedesc"].ToString();
                                 l.fromDate = Convert.ToDateTime(dt1.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
@@ -837,42 +862,55 @@ namespace Task_and_Leave_Tracker
                                 l.appliedBy = dt1.Rows[i]["AppliedBy"].ToString();
                                 l.leaveType = dt1.Rows[i]["LeaveType"].ToString();
                                 l.status = dt1.Rows[i]["Status"].ToString();
-                                leaveList.Add(l);                               // Adding Leave Instance
+                                leaveList.Add(l);                                                    // Adding Leave Instance
                             }
-                            resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);  // Assigning LeaveList to Response Class Instance[leaveObject]
+                            resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);   // Assigning LeaveList to Response Class Instance[leaveObject]
 
-                            DataTable dt5 = userBll.ViewUserDetailsByLeaveIdBLL(leaveId);  // Retreiving Details of TM
-                            User u2 = null; // For TM
+                            DataTable dt5 = userBll.ViewLeaveDetailsByLeaveIdBLL(leaveId);           // Retreiving Details by LeaveId
+                            Leave l2 = null; // For TM
                             if (dt5.Rows.Count > 0)
                             {
-                                u2 = new User();
-                                u2.firstName = dt5.Rows[0]["FirstName"].ToString();
-                                u2.lastName = dt5.Rows[0]["LastName"].ToString();
-                                u2.emailId = dt5.Rows[0]["EmailId"].ToString();
-                                u2.firstName = dt5.Rows[0]["FirstName"].ToString();
-                                u2.lastName = dt5.Rows[0]["LastName"].ToString();
+                                l2 = new Leave();
+                                l2.appliedBy = dt5.Rows[0]["AppliedBy"].ToString();
                             }
 
-                            DataTable dt4 = userBll.ViewAllUserDetailsBLL(); // Retreiving Details of PM              
+                            DataTable dt6 = userBll.ViewUserDetailsByNtidBLL(l2.appliedBy);           // Retreiving Details of TM
+                            User u2 = null; // For TM
+                            if (dt6.Rows.Count > 0)
+                            {
+                                u2 = new User();
+                                u2.firstName = dt6.Rows[0]["FirstName"].ToString();
+                                u2.lastName = dt6.Rows[0]["LastName"].ToString();
+                                u2.emailId = dt6.Rows[0]["EmailId"].ToString();
+                            }
+
+                            DataTable dt4 = userBll.ViewAllUserDetailsBLL();                        // Retreiving Details of PM              
                             User u1 = null; // For PM
                             if (dt4.Rows.Count > 0)
                             {
                                 u1 = new User();
                                 u1.emailId = dt4.Rows[0]["EmailId"].ToString();
-                                u1.roleId = dt4.Rows[0]["RoleId"].ToString();                              
+                                u1.roleId = dt4.Rows[0]["RoleId"].ToString();
 
                                 String from = "bhawneet.singh@owenscorning.com";
                                 String subject = "Welcome to Tracker Tool";
                                 String body = "Dear " + u2.firstName + " " + u2.lastName + ",<br/>" + "<br/> <table border ='3'> <tr> <th  align='left' > Leave Id </th> &nbsp;&nbsp;  <td> " + l.leaveId + "</td></tr>  <tr> <th  align='left' > Leave Desc </th> &nbsp;&nbsp;  <td> " + l.leaveDesc + "</td></tr>  <tr> <th  align='left' > From Date </th> &nbsp;&nbsp;  <td> " + l.fromDate + "</td></tr>  <tr> <th align='left'> To Date </th> &nbsp;&nbsp;  <td> " + l.toDate + "</td></tr> <tr> <th align='left'> Leave Type </th> &nbsp;&nbsp;  <td> " + l.leaveType + "</td></tr> <tr> <th align='left'> Status </th> &nbsp;&nbsp;  <td> " + status + "</td></tr>  </table> " + " <br/> " + "Thanks and Regards" + "<br/> Tracker Tool Admin";
                                 String[] to = { u2.emailId };
-                                String emailPM = u1.emailId;
-                                Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To Both[Leave Applied]
-                                if (val)
+                                if (!String.IsNullOrWhiteSpace(u1.emailId))
                                 {
-                                    resultObject.Response.Status = "Success";
-                                    resultObject.Response.Reason = "Email has been sent !!";
+                                    String emailPM = u1.emailId;
+                                    Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To Both[Updated Leave]   
+                                    if (val)
+                                    {
+                                        resultObject.Response.Status = "Success";
+                                        resultObject.Response.Reason = "Email has been sent !!";
+                                    }
                                 }
-                            }                        
+                                else
+                                {
+                                    throw new DataNotFoundError("PM does'nt exist!!");
+                                }                                     
+                            }
                         }
                         else
                         {
@@ -922,70 +960,87 @@ namespace Task_and_Leave_Tracker
             {
                 DateTime createdDate = DateTime.Now;
 
-                if (!(string.IsNullOrWhiteSpace(fromDate)) && createdDate != null && !(string.IsNullOrWhiteSpace(toDate)) && !(string.IsNullOrWhiteSpace(appliedBy)) && !(string.IsNullOrWhiteSpace(status)) && !(string.IsNullOrWhiteSpace(leaveDesc)))
-                {
-                    result = userBll.InsertLeaveDetailsBLL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
+                DataTable d = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
+                //Leave l4 = null;
+                //if (d.Rows.Count > 0)
+                //{
+                //    for (int j = 0; j < d.Rows.Count; j++)
+                //    {
+                //        l4 = new Leave();
+                //        l4.fromDate = Convert.ToDateTime(d.Rows[j]["FromDate"]).ToString("dd/MMM/yyyy");
+                //        l4.toDate = Convert.ToDateTime(d.Rows[j]["ToDate"]).ToString("dd/MMM/yyyy");
 
-                    if (result > 0)
+                //        if (fromDate == l4.fromDate && toDate == l4.toDate)
+                //        {
+                //            throw new DataNotFoundError("Enter the valid date!!");
+                //        }
+                //    }
+
+                    if (!(string.IsNullOrWhiteSpace(fromDate)) && createdDate != null && !(string.IsNullOrWhiteSpace(toDate)) && !(string.IsNullOrWhiteSpace(appliedBy)) && !(string.IsNullOrWhiteSpace(status)) && !(string.IsNullOrWhiteSpace(leaveDesc)))
                     {
-                        List<Leave> leaveList = new List<Leave>();  //Initializing LeaveList Instance
-                        DataTable dt = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
-                        Leave l = null;
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-                            l = new Leave();                  //Initializing Leave Instance
-                            l.leaveId = Convert.ToInt32(dt.Rows[i]["LeaveId"]);
-                            l.leaveDesc = dt.Rows[i]["Leavedesc"].ToString();
-                            l.fromDate = Convert.ToDateTime(dt.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
-                            l.toDate = Convert.ToDateTime(dt.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
-                            l.appliedBy = dt.Rows[i]["AppliedBy"].ToString();
-                            l.leaveType = dt.Rows[i]["LeaveType"].ToString();
-                            l.status = dt.Rows[i]["Status"].ToString();
-                            leaveList.Add(l);                       // Adding Leave Instance To LeaveList
-                        }
-                        resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);// Assigning LeaveList to Response Class Instance[leaveObject]
+                        result = userBll.InsertLeaveDetailsBLL(leaveDesc, fromDate, toDate, appliedBy, leaveType, status);
 
-                        DataTable dt5 = userBll.ViewUserDetailsByNtidBLL(appliedBy);  // Retreiving Details of TM
-                        User u2 = null; // For TM
-                        if (dt5.Rows.Count > 0)
+                        if (result > 0)
                         {
-                            u2 = new User();
-                            u2.firstName = dt5.Rows[0]["FirstName"].ToString();
-                            u2.lastName = dt5.Rows[0]["LastName"].ToString();
-                            u2.emailId = dt5.Rows[0]["EmailId"].ToString();
-                        }
-
-                        DataTable dt4 = userBll.ViewAllUserDetailsBLL(); // Retreiving Details of PM              
-                        User u1 = null; // For PM
-                        if (dt4.Rows.Count > 0)
-                        {
-                            u1 = new User();
-                            u1.emailId = dt4.Rows[0]["EmailId"].ToString();
-                            u1.roleId = dt4.Rows[0]["RoleId"].ToString();
-                            u1.firstName = dt4.Rows[0]["FirstName"].ToString();
-                            u1.lastName = dt4.Rows[0]["LastName"].ToString();
-
-                            String from = u2.emailId;
-                            String subject = "Welcome to Tracker Tool";
-                            String body = "Dear " + u1.firstName + " " + u1.lastName + ",<br/>" + "<br/> <table border ='3'> <tr> <th  align='left' > Leave Id </th> &nbsp;&nbsp;  <td> " + l.leaveId + "</td></tr>  <tr> <th  align='left' > Leave Desc </th> &nbsp;&nbsp;  <td> " + l.leaveDesc + "</td></tr>  <tr> <th  align='left' > From Date </th> &nbsp;&nbsp;  <td> " + l.fromDate + "</td></tr>  <tr> <th align='left'> To Date </th> &nbsp;&nbsp;  <td> " + l.toDate + "</td></tr> <tr> <th align='left'> Leave Type </th> &nbsp;&nbsp;  <td> " + l.leaveType + "</td></tr> <tr> <th align='left'> Status </th> &nbsp;&nbsp;  <td> " + status + "</td></tr>  </table> " + " <br/> " + "Thanks and Regards" + "<br/>" + u2.firstName + " " + u2.lastName;
-                            String[] to = { u1.emailId };
-                            String emailPM = null;
-                            Boolean val = SendingMail(to, from, subject, body, emailPM); // Sending Mail To PM[Leave Applied]
-                            if (val)
+                            List<Leave> leaveList = new List<Leave>();                              //Initializing LeaveList Instance
+                            DataTable dt = userBll.ViewLeaveDetailsByTMBLL(appliedBy);
+                            Leave l = null;
+                            for (int i = 0; i < dt.Rows.Count; i++)
                             {
-                                resultObject.Response.Status = "Success";
-                                resultObject.Response.Reason = "Email has been sent !!";
+                                l = new Leave();                                                    //Initializing Leave Instance
+                                l.leaveId = Convert.ToInt32(dt.Rows[i]["LeaveId"]);
+                                l.leaveDesc = dt.Rows[i]["Leavedesc"].ToString();
+                                l.fromDate = Convert.ToDateTime(dt.Rows[i]["FromDate"]).ToString("dd/MMM/yyyy");
+                                l.toDate = Convert.ToDateTime(dt.Rows[i]["ToDate"]).ToString("dd/MMM/yyyy");
+                                l.appliedBy = dt.Rows[i]["AppliedBy"].ToString();
+                                l.leaveType = dt.Rows[i]["LeaveType"].ToString();
+                                l.status = dt.Rows[i]["Status"].ToString();
+                                leaveList.Add(l);                                                   // Adding Leave Instance To LeaveList
+                            }
+                            resultObject.Response.leaveObject = oSerializer.Serialize(leaveList);   // Assigning LeaveList to Response Class Instance[leaveObject]
+
+                            DataTable dt5 = userBll.ViewUserDetailsByNtidBLL(appliedBy);            // Retreiving Details of TM
+                            User u2 = null; // For TM
+                            if (dt5.Rows.Count > 0)
+                            {
+                                u2 = new User();
+                                u2.firstName = dt5.Rows[0]["FirstName"].ToString();
+                                u2.lastName = dt5.Rows[0]["LastName"].ToString();
+                                u2.emailId = dt5.Rows[0]["EmailId"].ToString();
                             }
 
+                            DataTable dt4 = userBll.ViewAllUserDetailsBLL();                        // Retreiving Details of PM              
+                            User u1 = null; // For PM
+                            if (dt4.Rows.Count > 0)
+                            {
+                                u1 = new User();
+                                u1.emailId = dt4.Rows[0]["EmailId"].ToString();
+                                u1.roleId = dt4.Rows[0]["RoleId"].ToString();
+                                u1.firstName = dt4.Rows[0]["FirstName"].ToString();
+                                u1.lastName = dt4.Rows[0]["LastName"].ToString();
+
+                                String from = u2.emailId;
+                                String subject = "Welcome to Tracker Tool";
+                                String body = "Dear " + u1.firstName + " " + u1.lastName + ",<br/>" + "<br/> <table border ='3'> <tr> <th  align='left' > Leave Id </th> &nbsp;&nbsp;  <td> " + l.leaveId + "</td></tr>  <tr> <th  align='left' > Leave Desc </th> &nbsp;&nbsp;  <td> " + l.leaveDesc + "</td></tr>  <tr> <th  align='left' > From Date </th> &nbsp;&nbsp;  <td> " + l.fromDate + "</td></tr>  <tr> <th align='left'> To Date </th> &nbsp;&nbsp;  <td> " + l.toDate + "</td></tr> <tr> <th align='left'> Leave Type </th> &nbsp;&nbsp;  <td> " + l.leaveType + "</td></tr> <tr> <th align='left'> Status </th> &nbsp;&nbsp;  <td> " + status + "</td></tr>  </table> " + " <br/> " + "Thanks and Regards" + "<br/>" + u2.firstName + " " + u2.lastName;
+                                String[] to = { u1.emailId };
+                                String emailPM = null;
+                                Boolean val = SendingMail(to, from, subject, body, emailPM);        // Sending Mail To PM[Leave Applied]
+                                if (val)
+                                {
+                                    resultObject.Response.Status = "Success";
+                                    resultObject.Response.Reason = "Email has been sent !!";
+                                }
+                            }
+                            resultObject.Response.Status = "Success";
+                            resultObject.Response.Reason = "Leave applied successfully!!!";
                         }
-                        resultObject.Response.Status = "Success";
-                        resultObject.Response.Reason = "Leave applied successfully!!!";
                     }
-                }
-                else
-                {
-                    throw new DataNotFoundError("Fill all the details");
-                }
+                    else
+                    {
+                        throw new DataNotFoundError("Fill all the details");
+                    }
+
+                //}              
             }
             catch (InsertionError ex)
             {

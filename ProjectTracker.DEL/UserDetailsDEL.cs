@@ -28,6 +28,7 @@ namespace ProjectTracker.DEL
             int result = 0;
             try
             {
+                con.Open();
                 SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Action", "Insert");
@@ -80,34 +81,7 @@ namespace ProjectTracker.DEL
             }
             return dt;
         }
-        #endregion
-
-
-        #region DEL Method - View All Users Through LeaveId
-        public DataTable ViewUserDetailsByLeaveIdDEL(int leaveId)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("sp_all_tbl_user_details", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "View L");
-                cmd.Parameters.AddWithValue("@LeaveId", leaveId);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dt);
-            }
-            catch (UserNotFoundError ex)
-            {
-                throw new Task_and_Leave_Tracker.UserNotFoundError("User does not exist !!");
-            }
-            finally
-            {
-                con.Close();
-            }
-            return dt;
-        }
-        #endregion
+        #endregion      
 
 
         #region DEL Method - View All Users
@@ -542,6 +516,35 @@ namespace ProjectTracker.DEL
             catch (Exception ex)
             {
                 throw new Task_and_Leave_Tracker.RetreivalError("Unable to apply the leave!!");
+            }
+
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+        #endregion
+
+
+        #region DEL Method - View Leaves Details By LeaveId
+       public DataTable ViewLeaveDetailsByLeaveIdDEL(int leaveId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_all_tbl_leave_details", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", "View L");
+                cmd.Parameters.AddWithValue("@LeaveId", leaveId);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Task_and_Leave_Tracker.RetreivalError("Unable to view the leave!!");
             }
 
             finally

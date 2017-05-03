@@ -36,8 +36,10 @@ app.factory('httpService', function ($http) {
                 url: "/AjaxCaller.aspx/ProxyGetMethod",
                 data: JSON.stringify(PostJson)
 
+
             }).then(function successCallback(response) {
                 var realData = JSON.parse(response.data.d);
+
 
             }
                 );
@@ -134,7 +136,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             $('#taskTable tbody').on('click', "#view", function () {
                 var data = $scope.taskTable.row($(this).parents('tr')).data();
-                           
+
                 $scope.viewTaskDetail(getTaskDetailByTaskId(data.taskId, $scope.taskList));
 
                 //$scope.currentTask = {
@@ -148,7 +150,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 //    status: currentTask.status,
                 //    assignedTo: cur
                 //}
-             
+
             });
 
             $('#taskTable tbody').on('click', "#edit", function () {
@@ -218,8 +220,14 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             $('#leaveTable tbody').on('click', "#view", function () {
                 var data = $scope.leaveTable.row($(this).parents('tr')).data();
                 $scope.currentLeave = getLeaveDetailByLeaveId(data.leaveId, $scope.leaveList);
-                $('#leaveDetailModal').modal("show");
-             //   alert('Hi View');
+                $scope.$apply();
+                $timeout(function () {
+                    $('#leaveDetailModal').modal("show")
+                });
+
+
+
+                //   alert('Hi View');
             });
 
             $('#leaveTable tbody').on('click', "#cancel", function () {
@@ -229,7 +237,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                 //  alert('Hi Cancel');
             });
-           
+
             $('#leaveTable tbody').on('click', "#approve", function () {
                 var data = $scope.leaveTable.row($(this).parents('tr')).data();
                 $scope.updateLeaveStatus(data.leaveId, "Approved");
@@ -246,7 +254,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 
         $scope.loadTable = function (taskTableData) {
-            
+
             $scope.loadTaskTable(taskTableData);
             $scope.loadLeaveTable(taskTableData);
 
@@ -258,6 +266,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             var ntid = sessionStorage.getItem("username");
             if (ntid != null || ntid != undefined) {
+
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var postData = { ntid: ntid };
 
@@ -276,6 +287,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     var responseJSON = JSON.parse(response.data.d);
 
                     $scope.status = responseJSON.Response.Status;
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     if ($scope.status == "Success") {
 
@@ -393,6 +407,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
                 $scope.status = responseJSON.Response.Status;
 
+
                 if ($scope.status == "Success") {
                     usersJSON = JSON.parse(responseJSON.Response.userObject);
                     $scope.availableTeamMembers = parseTeamMembers(usersJSON);
@@ -403,7 +418,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     taskMinStartDate = moment().format('MM/DD/YYYY');
 
                     $('#taskModal').modal("show");
-                
+
                     $timeout(function () {
                         $('#taskForm').data('formValidation').resetForm();
                     }, 200);
@@ -433,7 +448,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                             max: 50
                         },
                         notEmpty: {
-                            message: 'Please supply task name'
+                            message: 'Please enter task name'
                         }
                     }
                 }, taskDesc: {
@@ -443,7 +458,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                             max: 150
                         },
                         notEmpty: {
-                            message: 'Please supply task description'
+                            message: 'Please enter task description'
                         }
                     }
                 },
@@ -456,7 +471,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         date: {
 
                             format: 'MM/DD/YYYY',
-                            message: 'The value is not a valid date'
+                            message: 'Please select a valid date'
 
                         },
                         callback: {
@@ -484,7 +499,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         date: {
 
                             format: 'MM/DD/YYYY',
-                            message: 'The value is not a valid date'
+                            message: 'Please enter a valid date'
 
                         },
                         callback: {
@@ -526,8 +541,11 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
 
+                $('.loader').show();
+                $('.backdrop').show();
+
                 var postData = {
-                    
+
                     taskDesc: $scope.task.taskDesc,
                     expiryDate: $scope.task.taskEndDate,
                     createdBy: sessionStorage.getItem("username"),
@@ -558,6 +576,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     $scope.status = responseJSON.Response.Status;
                     $scope.reason = responseJSON.Response.Reason;
 
+                    $('.loader').hide();
+                    $('.backdrop').hide();
+
                     if ($scope.status == "Success") {
 
                         //$scope.statusModalTitle = "Task ";
@@ -584,9 +605,6 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 
         $scope.editTaskPopup = function (taskData) {
-
-
-
 
             //Ajax method 
             $http({
@@ -643,6 +661,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             if ($('#taskForm').data('formValidation').isValid() != null && $('#taskForm').data('formValidation').isValid()) {
 
+                $('.loader').show();
+                $('.backdrop').show();
+
                 var postData = {
                     ntid: sessionStorage.getItem('username'),
                     taskId: $scope.task.taskId,
@@ -665,13 +686,16 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     async: true
                 }).then(function mySuccess(response) {
 
-                   
+
 
                     $('#taskModal').modal("hide");
 
                     var responseJSON = JSON.parse(response.data.d);
                     $scope.status = responseJSON.Response.Status;
                     $scope.reason = responseJSON.Response.Reason;
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     if ($scope.status == "Success") {
 
@@ -705,11 +729,16 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         /******************************** VIEW TASK DETAIL CODE *********************************/
 
+
         $scope.viewTaskDetail = function (taskDetailData) {
 
             $scope.currentTask = taskDetailData;
+            $scope.$apply();
+            $timeout(function () {
+                $('#taskDetailModal').modal("show");
+            });
 
-            $('#taskDetailModal').modal("show");
+
 
 
         }
@@ -717,7 +746,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         /******************************** UPDATE TASK STATUS CODE *********************************/
 
-        $scope.updateTaskStatus = function (taskId,status) {
+        $scope.updateTaskStatus = function (taskId, status) {
+            $('.loader').show();
+            $('.backdrop').show();
 
             var postData = {
                 ntid: sessionStorage.getItem('username'),
@@ -743,6 +774,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 $scope.status = responseJSON.Response.Status;
                 $scope.reason = responseJSON.Response.Reason;
 
+                $('.loader').hide();
+                $('.backdrop').hide();
+
                 if ($scope.status == "Success") {
 
                     $scope.taskList = JSON.parse(responseJSON.Response.taskObject);
@@ -760,7 +794,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
             });
 
-         
+
 
         }
 
@@ -776,7 +810,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             leaveMinStartDate = moment().format('MM/DD/YYYY');
 
             $('#leaveModal').modal("show");
-          
+
             $timeout(function () {
                 $('#leaveForm').data('formValidation').resetForm();
             }, 200);
@@ -812,7 +846,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         date: {
 
                             format: 'MM/DD/YYYY',
-                            message: 'The value is not a valid date'
+                            message: 'Please select a valid date'
 
                         },
                         callback: {
@@ -840,7 +874,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         date: {
 
                             format: 'MM/DD/YYYY',
-                            message: 'The value is not a valid date'
+                            message: 'Please select a valid date'
 
                         },
                         callback: {
@@ -877,10 +911,11 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         // Function - Apply Leave
         $scope.applyLeave = function () {
 
-
             $('#leaveForm').data('formValidation').validate();
-
             if ($('#leaveForm').data('formValidation').isValid() != null && $('#leaveForm').data('formValidation').isValid()) {
+
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var postData = {
 
@@ -890,7 +925,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     appliedBy: sessionStorage.getItem("username"),
                     leaveDesc: $scope.leave.leaveDesc,
                     status: "Approval Pending"
-                  
+
                 }
 
                 //Ajax method 
@@ -912,6 +947,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     var responseJSON = JSON.parse(response.data.d);
                     $scope.status = responseJSON.Response.Status;
                     $scope.reason = responseJSON.Response.Reason;
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     if ($scope.status == "Success") {
 
@@ -938,6 +976,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         $scope.updateLeaveStatus = function (leaveId, status) {
 
+            $('.loader').show();
+            $('.backdrop').show();
+
             var postData = {
                 ntid: sessionStorage.getItem('username'),
                 leaveId: leaveId,
@@ -957,6 +998,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                 var responseJSON = JSON.parse(response.data.d);
                 $scope.status = responseJSON.Response.Status;
                 $scope.reason = responseJSON.Response.Reason;
+
+                $('.loader').hide();
+                $('.backdrop').hide();
 
                 if ($scope.status == "Success") {
 
@@ -978,7 +1022,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
         }
 
-        
+
 
 
 
@@ -1010,7 +1054,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please enter your current password (Min 5 Chars)'
+                            message: 'Please enter your current password'
                         }
                     }
                 },
@@ -1019,8 +1063,12 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                         stringLength: {
                             min: 5,
                         },
+                        different: {
+                            field: 'currentPwd',
+                            message: 'New Password must be different from current password'
+                        },
                         notEmpty: {
-                            message: 'Please enter your new password (Min 5 Chars)'
+                            message: 'Please enter your new password'
                         }
                     }
                 },
@@ -1030,7 +1078,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Re-enter your new password (Min 5 Chars)'
+                            message: 'Please re-enter your new password'
                         },
                         identical: {
                             field: 'newPwd',
@@ -1047,6 +1095,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
             $('#change_form').data('formValidation').validate();
 
             if ($('#change_form').data('formValidation').isValid() != null && $('#change_form').data('formValidation').isValid()) {
+
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var userData = {
                     ntid: sessionStorage.getItem('username'),
@@ -1069,6 +1120,9 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     $scope.reason = responseJSON.Response.Reason;
                     $scope.status = responseJSON.Response.Status;
 
+                    $('.loader').hide();
+                    $('.backdrop').hide();
+
                     if ($scope.status == "Success") {
 
                     } else if ($scope.status == "Failure") {
@@ -1076,7 +1130,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
                     }
                     $('#changePwdModal').modal("hide");
 
-                 
+
                     $('#statusModal').modal("show");
 
                 }, function myError(response) {
@@ -1086,7 +1140,7 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
         }
 
         $scope.homeInit();
-       
+
     });
 
 });
@@ -1095,12 +1149,52 @@ app.controller('homeCtrl', function ($scope, $rootScope, $http, httpService, $in
 
 app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $interval, $cookies) {
 
+    $scope.isDisableLoginButton = true;
+
     //Check weather user has already logged 
     $scope.pageInit = function () {
         if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
             goToURL('home');
         }
     }
+
+    //$scope.signupInit = function () {
+
+    //    if (!(sessionStorage.getItem('username') == null || sessionStorage.getItem('username') == undefined)) {
+    //        goToURL('home');
+    //    }
+    //    else {
+    //        var postData = {}
+    //        //Ajax method - To Get User NTID
+    //        $http({
+    //            method: "POST",
+    //            url: "/TaskManagerAPI.aspx/GetUserDetails",
+    //            data: JSON.stringify(postData),
+    //            cache: false,
+    //            contentType: "application/json; charset=utf-8",
+    //            dataType: "json",
+    //            async: true
+    //        }).then(function mySucces(response) {
+
+    //            var responseJSON = JSON.parse(response.data.d);
+
+    //            $scope.status = responseJSON.Response.Status;
+
+    //            if ($scope.status == "Success") {
+
+    //                var userJSON = JSON.parse(responseJSON.Response.userObject);
+    //                $scope.ntid_name = userJSON.ntid;
+
+    //            }
+
+    //        }, function myError(response) {
+    //            console.log(response);
+    //        });
+    //    }
+
+
+
+    //}
 
 
     $(function () {
@@ -1137,7 +1231,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 2,
                         },
                         notEmpty: {
-                            message: 'Please supply your NTID'
+                            message: 'Please enter your NTID'
                         }
                     }
                 },
@@ -1147,19 +1241,44 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please supply your password(min 5 characters)'
+                            message: 'Please enter your password'
                         }
                     }
                 }
             }
+        }).on('success.field.fv', function (e, data) {
+
+            if ($('#login_form').data('formValidation').isValid() != null && $('#login_form').data('formValidation').isValid()) {
+                $scope.isDisableLoginButton = false;
+            }
+            else
+                $scope.isDisableLoginButton = true;
+
+            //if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
+            //    //data.fv.disableSubmitButtons(true);
+
+            //}
+            //else
+            //    $('#signInButton').disable(false);
+        }).on('err.field.fv', function (e, data) {
+            if ($('#login_form').data('formValidation').isValid() != null && $('#login_form').data('formValidation').isValid()) {
+                $scope.isDisableLoginButton = false;
+            }
+            else
+                $scope.isDisableLoginButton = true;
+
         });
 
         // Function - Sign-In 
+
         $scope.login = function () {
 
             $('#login_form').data('formValidation').validate();
 
             if ($('#login_form').data('formValidation').isValid() != null && $('#login_form').data('formValidation').isValid()) {
+
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var user = {
                     ntid: $scope.ntid,
@@ -1181,6 +1300,9 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
                     $scope.status = responseJSON.Response.Status;
                     $scope.reason = responseJSON.Response.Reason;
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     if ($scope.status == "Success") {
                         //Save NTID in session storage
@@ -1242,6 +1364,8 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
             if ($('#forgot_form').data('formValidation').isValid() != null && $('#forgot_form').data('formValidation').isValid()) {
 
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var user = {
                     ntid: $scope.forgot_ntid,
@@ -1262,6 +1386,9 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
                     $scope.status = responseJSON.Response.Status;
                     $scope.reason = responseJSON.Response.Reason;
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     $('#forgotPwd').modal("hide");
 
@@ -1292,7 +1419,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 2,
                         },
                         notEmpty: {
-                            message: 'Please supply your first name'
+                            message: 'Please enter your first name.'
                         }
                     }
                 }, last_name: {
@@ -1301,7 +1428,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 2,
                         },
                         notEmpty: {
-                            message: 'Please supply your last name'
+                            message: 'Please enter your last name.'
                         }
                     }
                 },
@@ -1309,9 +1436,8 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
                 role_id: {
                     validators: {
-
                         notEmpty: {
-                            message: 'Please supply your role'
+                            message: 'Please select your role'
                         }
                     }
                 },
@@ -1321,7 +1447,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 2,
                         },
                         notEmpty: {
-                            message: 'Please supply your NTID'
+                            message: 'Please enter your NTID'
                         }
                     }
                 },
@@ -1331,7 +1457,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please supply your password (min 5 characters)'
+                            message: 'Please enter your password (Min 5 characters)'
                         }
                     }
                 },
@@ -1341,7 +1467,7 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                             min: 5,
                         },
                         notEmpty: {
-                            message: 'Please supply your password once more'
+                            message: 'Please re-enter your password'
                         },
                         identical: {
                             field: 'password',
@@ -1352,21 +1478,29 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                 email: {
                     validators: {
                         notEmpty: {
-                            message: 'Please supply your email address'
+                            message: 'Please enter your email address'
                         },
                         emailAddress: {
-                            message: 'Please supply a valid email address'
+                            message: 'Please enter a valid email address'
+                        },
+                        regexp: {
+                            regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                            message: 'The value is not a valid email address'
                         }
                     }
                 },
                 phone: {
                     validators: {
+                        stringLength: {
+                            min: 10,
+                            max: 10
+                        },
                         notEmpty: {
-                            message: 'Please supply your phone number'
+                            message: 'Please enter your phone number'
                         },
                         phone: {
                             country: 'IN',
-                            message: 'Please supply a vaild phone number'
+                            message: 'Please enter a vaild phone number'
                         }
                     }
                 }
@@ -1380,6 +1514,8 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
             if ($('#register_form').data('formValidation').isValid() != null && $('#register_form').data('formValidation').isValid()) {
 
+                $('.loader').show();
+                $('.backdrop').show();
 
                 var user = {
                     ntid: $scope.ntid,
@@ -1403,6 +1539,9 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
                 }).then(function mySuccess(response) {
 
                     var resp = JSON.parse(response.data.d);
+
+                    $('.loader').hide();
+                    $('.backdrop').hide();
 
                     //Case of NTID already existing
                     if (resp.Response.Status == 'Failure') {
@@ -1430,21 +1569,6 @@ app.controller('loginCtrl', function ($scope, $rootScope, $http, httpService, $i
 
 
 
-            //Ajax method - To Get User Details
-            $http({
-                method: "GET",
-                url: "/TaskManagerAPI.aspx/GetUserDetails",
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: true
-            }).then(function mySucces(response) {
-
-                console.log(response);
-
-            }, function myError(response) {
-                console.log(response);
-            });
 
         }
 
